@@ -4,6 +4,20 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title id="page-title">Play Thau'Gether — Événements</title>
+
+<!-- ═══ FAVICON ═══════════════════════════════════════════ -->
+<link rel="icon" type="image/png" sizes="195x195"  href="favicon.png"/>
+<link rel="apple-touch-icon"      sizes="195x195"  href="favicon.png"/>
+<link rel="icon" type="image/png" sizes="512x512"  href="favicon-512.png"/>
+
+<!-- ═══ PWA — Installation sur Android & iPhone ══════════ -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#613402"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="PTG - Événements"/>
+<meta name="application-name" content="PTG - Événements"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
@@ -155,7 +169,23 @@ textarea.form-input{resize:vertical;min-height:68px;}
 .info-block{background:var(--surface2);border-radius:10px;padding:15px;margin-bottom:18px;font-size:13px;color:var(--muted2);line-height:1.75;}
 .info-block strong{color:var(--accent);}
 .info-block code{background:var(--bg2);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--accent);}
-/* Spinner */
+/* ══ STATS ═══════════════════════════════════════════════ */
+.stats-list{display:flex;flex-direction:column;gap:10px;}
+.stat-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+.stat-item-name{font-family:var(--font-d);font-size:14px;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat-bars{display:flex;flex-direction:column;gap:5px;}
+.stat-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted2);}
+.stat-row-label{width:88px;flex-shrink:0;font-size:11px;}
+.stat-bar-wrap{flex:1;height:6px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+.stat-bar{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.23,1,.32,1);}
+.stat-bar.views{background:var(--mid);}
+.stat-bar.reservations{background:var(--accent);}
+.stat-count{font-weight:600;color:var(--text);min-width:22px;text-align:right;font-size:12px;}
+.stat-total{font-size:11px;color:var(--muted);margin-top:2px;}
+.stats-refresh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.stats-legend{display:flex;gap:14px;font-size:11px;color:var(--muted2);}
+.stats-legend span{display:flex;align-items:center;gap:5px;}
+.stats-legend-dot{width:8px;height:8px;border-radius:50%;}
 .spinner{width:18px;height:18px;border:2px solid rgba(97,52,2,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg);}}
 /* Empty */
@@ -192,7 +222,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
   width:320px;flex-shrink:0;
   overflow:hidden;
   background:#1a0d04;
-  display:flex;align-items:stretch;justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   min-height:500px;
 }
 .emodal-poster-bg{
@@ -204,13 +234,13 @@ textarea.form-input{resize:vertical;min-height:68px;}
 }
 .emodal-poster-img-wrap{
   position:relative;z-index:1;
-  width:100%;height:100%;
+  width:88%;
   display:flex;align-items:center;justify-content:center;
   filter:drop-shadow(0 8px 24px rgba(0,0,0,.45));
 }
 .emodal-poster-img-wrap img{
-  width:100%;height:100%;
-  object-fit:cover;display:block;
+  width:100%;height:auto;
+  object-fit:contain;display:block;
   border:none;
 }
 .emodal-poster-placeholder{
@@ -384,6 +414,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
         <div class="admin-tabs">
           <button class="admin-tab active" onclick="switchTab('form',0)">Événement</button>
           <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
+          <button class="admin-tab" onclick="switchTab('stats',2);loadStats()">Stats</button>
         </div>
         <!-- Formulaire événement -->
         <div class="admin-tab-panel active" id="tab-form">
@@ -466,6 +497,20 @@ textarea.form-input{resize:vertical;min-height:68px;}
           <div class="form-group"><label class="form-label">URL du logo</label><input type="url" class="form-input" id="s-logo" placeholder="logo.png"/></div>
           <div class="form-group"><label class="form-label">Email de contact</label><input type="email" class="form-input" id="s-email" placeholder="contact@monasso.fr"/></div>
           <button class="btn btn-accent btn-full" onclick="saveSettings()">Enregistrer</button>
+        </div>
+        <!-- Stats -->
+        <div class="admin-tab-panel" id="tab-stats">
+          <div class="sec-title">Statistiques</div>
+          <div class="stats-refresh">
+            <div class="stats-legend">
+              <span><div class="stats-legend-dot" style="background:var(--mid)"></div>Vues vignette</span>
+              <span><div class="stats-legend-dot" style="background:var(--accent)"></div>Clics réservation</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="loadStats()">↺ Actualiser</button>
+          </div>
+          <div id="stats-list" class="stats-list">
+            <p style="color:var(--muted);font-size:13px">Clique sur "Stats" pour charger…</p>
+          </div>
         </div>
       </div>
     </div>
@@ -733,13 +778,60 @@ function renderSite(){
         ?'<button class="cta-btn" style="background:var(--mid);cursor:default;pointer-events:none">Bientôt…</button>'
         :sold
           ?'<button class="cta-btn" style="background:var(--mid);cursor:default" onclick="event.stopPropagation()">Complet</button>'
-          :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');event.stopPropagation();" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>')
+          :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\');event.stopPropagation();" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>')
       +'</div></div></div>';
   }).join('');
 }
 
 /* ══ TRACKING ════════════════════════════════════════════ */
-window.trackClick=function(n){if(typeof gtag!=='undefined')gtag('event','reservation_click',{event_category:'Billetterie',event_label:n,value:1});};
+window.trackClick=function(n){
+  if(typeof gtag!=='undefined')gtag('event','reservation_click',{event_category:'Billetterie',event_label:n,value:1});
+};
+
+/* ══ STATS FIRESTORE ══════════════════════════════════════ */
+async function incrementStat(eventId, field){
+  if(!db||!eventId)return;
+  try{
+    const ref=doc(db,'stats',eventId);
+    const snap=await getDoc(ref);
+    const cur=snap.exists()?snap.data():{views:0,reservations:0};
+    await setDoc(ref,{...cur,[field]:(cur[field]||0)+1},{merge:true});
+  }catch(e){/* silencieux — stats non critiques */}
+}
+window.incrementStat=incrementStat;
+
+window.loadStats=async function(){
+  const list=$('stats-list');
+  if(!db){list.innerHTML='<p style="color:#b7770d;font-size:13px">⚠ Firebase non connecté.</p>';return;}
+  list.innerHTML='<div style="text-align:center;padding:30px"><div class="spinner"></div></div>';
+  try{
+    // Charge tous les docs stats
+    const snap=await getDocs(collection(db,'stats'));
+    const statsMap={};
+    snap.forEach(d=>statsMap[d.id]=d.data());
+
+    const events=localEvents.filter(e=>e.status!=='hidden');
+    if(!events.length){list.innerHTML='<p style="color:var(--muted);font-size:13px">Aucun événement.</p>';return;}
+
+    // Max pour les barres de progression
+    const maxViews=Math.max(1,...events.map(e=>(statsMap[e.id]?.views||0)));
+    const maxRes=Math.max(1,...events.map(e=>(statsMap[e.id]?.reservations||0)));
+
+    list.innerHTML=events.map(e=>{
+      const s=statsMap[e.id]||{views:0,reservations:0};
+      const views=s.views||0, res=s.reservations||0;
+      const rate=views>0?Math.round(res/views*100):0;
+      return '<div class="stat-item">'
+        +'<div class="stat-item-name">'+e.name+'</div>'
+        +'<div class="stat-bars">'
+        +'<div class="stat-row"><span class="stat-row-label">👁 Vues</span><div class="stat-bar-wrap"><div class="stat-bar views" style="width:'+Math.round(views/maxViews*100)+'%"></div></div><span class="stat-count">'+views+'</span></div>'
+        +'<div class="stat-row"><span class="stat-row-label">🎟 Réservations</span><div class="stat-bar-wrap"><div class="stat-bar reservations" style="width:'+Math.round(res/maxRes*100)+'%"></div></div><span class="stat-count">'+res+'</span></div>'
+        +'</div>'
+        +'<div class="stat-total">Taux de conversion : <strong>'+rate+'%</strong></div>'
+        +'</div>';
+    }).join('');
+  }catch(e){list.innerHTML='<p style="color:#c0392b;font-size:13px">Erreur : '+e.message+'</p>';}
+};
 
 /* ══ EVENT MODAL ══════════════════════════════════════════ */
 window.openEventModal=function(id){
@@ -790,10 +882,11 @@ window.openEventModal=function(id){
   // CTA
   $('emodal-cta').innerHTML=sold
     ?'<div class="emodal-sold">⛔ Cet événement est complet</div>'
-    :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+    :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
 
   $('event-modal').classList.add('open');
   document.body.style.overflow='hidden';
+  incrementStat(e.id,'views');
 };
 window.closeEventModal=function(){
   $('event-modal').classList.remove('open');
