@@ -407,7 +407,8 @@ textarea.form-input{resize:vertical;min-height:68px;}
           <div class="form-group">
             <label class="form-label">Lien Google Maps</label>
             <input type="url" class="form-input" id="f-maps-url" placeholder="https://maps.app.goo.gl/… ou maps.google.com/…" oninput="onMapsUrlInput(this.value)"/>
-            <div class="form-hint">Colle ton lien Maps → le nom du lieu se remplit tout seul ✦</div>
+            <div class="form-hint" id="f-maps-hint"></div>
+            <div class="form-hint">💡 Copie le lien depuis Google Maps → "Partager" → "Copier le lien"</div>
           </div>
           <div class="form-group">
             <label class="form-label">Nom du lieu affiché</label>
@@ -588,26 +589,41 @@ function parseMapsName(url){
 }
 /* Construit une URL d'embed Maps depuis un lien ou un nom */
 function buildMapsEmbed(mapsUrl, placeName){
-  // Priorité 1 : extraire coordonnées du lien (le plus précis, évite la géoloc visiteur)
-  if(mapsUrl){
+  // Lien raccourci (maps.app.goo.gl) → ne contient pas de coords, on utilise le nom
+  const isShort = mapsUrl && (mapsUrl.includes('maps.app.goo.gl') || mapsUrl.includes('goo.gl'));
+  if(!isShort && mapsUrl){
+    // Priorité 1 : coordonnées GPS dans l'URL longue
     const coords=mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-    if(coords){
-      return 'https://maps.google.com/maps?q='+coords[1]+','+coords[2]+'&output=embed&z=16';
-    }
-    // Priorité 2 : place name dans l'URL (ex: /maps/place/La+Hune,+23+Av...)
+    if(coords) return 'https://maps.google.com/maps?q='+coords[1]+','+coords[2]+'&output=embed&z=16';
+    // Priorité 2 : nom dans l'URL longue
     const m=mapsUrl.match(/\/maps\/place\/([^/@?&]+)/);
     if(m){
       const q=decodeURIComponent(m[1].replace(/\+/g,' '));
       return 'https://maps.google.com/maps?q='+encodeURIComponent(q)+'&output=embed';
     }
   }
-  // Priorité 3 : nom du lieu saisi manuellement (champ f-place)
+  // Priorité 3 : nom du lieu saisi manuellement (marche toujours, même avec lien court)
   if(placeName) return 'https://maps.google.com/maps?q='+encodeURIComponent(placeName)+'&output=embed';
   return '';
 }
 window.onMapsUrlInput=function(url){
+  const hint=$('f-maps-hint');
+  if(!url){hint.textContent='';hint.style.color='';return;}
+  // Lien raccourci maps.app.goo.gl → impossible d'extraire infos côté navigateur
+  if(url.includes('maps.app.goo.gl')||url.includes('goo.gl')){
+    hint.style.color='#b7770d';
+    hint.textContent='⚠ Lien raccourci détecté — remplis le nom du lieu manuellement ci-dessous (il sera utilisé pour la carte et l\'affichage).';
+    return;
+  }
   const name=parseMapsName(url);
-  if(name&&!$('f-place').value)$('f-place').value=name;
+  if(name){
+    if(!$('f-place').value)$('f-place').value=name;
+    hint.style.color='#3a8a3a';
+    hint.textContent='✓ Lieu détecté : '+name;
+  }else{
+    hint.style.color='var(--muted)';
+    hint.textContent='Remplis le nom du lieu ci-dessous.';
+  }
 };
 
 /* ══ FIREBASE STATE ═══════════════════════════════════════ */
@@ -886,6 +902,7 @@ window.openEventForm=function(id){
   $('f-id').value=ev?.id||'';$('f-img').value=ev?.img||'';$('f-name').value=ev?.name||'';
   $('f-date').value=ev?.date||'';$('f-time').value=ev?.time||'';$('f-place').value=ev?.place||'';
   $('f-maps-url').value=ev?.mapsUrl||'';
+  if(ev?.mapsUrl)onMapsUrlInput(ev.mapsUrl);
   $('f-price').value=ev?.price||'';$('f-price-type').value=ev?.priceType||'normal';
   $('f-link').value=ev?.link||'';$('f-desc').value=ev?.desc||'';
   $('f-desc-long').value=ev?.descLong||'';
@@ -896,6 +913,7 @@ window.resetForm=function(){
   editingId=null;$('form-title').textContent='Nouvel événement';
   ['f-img','f-name','f-date','f-time','f-place','f-maps-url','f-price','f-link','f-desc','f-desc-long','f-id'].forEach(id=>$(id).value='');
   $('f-price-type').value='normal';$('f-status').value='active';previewImg('');
+  $('f-maps-hint').textContent='';
 };
 window.previewImg=function(url){
   const w=$('img-preview');
