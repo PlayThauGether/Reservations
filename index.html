@@ -50,7 +50,7 @@ header{position:relative;z-index:1;padding:56px 0 0;text-align:center;}
 /* GRID */
 .events-grid{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;padding-bottom:96px;}
 /* CARD */
-.event-card{width:var(--card-w);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;color:inherit;position:relative;transition:transform .32s cubic-bezier(.23,1,.32,1),box-shadow .32s,border-color .3s;animation:fadeUp .55s both;box-shadow:var(--shadow);}
+.event-card{width:var(--card-w);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;color:inherit;position:relative;transition:transform .32s cubic-bezier(.23,1,.32,1),box-shadow .32s,border-color .3s;animation:fadeUp .55s both;box-shadow:var(--shadow);cursor:default;}
 .event-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--border2);}
 .card-img-wrap{position:relative;width:100%;aspect-ratio:1080/1350;overflow:hidden;background:var(--surface2);flex-shrink:0;}
 .card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.23,1,.32,1);}
@@ -471,10 +471,8 @@ function renderSite(){
   }
   grid.innerHTML=ev.map((e,i)=>{
     const sold=e.status==='soldout';
-    return '<a class="event-card" href="'+(sold?'#':e.link)+'" '
-      +(sold?'onclick="return false;" style="pointer-events:none;opacity:.6"'
-        :'target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\')\"')
-      +' style="animation-delay:'+i*.07+'s">'
+    const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||'');
+    return '<div class="event-card" style="animation-delay:'+i*.07+'s'+(sold?';opacity:.6':'')+'">'
       +'<div class="card-img-wrap">'
       +(e.img?'<img src="'+e.img+'" alt="'+e.name+'" loading="lazy"/>'
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;flex-direction:column;gap:8px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg>Affiche à venir</div>')
@@ -483,12 +481,13 @@ function renderSite(){
       +(sold?'<div class="sold-out-overlay"><div class="sold-out-stamp">COMPLET</div></div>':'')
       +'</div><div class="card-body">'
       +'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDate(e.date,e.time)+'</strong></div>'
-      +(e.place?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+e.place+'</div>':'')
+      +(e.place?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><a href="'+mapsUrl+'" target="_blank" rel="noopener noreferrer" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--mid)">'+e.place+'</a></div>':'')
       +(e.desc?'<p class="card-desc">'+e.desc+'</p>':'')
-      +'<div class="card-cta"><button class="cta-btn"'+(sold?' style="background:var(--mid);cursor:default"':'')+'>'
-      +(sold?'Complet':'Réserver')
-      +(!sold?'<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>':'')
-      +'</button></div></div></a>';
+      +'<div class="card-cta">'
+      +(sold
+        ?'<button class="cta-btn" style="background:var(--mid);cursor:default">Complet</button>'
+        :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>')
+      +'</div></div></div>';
   }).join('');
 }
 
