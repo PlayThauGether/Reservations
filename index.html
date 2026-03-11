@@ -167,95 +167,146 @@ textarea.form-input{resize:vertical;min-height:68px;}
 /* ══ EVENT DETAIL MODAL ═══════════════════════════════════ */
 #event-modal{
   display:none;position:fixed;inset:0;z-index:150;
-  background:rgba(44,26,8,.82);backdrop-filter:blur(12px);
+  background:rgba(44,26,8,.85);backdrop-filter:blur(14px);
   align-items:center;justify-content:center;padding:20px;
   overflow-y:auto;
 }
 #event-modal.open{display:flex;animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 .emodal-box{
-  width:100%;max-width:900px;
+  width:100%;max-width:920px;
   background:var(--surface);
   border:1px solid var(--border2);
-  border-radius:20px;
+  border-radius:22px;
   overflow:hidden;
-  box-shadow:0 40px 120px rgba(44,26,8,.4);
-  display:grid;grid-template-columns:340px 1fr;
+  box-shadow:0 40px 120px rgba(44,26,8,.5);
+  display:grid;grid-template-columns:320px 1fr;
   position:relative;
-  animation:modalUp .3s cubic-bezier(.23,1,.32,1);
+  max-height:90vh;
+  animation:modalUp .32s cubic-bezier(.23,1,.32,1);
 }
-@keyframes modalUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+@keyframes modalUp{from{transform:translateY(32px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+/* Panneau image — fond flouté + affiche centrée */
 .emodal-poster{
-  position:relative;width:340px;flex-shrink:0;
-  aspect-ratio:1080/1350;overflow:hidden;background:var(--surface2);
+  position:relative;
+  width:320px;flex-shrink:0;
+  overflow:hidden;
+  background:#1a0d04;
+  display:flex;align-items:center;justify-content:center;
+  min-height:500px;
 }
-.emodal-poster img{width:100%;height:100%;object-fit:cover;display:block;}
+.emodal-poster-bg{
+  position:absolute;inset:-10px;
+  background-size:cover;background-position:center;
+  filter:blur(22px) brightness(.38) saturate(1.4);
+  transform:scale(1.08);
+  z-index:0;
+}
+.emodal-poster-img-wrap{
+  position:relative;z-index:1;
+  width:88%;max-height:88%;
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 12px 40px rgba(0,0,0,.7));
+}
+.emodal-poster-img-wrap img{
+  width:100%;height:auto;max-height:76vh;
+  object-fit:contain;border-radius:8px;display:block;
+}
 .emodal-poster-placeholder{
-  width:100%;height:100%;display:flex;align-items:center;
-  justify-content:center;flex-direction:column;gap:10px;
-  color:var(--muted);font-size:13px;
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+  color:rgba(255,255,255,.4);font-size:13px;
 }
 .emodal-badge{
-  position:absolute;top:14px;right:14px;z-index:2;
-  background:var(--accent);color:#fff;font-size:13px;font-weight:600;
-  padding:5px 14px;border-radius:20px;
-  box-shadow:0 3px 12px rgba(97,52,2,.35);
+  position:absolute;top:14px;left:14px;z-index:3;
+  background:var(--accent);color:#fff;font-size:12px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 13px;border-radius:20px;
+  box-shadow:0 3px 14px rgba(0,0,0,.4);
 }
-.emodal-badge.free{background:var(--surface);color:var(--accent);border:1.5px solid var(--accent);}
+.emodal-badge.free{background:#fff;color:var(--accent);}
+/* Contenu droit */
 .emodal-content{
-  padding:36px 32px;display:flex;flex-direction:column;
-  gap:14px;overflow-y:auto;max-height:80vh;
+  padding:34px 30px 28px;display:flex;flex-direction:column;
+  gap:13px;overflow-y:auto;
 }
 .emodal-close{
-  position:absolute;top:14px;right:14px;z-index:10;
-  width:34px;height:34px;border-radius:50%;
-  background:var(--surface);border:1px solid var(--border2);
+  position:absolute;top:12px;right:12px;z-index:10;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.9);border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:16px;color:var(--muted2);
+  cursor:pointer;font-size:15px;color:var(--muted2);
   transition:background .2s,color .2s;
   box-shadow:0 2px 10px rgba(44,26,8,.15);
 }
 .emodal-close:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 .emodal-status{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted2);
 }
-.emodal-status .dot{width:7px;height:7px;border-radius:50%;background:#4aae4a;}
-.emodal-status .dot.sold{background:var(--accent2,#c0392b);}
-.emodal-title{font-family:var(--font-d);font-size:clamp(22px,3vw,34px);font-weight:700;color:var(--accent);line-height:1.15;}
-.emodal-divider{height:1px;background:var(--border2);margin:2px 0;}
-.emodal-meta{display:flex;flex-direction:column;gap:8px;}
+.emodal-status .dot{width:7px;height:7px;border-radius:50%;background:#4aae4a;box-shadow:0 0 0 3px rgba(74,174,74,.2);}
+.emodal-status .dot.sold{background:#c0392b;box-shadow:0 0 0 3px rgba(192,57,43,.2);}
+.emodal-status .dot.soon{background:#f39c12;box-shadow:0 0 0 3px rgba(243,156,18,.2);}
+.emodal-title{font-family:var(--font-d);font-size:clamp(20px,2.8vw,32px);font-weight:700;color:var(--accent);line-height:1.15;}
+.emodal-divider{height:1px;background:var(--border2);margin:0;}
+.emodal-meta{display:flex;flex-direction:column;gap:9px;}
 .emodal-meta-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted2);}
-.emodal-meta-item svg{flex-shrink:0;margin-top:2px;opacity:.6;}
+.emodal-meta-item svg{flex-shrink:0;margin-top:2px;opacity:.55;}
 .emodal-meta-item strong{color:var(--text);font-weight:500;}
 .emodal-meta-item a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
-.emodal-desc{font-size:14px;color:var(--text);line-height:1.75;white-space:pre-wrap;}
+.emodal-desc{font-size:14px;color:var(--text);line-height:1.8;white-space:pre-wrap;}
 .emodal-map{
-  width:100%;height:200px;border-radius:12px;overflow:hidden;
+  width:100%;height:190px;border-radius:12px;overflow:hidden;
   border:1px solid var(--border);flex-shrink:0;
 }
 .emodal-map iframe{width:100%;height:100%;border:none;display:block;}
-.emodal-cta{margin-top:auto;padding-top:6px;display:flex;gap:10px;}
+.emodal-cta{margin-top:auto;padding-top:4px;display:flex;gap:10px;}
 .emodal-reserve{
   flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:13px 20px;border-radius:10px;
+  padding:14px 20px;border-radius:12px;
   font-family:var(--font-b);font-size:15px;font-weight:600;
   background:var(--accent);color:#fff;text-decoration:none;
   transition:background .22s,transform .15s;
+  box-shadow:0 6px 20px rgba(97,52,2,.3);
 }
-.emodal-reserve:hover{background:var(--accent-l);}
+.emodal-reserve:hover{background:var(--accent-l);transform:translateY(-1px);}
 .emodal-reserve:active{transform:scale(.98);}
-.emodal-sold{
-  flex:1;padding:13px 20px;border-radius:10px;text-align:center;
-  font-size:15px;font-weight:600;background:var(--surface2);color:var(--muted);
+.emodal-sold,.emodal-soon-cta{
+  flex:1;padding:14px 20px;border-radius:12px;text-align:center;
+  font-size:14px;font-weight:600;background:var(--surface2);color:var(--muted);
   border:1px solid var(--border2);cursor:default;
 }
+/* ══ CARTE "BIENTÔT" ══════════════════════════════════════ */
+.event-card.coming-soon{cursor:default;}
+.coming-soon-overlay{
+  position:absolute;inset:0;z-index:6;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:rgba(239,226,211,.12);
+  backdrop-filter:blur(0px);
+}
+.coming-soon-badge{
+  background:var(--accent);color:#fff;
+  font-family:var(--font-d);font-size:17px;font-weight:700;
+  letter-spacing:.06em;padding:8px 22px;border-radius:30px;
+  box-shadow:0 6px 24px rgba(97,52,2,.45);
+  text-transform:uppercase;
+}
+.coming-soon-sub{
+  font-size:12px;color:rgba(255,255,255,.85);
+  letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  text-shadow:0 1px 6px rgba(0,0,0,.5);
+}
+.event-card.coming-soon .card-img-wrap img{filter:blur(7px);transform:scale(1.06);}
+.event-card.coming-soon .card-img-wrap::after{background:linear-gradient(to bottom,rgba(44,26,8,.3) 0%,rgba(44,26,8,.65) 100%);}
+.event-card.coming-soon .card-body{opacity:.45;pointer-events:none;}
+.event-card.coming-soon .card-cta .cta-btn{background:var(--mid);cursor:default;pointer-events:none;}
 @media(max-width:700px){
-  .emodal-box{grid-template-columns:1fr;max-width:420px;}
-  .emodal-poster{width:100%;aspect-ratio:16/9;}
-  .emodal-poster img{object-position:top;}
-  .emodal-content{padding:24px 20px;max-height:none;}
+  .emodal-box{grid-template-columns:1fr;max-width:440px;max-height:none;}
+  .emodal-poster{width:100%;min-height:260px;max-height:320px;}
+  .emodal-poster-img-wrap img{max-height:300px;}
+  .emodal-content{padding:22px 18px;overflow-y:visible;}
 }
 @media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
   .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
@@ -389,6 +440,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
             <label class="form-label">Statut</label>
             <select class="form-input" id="f-status">
               <option value="active">En vente</option>
+              <option value="coming_soon">Bientôt — teaser flou</option>
               <option value="soldout">Complet</option>
               <option value="hidden">Masqué</option>
             </select>
@@ -536,15 +588,22 @@ function parseMapsName(url){
 }
 /* Construit une URL d'embed Maps depuis un lien ou un nom */
 function buildMapsEmbed(mapsUrl, placeName){
+  // Priorité 1 : extraire coordonnées du lien (le plus précis, évite la géoloc visiteur)
   if(mapsUrl){
-    // Essaie d'extraire les coordonnées
     const coords=mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-    if(coords)return 'https://maps.google.com/maps?q='+coords[1]+','+coords[2]+'&output=embed&z=15';
-    // Sinon embed par nom extrait ou nom affiché
+    if(coords){
+      return 'https://maps.google.com/maps?q='+coords[1]+','+coords[2]+'&output=embed&z=16';
+    }
+    // Priorité 2 : place name dans l'URL (ex: /maps/place/La+Hune,+23+Av...)
+    const m=mapsUrl.match(/\/maps\/place\/([^/@?&]+)/);
+    if(m){
+      const q=decodeURIComponent(m[1].replace(/\+/g,' '));
+      return 'https://maps.google.com/maps?q='+encodeURIComponent(q)+'&output=embed';
+    }
   }
-  const q=parseMapsName(mapsUrl)||placeName;
-  if(!q)return '';
-  return 'https://maps.google.com/maps?q='+encodeURIComponent(q)+'&output=embed';
+  // Priorité 3 : nom du lieu saisi manuellement (champ f-place)
+  if(placeName) return 'https://maps.google.com/maps?q='+encodeURIComponent(placeName)+'&output=embed';
+  return '';
 }
 window.onMapsUrlInput=function(url){
   const name=parseMapsName(url);
@@ -635,22 +694,29 @@ function renderSite(){
   }
   grid.innerHTML=ev.map((e,i)=>{
     const sold=e.status==='soldout';
+    const soon=e.status==='coming_soon';
     const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||'');
-    return '<div class="event-card" onclick="openEventModal(\''+e.id+'\')" style="animation-delay:'+i*.07+'s'+(sold?';opacity:.65':'')+'">'
+    const clickable=!soon; // bientôt → pas de modal
+    return '<div class="event-card'+(soon?' coming-soon':'')+'"'
+      +(clickable?' onclick="openEventModal(\''+e.id+'\')"':'')
+      +' style="animation-delay:'+i*.07+'s'+(sold?';opacity:.65':'')+'">'
       +'<div class="card-img-wrap">'
       +(e.img?'<img src="'+e.img+'" alt="'+e.name+'" loading="lazy"/>'
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;flex-direction:column;gap:8px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg>Affiche à venir</div>')
-      +(e.price?'<div class="price-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
+      +(e.price&&!soon?'<div class="price-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
       +'<div class="card-overlay-name">'+e.name+'</div>'
       +(sold?'<div class="sold-out-overlay"><div class="sold-out-stamp">COMPLET</div></div>':'')
+      +(soon?'<div class="coming-soon-overlay"><div class="coming-soon-badge">Bientôt</div><div class="coming-soon-sub">Restez connectés ✦</div></div>':'')
       +'</div><div class="card-body">'
-      +'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDate(e.date,e.time)+'</strong></div>'
-      +(e.place?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><a href="'+(e.mapsUrl||mapsUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--mid)">'+e.place+'</a></div>':'')
-      +(e.desc?'<p class="card-desc">'+e.desc+'</p>':'')
+      +'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+(soon?'Date à venir…':formatDate(e.date,e.time))+'</strong></div>'
+      +(e.place&&!soon?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><a href="'+(e.mapsUrl||mapsUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--mid)">'+e.place+'</a></div>':'')
+      +(e.desc&&!soon?'<p class="card-desc">'+e.desc+'</p>':'')
       +'<div class="card-cta">'
-      +(sold
-        ?'<button class="cta-btn" style="background:var(--mid);cursor:default" onclick="event.stopPropagation()">Complet</button>'
-        :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');event.stopPropagation();" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>')
+      +(soon
+        ?'<button class="cta-btn" style="background:var(--mid);cursor:default;pointer-events:none">Bientôt…</button>'
+        :sold
+          ?'<button class="cta-btn" style="background:var(--mid);cursor:default" onclick="event.stopPropagation()">Complet</button>'
+          :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');event.stopPropagation();" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>')
       +'</div></div></div>';
   }).join('');
 }
@@ -660,16 +726,19 @@ window.trackClick=function(n){if(typeof gtag!=='undefined')gtag('event','reserva
 
 /* ══ EVENT MODAL ══════════════════════════════════════════ */
 window.openEventModal=function(id){
-  const e=localEvents.find(ev=>ev.id===id);if(!e)return;
+  const e=localEvents.find(ev=>ev.id===id);if(!e||e.status==='coming_soon')return;
   const sold=e.status==='soldout';
 
-  // Poster
+  // Poster — fond flouté + affiche centrée
   const poster=$('emodal-poster');
-  poster.innerHTML=e.img
-    ?'<img src="'+e.img+'" alt="'+e.name+'"/>'
-      +(e.price?'<div class="emodal-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
-    :'<div class="emodal-poster-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg><span>Affiche à venir</span></div>';
-  if(e.price&&e.img){}; // badge already in img block
+  if(e.img){
+    poster.innerHTML=
+      '<div class="emodal-poster-bg" style="background-image:url(\''+e.img+'\')"></div>'
+      +'<div class="emodal-poster-img-wrap"><img src="'+e.img+'" alt="'+e.name+'"/></div>'
+      +(e.price?'<div class="emodal-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'');
+  }else{
+    poster.innerHTML='<div class="emodal-poster-placeholder"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity=".4"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg><span style="color:rgba(255,255,255,.4)">Affiche à venir</span></div>';
+  }
 
   // Statut
   $('emodal-dot').className='dot'+(sold?' sold':'');
@@ -682,19 +751,18 @@ window.openEventModal=function(id){
   const mapsLink=e.mapsUrl||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||''));
   $('emodal-meta').innerHTML=
     (e.date?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDateLong(e.date,e.time)+'</strong></div>':'')
-    +(e.place?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span><a href="'+mapsLink+'" target="_blank" rel="noopener noreferrer">'+e.place+'</a> <span style="color:var(--mid);font-size:12px">— ouvrir Maps ↗</span></span></div>':'')
-    +(e.price?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><strong>'+e.price+'</strong></div>':'');
+    +(e.place?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span><a href="'+mapsLink+'" target="_blank" rel="noopener noreferrer">'+e.place+'</a><span style="color:var(--mid);font-size:12px"> — ouvrir Maps ↗</span></span></div>':'')
+    +(e.price?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.88 13.76V17h-1.75v-1.17c-1.07-.23-2.27-.78-2.27-2.42h1.6c0 .87.58 1.29 1.42 1.29.87 0 1.33-.42 1.33-1.05 0-.61-.35-.93-1.47-1.24-1.57-.44-2.7-1.04-2.7-2.55 0-1.32.99-2.15 2.09-2.4V6h1.75v1.49c1.08.27 1.92.96 1.92 2.2h-1.6c0-.8-.47-1.18-1.32-1.18-.82 0-1.26.42-1.26 1 0 .58.39.87 1.57 1.21 1.57.44 2.6 1.09 2.6 2.6 0 1.4-1.06 2.24-2.41 2.44z"/></svg><strong>'+e.price+'</strong></div>':'');
 
-  // Description longue
+  // Description
   const desc=$('emodal-desc');
   const txt=e.descLong||e.desc||'';
-  desc.textContent=txt;
-  desc.style.display=txt?'block':'none';
+  desc.textContent=txt;desc.style.display=txt?'block':'none';
 
-  // Carte Maps
+  // Carte Maps — utilise les coordonnées du lien si possible, sinon adresse complète
   const mapWrap=$('emodal-map');
   const embedUrl=buildMapsEmbed(e.mapsUrl,e.place);
-  if(embedUrl&&e.place){
+  if(embedUrl){
     $('emodal-map-iframe').src=embedUrl;
     mapWrap.style.display='block';
   }else{
@@ -705,7 +773,7 @@ window.openEventModal=function(id){
   // CTA
   $('emodal-cta').innerHTML=sold
     ?'<div class="emodal-sold">⛔ Cet événement est complet</div>'
-    :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+    :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
 
   $('event-modal').classList.add('open');
   document.body.style.overflow='hidden';
@@ -801,7 +869,7 @@ function renderAdminList(){
     +'<div class="admin-event-info">'
     +'<div class="admin-event-name">'+ev.name+'</div>'
     +'<div class="admin-event-meta">'+(ev.date?formatDate(ev.date,ev.time):'—')
-    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':'')+'</div></div>'
+    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+'</div></div>'
     +'<div class="admin-event-actions">'
     +'<button class="btn btn-icon btn-sm" onclick="openEventForm(\''+ev.id+'\')">✏️</button>'
     +'<button class="btn btn-warn btn-sm" onclick="toggleSoldOut(\''+ev.id+'\')">'+(ev.status==='soldout'?'↩':'⛔')+'</button>'
