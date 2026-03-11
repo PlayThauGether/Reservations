@@ -16,8 +16,8 @@
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="PTG - Événements"/>
-<meta name="application-name" content="PTG - Événements"/>
+<meta name="apple-mobile-web-app-title" content="PTG - Événéments"/>
+<meta name="application-name" content="PTG - Événéments"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
@@ -676,6 +676,16 @@ window.onMapsUrlInput=function(url){
 let db=null, fbApp=null, unsubEvents=null, unsubSettings=null;
 const DEFAULT_PW_HASH='240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'; // admin1234
 
+// Config Firebase intégrée — fonctionne sur tous les appareils
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyBvW_1kabWgE9PV1mXOVk8C7UwiXIORfpc",
+  authDomain:"playthaugethersite.firebaseapp.com",
+  projectId:"playthaugethersite",
+  storageBucket:"playthaugethersite.firebasestorage.app",
+  messagingSenderId:"565940188089",
+  appId:"1:565940188089:web:126a2599f298aefa89bc68"
+};
+
 /* Cache local pour affichage immédiat */
 let localEvents=ls.get('cache_events',[]);
 let localSettings=ls.get('cache_settings',{
@@ -697,9 +707,7 @@ function initFirebase(cfg){
 function getFbCfg(){return ls.get('fb_cfg',null);}
 
 async function connectFirebase(){
-  const cfg=getFbCfg();
-  if(!cfg){updateBackendStatus('warn','Firebase non configuré.','o');return;}
-  if(!initFirebase(cfg)){updateBackendStatus('err','Erreur initialisation Firebase.','r');return;}
+  if(!initFirebase(FIREBASE_CONFIG)){updateBackendStatus('err','Erreur initialisation Firebase.','r');return;}
   updateBackendStatus('ok','Firebase connecté — données temps réel ✓','g');
   startListeners();
 }
@@ -1089,8 +1097,11 @@ window.switchTab=function(name,idx){
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
 renderSite(); // affichage depuis le cache immédiatement
-const cfg=getFbCfg();
-if(cfg&&initFirebase(cfg))startListeners(); // sync silencieuse en arrière-plan
+// Connexion Firebase automatique depuis la config intégrée
+if(initFirebase(FIREBASE_CONFIG)){
+  startListeners();
+  ls.set('fb_cfg',FIREBASE_CONFIG); // sync localStorage aussi
+}
 </script>
 </body>
 </html>
