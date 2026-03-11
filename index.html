@@ -426,7 +426,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Lien de réservation *</label>
+            <label class="form-label">Lien de réservation <span id="f-link-required" style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(obligatoire sauf "Bientôt")</span></label>
             <input type="url" class="form-input" id="f-link" placeholder="https://billetterie.fr/…"/>
           </div>
           <div class="form-group">
@@ -720,7 +720,7 @@ function renderSite(){
       +(e.img?'<img src="'+e.img+'" alt="'+e.name+'" loading="lazy"/>'
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;flex-direction:column;gap:8px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg>Affiche à venir</div>')
       +(e.price&&!soon?'<div class="price-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
-      +'<div class="card-overlay-name">'+e.name+'</div>'
+      +(soon?'':' <div class="card-overlay-name">'+e.name+'</div>')
       +(sold?'<div class="sold-out-overlay"><div class="sold-out-stamp">COMPLET</div></div>':'')
       +(soon?'<div class="coming-soon-overlay"><div class="coming-soon-badge">Bientôt</div><div class="coming-soon-sub">Restez connectés ✦</div></div>':'')
       +'</div><div class="card-body">'
@@ -883,7 +883,7 @@ function renderAdminList(){
     +(ev.img?'<img class="admin-thumb" src="'+ev.img+'" alt=""/>'
       :'<div class="admin-thumb" style="display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg></div>')
     +'<div class="admin-event-info">'
-    +'<div class="admin-event-name">'+ev.name+'</div>'
+    +'<div class="admin-event-name">'+(ev.status==='coming_soon'?'⏳ [Bientôt] '+ev.name:ev.name)+'</div>'
     +'<div class="admin-event-meta">'+(ev.date?formatDate(ev.date,ev.time):'—')
     +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+'</div></div>'
     +'<div class="admin-event-actions">'
@@ -926,7 +926,8 @@ window.saveEvent=async function(){
   if(saving)return;
   const name=$('f-name').value.trim(),link=$('f-link').value.trim();
   if(!name){toast('Le nom est obligatoire','error');return;}
-  if(!link){toast('Le lien est obligatoire','error');return;}
+  const status=$('f-status').value;
+  if(!link&&status!=='coming_soon'){toast('Le lien de réservation est obligatoire','error');return;}
   saving=true;
   const data={name,date:$('f-date').value,time:$('f-time').value,place:$('f-place').value.trim(),
     mapsUrl:$('f-maps-url').value.trim(),
