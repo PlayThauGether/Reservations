@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title id="page-title">Association — Événements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+
+<!-- Google Analytics — remplace G-XXXXXXXXXX par ton ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+
+<style>
+:root{
+  --bg:#efe2d3;--bg2:#e8d5c2;--surface:#fff9f3;--surface2:#f5ebe0;
+  --border:rgba(97,52,2,.1);--border2:rgba(97,52,2,.2);
+  --accent:#613402;--accent-l:#8a4d0f;--mid:#cdb396;
+  --text:#2c1a08;--muted:#9a7b5e;--muted2:#7a5c3e;
+  --r:14px;--font-d:'Playfair Display',serif;--font-b:'DM Sans',sans-serif;
+  --card-w:290px;--shadow:0 4px 24px rgba(97,52,2,.1);--shadow-lg:0 16px 60px rgba(97,52,2,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:16px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:var(--font-b);}
+input,textarea,select{font-family:var(--font-b);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.6;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");}
+.deco{position:fixed;border-radius:50%;pointer-events:none;z-index:0;}
+.deco-1{width:700px;height:700px;border:1px solid rgba(97,52,2,.06);top:-200px;right:-250px;}
+.deco-2{width:500px;height:500px;border:1px solid rgba(97,52,2,.05);bottom:-150px;left:-200px;}
+.deco-3{width:300px;height:300px;background:rgba(205,179,150,.15);filter:blur(80px);top:100px;left:-100px;}
+.wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 28px;}
+/* HEADER */
+header{position:relative;z-index:1;padding:56px 0 0;text-align:center;}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:14px;}
+.site-logo{width:72px;height:72px;border-radius:12px;object-fit:contain;border:2px solid var(--border2);padding:4px;background:var(--surface);}
+.site-logo-ph{width:72px;height:72px;border-radius:12px;background:var(--surface);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;}
+.site-logo-ph svg{width:40px;height:40px;}
+.asso-name{font-family:var(--font-d);font-size:clamp(36px,5.5vw,68px);font-weight:700;color:var(--accent);line-height:1;letter-spacing:-.01em;}
+.asso-name em{font-style:italic;color:var(--muted2);font-weight:400;}
+.tagline{font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:10px;}
+.ornament{display:flex;align-items:center;gap:18px;margin:36px auto;max-width:440px;}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--mid),transparent);}
+.ornament-icon{color:var(--mid);font-size:18px;flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.ornament-icon::before,.ornament-icon::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--mid);}
+/* GRID */
+.events-grid{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;padding-bottom:96px;}
+/* CARD */
+.event-card{width:var(--card-w);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;color:inherit;position:relative;transition:transform .32s cubic-bezier(.23,1,.32,1),box-shadow .32s,border-color .3s;animation:fadeUp .55s both;box-shadow:var(--shadow);}
+.event-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--border2);}
+.card-img-wrap{position:relative;width:100%;aspect-ratio:1080/1350;overflow:hidden;background:var(--surface2);flex-shrink:0;}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.23,1,.32,1);}
+.event-card:hover .card-img-wrap img{transform:scale(1.04);}
+.card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,26,8,.75) 100%);z-index:1;pointer-events:none;}
+.price-badge{position:absolute;top:12px;right:12px;z-index:2;background:var(--accent);color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:20px;box-shadow:0 3px 12px rgba(97,52,2,.35);}
+.price-badge.free{background:var(--surface);color:var(--accent);border:1.5px solid var(--accent);}
+.card-overlay-name{position:absolute;bottom:14px;left:14px;right:14px;z-index:2;font-family:var(--font-d);font-size:20px;font-weight:700;line-height:1.15;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6);}
+.card-body{padding:16px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.meta-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);}
+.meta-item svg{flex-shrink:0;opacity:.5;}
+.meta-item strong{color:var(--text);font-weight:500;}
+.card-desc{font-size:12.5px;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-cta{margin-top:auto;padding-top:14px;}
+.cta-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:10px 16px;border-radius:8px;font-size:13.5px;font-weight:500;background:var(--accent);color:#fff;border:none;transition:background .22s,transform .15s;cursor:pointer;}
+.cta-btn:hover{background:var(--accent-l);}
+.cta-btn:active{transform:scale(.98);}
+.cta-arrow{transition:transform .22s;}
+.cta-btn:hover .cta-arrow{transform:translateX(3px);}
+.sold-out-overlay{position:absolute;inset:0;z-index:5;background:rgba(239,226,211,.65);backdrop-filter:blur(1px);display:flex;align-items:center;justify-content:center;}
+.sold-out-stamp{font-family:var(--font-d);font-size:28px;font-weight:700;color:var(--accent);border:2.5px solid var(--accent);padding:8px 22px;border-radius:6px;transform:rotate(-10deg);box-shadow:0 4px 20px rgba(97,52,2,.2);background:rgba(239,226,211,.8);}
+/* FOOTER */
+footer{position:relative;z-index:1;text-align:center;padding:30px 24px 38px;border-top:1px solid var(--border2);color:var(--muted);font-size:13px;background:var(--bg2);}
+footer a{color:var(--accent);}
+#admin-trigger{display:inline-block;padding:4px 8px;border-radius:4px;cursor:pointer;user-select:none;color:var(--mid);transition:background .2s;}
+#admin-trigger:hover{background:var(--border);}
+/* TOAST */
+#toast{position:fixed;bottom:26px;right:26px;z-index:999;background:var(--accent);color:#fff;border-radius:10px;padding:11px 20px;font-size:14px;font-weight:500;box-shadow:0 8px 28px rgba(97,52,2,.3);transform:translateY(20px);opacity:0;transition:all .3s cubic-bezier(.23,1,.32,1);pointer-events:none;max-width:300px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.error{background:#c0392b;}
+/* ADMIN OVERLAY */
+#admin-overlay{position:fixed;inset:0;z-index:100;background:rgba(44,26,8,.96);backdrop-filter:blur(10px);display:none;flex-direction:column;overflow-y:auto;}
+#admin-overlay.open{display:flex;}
+#login-screen{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 20px;}
+.login-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:38px 32px;display:flex;flex-direction:column;gap:16px;box-shadow:0 24px 80px rgba(0,0,0,.4);}
+.login-box h2{font-family:var(--font-d);font-size:30px;color:var(--accent);text-align:center;}
+.login-box h2 span{font-style:italic;color:var(--muted2);}
+.login-error{color:#c0392b;font-size:13px;text-align:center;display:none;margin-top:-6px;}
+.login-error.show{display:block;}
+#admin-dashboard{display:none;flex-direction:column;flex:1;}
+#admin-dashboard.show{display:flex;}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border2);flex-shrink:0;position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:8px;}
+.admin-title{font-family:var(--font-d);font-size:22px;color:var(--accent);}
+.admin-title span{font-style:italic;color:var(--muted2);}
+.admin-body{display:grid;grid-template-columns:1fr 360px;flex:1;min-height:0;}
+@media(max-width:880px){.admin-body{grid-template-columns:1fr;}}
+.admin-main{padding:26px;overflow-y:auto;background:var(--bg);}
+.admin-side{padding:26px;overflow-y:auto;background:var(--surface);border-left:1px solid var(--border2);}
+/* Backend banner */
+.backend-banner{border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border2);background:var(--surface2);}
+.backend-banner.ok{border-color:rgba(74,174,74,.3);color:#3a8a3a;background:rgba(74,174,74,.06);}
+.backend-banner.err{border-color:rgba(192,57,43,.3);color:#c0392b;background:rgba(192,57,43,.06);}
+.backend-banner.warn{border-color:rgba(243,156,18,.3);color:#b7770d;background:rgba(243,156,18,.06);}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.sdot.g{background:#4aae4a;}.sdot.o{background:#f39c12;}.sdot.r{background:#c0392b;}
+/* Sec title */
+.sec-title{font-family:var(--font-d);font-size:17px;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border2);}
+/* Admin list */
+.admin-event-list{display:flex;flex-direction:column;gap:10px;}
+.admin-event-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;transition:border-color .2s;}
+.admin-event-item:hover{border-color:var(--border2);}
+.admin-thumb{width:42px;height:52px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--surface2);}
+.admin-event-info{flex:1;min-width:0;}
+.admin-event-name{font-family:var(--font-d);font-size:15px;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.admin-event-meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.admin-event-actions{display:flex;gap:6px;flex-shrink:0;}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;border:none;transition:background .2s,transform .15s;white-space:nowrap;cursor:pointer;}
+.btn:active{transform:scale(.97);}
+.btn-accent{background:var(--accent);color:#fff;}.btn-accent:hover{background:var(--accent-l);}
+.btn-ghost{background:transparent;color:var(--muted2);border:1px solid var(--border2);}.btn-ghost:hover{background:var(--surface2);}
+.btn-danger{background:rgba(192,57,43,.1);color:#c0392b;border:1px solid rgba(192,57,43,.2);}.btn-danger:hover{background:rgba(192,57,43,.18);}
+.btn-warn{background:rgba(205,179,150,.2);color:var(--muted2);border:1px solid var(--border2);}.btn-warn:hover{background:rgba(205,179,150,.35);}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px;}
+.btn-full{width:100%;justify-content:center;}
+.btn-icon{padding:6px;border-radius:6px;background:transparent;border:1px solid var(--border2);color:var(--muted);}.btn-icon:hover{background:var(--surface2);}
+/* Forms */
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:13px;}
+.form-label{font-size:11px;font-weight:600;color:var(--muted2);letter-spacing:.08em;text-transform:uppercase;}
+.form-input{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:14px;width:100%;transition:border-color .2s;outline:none;}
+.form-input:focus{border-color:var(--accent);}
+.form-input::placeholder{color:var(--mid);}
+textarea.form-input{resize:vertical;min-height:68px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.form-hint{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;}
+.form-hint code{background:var(--surface2);padding:1px 5px;border-radius:4px;font-size:10px;}
+/* Tabs */
+.admin-tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--surface2);border-radius:9px;padding:4px;}
+.admin-tab{flex:1;padding:7px;text-align:center;font-size:13px;font-weight:500;border-radius:6px;border:none;background:transparent;color:var(--muted2);cursor:pointer;transition:background .2s,color .2s;}
+.admin-tab.active{background:var(--surface);color:var(--accent);box-shadow:0 1px 6px rgba(97,52,2,.1);}
+.admin-tab-panel{display:none;}
+.admin-tab-panel.active{display:block;}
+/* Image preview */
+.img-preview-wrap{width:100%;aspect-ratio:1080/1350;border-radius:8px;overflow:hidden;background:var(--surface2);margin-bottom:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;flex-direction:column;gap:8px;}
+.img-preview-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+/* Modals */
+.modal-backdrop{display:none;position:fixed;inset:0;z-index:200;background:rgba(44,26,8,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.modal-backdrop.open{display:flex;}
+.modal-box{width:100%;max-width:500px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:32px;box-shadow:0 24px 80px rgba(0,0,0,.4);}
+.modal-box h3{font-family:var(--font-d);font-size:22px;color:var(--accent);margin-bottom:18px;}
+.info-block{background:var(--surface2);border-radius:10px;padding:15px;margin-bottom:18px;font-size:13px;color:var(--muted2);line-height:1.75;}
+.info-block strong{color:var(--accent);}
+.info-block code{background:var(--bg2);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--accent);}
+/* Spinner */
+.spinner{width:18px;height:18px;border:2px solid rgba(97,52,2,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* Empty */
+.empty-state{text-align:center;padding:70px 20px;color:var(--muted);font-size:15px;width:100%;}
+.empty-state .spinner{width:32px;height:32px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
+  .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
+</style>
+</head>
+<body>
+<div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
+
+<!-- SITE PUBLIC -->
+<header>
+  <div class="wrap">
+    <div class="logo-row">
+      <div id="logo-container"></div>
+      <h1 class="asso-name" id="site-asso-name">Chargement…</h1>
+    </div>
+    <p class="tagline" id="site-tagline"></p>
+    <div class="ornament"><div class="ornament-icon">✦</div></div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="events-grid" id="events-grid">
+      <div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Chargement…</p></div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="wrap">
+    <p>© <span id="footer-year"></span> <strong id="footer-name"></strong></p>
+    <p style="margin-top:5px">Contact : <a id="footer-email" href="#">—</a></p>
+    <p style="margin-top:14px;font-size:11px"><span id="admin-trigger" title="Administration">✦</span></p>
+  </div>
+</footer>
+
+<!-- ADMIN OVERLAY -->
+<div id="admin-overlay">
+  <!-- Login -->
+  <div id="login-screen">
+    <div class="login-box">
+      <h2>Espace <span>Admin</span></h2>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input type="password" class="form-input" id="login-pw" placeholder="••••••••" autocomplete="current-password"/>
+        <div class="login-error" id="login-error">Mot de passe incorrect</div>
+      </div>
+      <button class="btn btn-accent btn-full" onclick="doLogin()">Connexion</button>
+      <button class="btn btn-ghost btn-full" onclick="closeAdmin()">Annuler</button>
+    </div>
+  </div>
+  <!-- Dashboard -->
+  <div id="admin-dashboard">
+    <div class="admin-topbar">
+      <div class="admin-title">Panel <span>Admin</span></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" onclick="openFirebaseModal()">🔥 Firebase</button>
+        <button class="btn btn-ghost btn-sm" onclick="openPwModal()">🔑 MDP</button>
+        <button class="btn btn-ghost btn-sm" onclick="doLogout()">Déconnexion</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeAdmin()">✕</button>
+      </div>
+    </div>
+    <div class="admin-body">
+      <!-- Main -->
+      <div class="admin-main">
+        <div id="backend-status" class="backend-banner warn">
+          <div class="sdot o"></div>
+          <span>Firebase non configuré — <button class="btn btn-sm btn-ghost" style="margin-left:4px" onclick="openFirebaseModal()">Configurer</button></span>
+        </div>
+        <div class="sec-title">Événements</div>
+        <div id="admin-event-list" class="admin-event-list"></div>
+        <button class="btn btn-accent" style="margin-top:16px" onclick="openEventForm(null)">+ Ajouter un événement</button>
+      </div>
+      <!-- Side -->
+      <div class="admin-side">
+        <div class="admin-tabs">
+          <button class="admin-tab active" onclick="switchTab('form',0)">Événement</button>
+          <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
+        </div>
+        <!-- Formulaire événement -->
+        <div class="admin-tab-panel active" id="tab-form">
+          <div class="sec-title" id="form-title">Nouvel événement</div>
+          <div class="img-preview-wrap" id="img-preview">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Aperçu affiche</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">URL de l'affiche</label>
+            <input type="url" class="form-input" id="f-img" placeholder="https://… ou images/affiche.jpg" oninput="previewImg(this.value)"/>
+            <div class="form-hint">Héberge sur imgur.com, cloudinary.com ou dans le dossier <code>images/</code> de ton dépôt GitHub</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom de l'événement *</label>
+            <input type="text" class="form-input" id="f-name" placeholder="Concert de printemps"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Date *</label><input type="date" class="form-input" id="f-date"/></div>
+            <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="f-time"/></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lieu</label>
+            <input type="text" class="form-input" id="f-place" placeholder="Salle des fêtes, Paris"/>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Prix</label><input type="text" class="form-input" id="f-price" placeholder="12 €"/></div>
+            <div class="form-group">
+              <label class="form-label">Style badge</label>
+              <select class="form-input" id="f-price-type">
+                <option value="normal">Brun</option>
+                <option value="free">Contour (gratuit)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lien de réservation *</label>
+            <input type="url" class="form-input" id="f-link" placeholder="https://billetterie.fr/…"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description courte</label>
+            <textarea class="form-input" id="f-desc" rows="3" placeholder="Quelques mots…"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Statut</label>
+            <select class="form-input" id="f-status">
+              <option value="active">En vente</option>
+              <option value="soldout">Complet</option>
+              <option value="hidden">Masqué</option>
+            </select>
+          </div>
+          <input type="hidden" id="f-id"/>
+          <div style="display:flex;gap:10px;margin-top:4px">
+            <button class="btn btn-accent" style="flex:1" onclick="saveEvent()">Enregistrer</button>
+            <button class="btn btn-ghost" onclick="resetForm()">Annuler</button>
+          </div>
+        </div>
+        <!-- Paramètres asso -->
+        <div class="admin-tab-panel" id="tab-settings">
+          <div class="sec-title">Association</div>
+          <div class="form-group"><label class="form-label">Nom principal</label><input type="text" class="form-input" id="s-name" placeholder="NOM DE"/></div>
+          <div class="form-group">
+            <label class="form-label">Nom en italique (2e partie)</label>
+            <input type="text" class="form-input" id="s-name2" placeholder="L'Association"/>
+            <div class="form-hint">Affiché en italique à la suite</div>
+          </div>
+          <div class="form-group"><label class="form-label">Slogan / tagline</label><input type="text" class="form-input" id="s-tagline" placeholder="Nos prochains événements"/></div>
+          <div class="form-group"><label class="form-label">URL du logo</label><input type="url" class="form-input" id="s-logo" placeholder="logo.png"/></div>
+          <div class="form-group"><label class="form-label">Email de contact</label><input type="email" class="form-input" id="s-email" placeholder="contact@monasso.fr"/></div>
+          <button class="btn btn-accent btn-full" onclick="saveSettings()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL Firebase config -->
+<div class="modal-backdrop" id="firebase-modal">
+  <div class="modal-box">
+    <h3>🔥 Configuration Firebase</h3>
+    <div class="info-block">
+      <strong>Étapes rapides (tu as déjà Firebase, c'est facile) :</strong><br>
+      1. Va sur <a href="https://console.firebase.google.com" target="_blank" style="color:var(--accent)">console.firebase.google.com</a><br>
+      2. Ouvre ton projet → <strong>⚙ Paramètres</strong> → <strong>Général</strong><br>
+      3. Défile jusqu'à <strong>Tes applications</strong> → clique <strong>&lt;/&gt; Web</strong> (si pas encore créé, ajoute une app web)<br>
+      4. Copie le bloc <code>firebaseConfig</code> et colle les valeurs ci-dessous<br>
+      5. Active <strong>Firestore Database</strong> dans ton projet (mode test OK pour commencer)
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">API Key</label><input type="password" class="form-input" id="fb-apikey" placeholder="AIzaSy…"/></div>
+      <div class="form-group"><label class="form-label">Project ID</label><input type="text" class="form-input" id="fb-projectid" placeholder="mon-projet-123"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Auth Domain</label><input type="text" class="form-input" id="fb-authdomain" placeholder="mon-projet.firebaseapp.com"/></div>
+      <div class="form-group"><label class="form-label">App ID</label><input type="text" class="form-input" id="fb-appid" placeholder="1:123…:web:abc…"/></div>
+    </div>
+    <div id="fb-cfg-status" style="font-size:13px;margin-bottom:12px;display:none"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-accent" style="flex:1" onclick="saveFirebaseConfig()">Enregistrer & connecter</button>
+      <button class="btn btn-ghost" onclick="closeFirebaseModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL Mot de passe -->
+<div class="modal-backdrop" id="pw-modal">
+  <div class="modal-box" style="max-width:360px">
+    <h3>🔑 Changer le mot de passe</h3>
+    <div class="form-group"><label class="form-label">Ancien mot de passe</label><input type="password" class="form-input" id="pw-old" placeholder="••••••••"/></div>
+    <div class="form-group"><label class="form-label">Nouveau mot de passe</label><input type="password" class="form-input" id="pw-new" placeholder="••••••••"/></div>
+    <div class="form-group"><label class="form-label">Confirmer</label><input type="password" class="form-input" id="pw-confirm" placeholder="••••••••"/></div>
+    <div class="login-error" id="pw-error"></div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn btn-accent" style="flex:1" onclick="doChangePw()">Valider</button>
+      <button class="btn btn-ghost" onclick="closePwModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ══ HELPERS ══════════════════════════════════════════════ */
+const $=id=>document.getElementById(id);
+const ls={
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch{return d;}},
+  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
+};
+async function sha256(msg){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+let toastT;
+function toast(msg,type='ok'){
+  const t=$('toast');t.textContent=msg;t.className='show'+(type==='error'?' error':'');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.className='',3400);
+}
+function formatDate(d,t){
+  if(!d)return '';
+  const dt=new Date(d+'T12:00:00');
+  const D=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const M=['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+  return D[dt.getDay()]+' '+dt.getDate()+' '+M[dt.getMonth()]+' '+dt.getFullYear()+(t?' · '+t:'');
+}
+
+/* ══ FIREBASE STATE ═══════════════════════════════════════ */
+let db=null, fbApp=null, unsubEvents=null, unsubSettings=null;
+const DEFAULT_PW_HASH='240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'; // admin1234
+
+/* Cache local pour affichage immédiat */
+let localEvents=ls.get('cache_events',[]);
+let localSettings=ls.get('cache_settings',{
+  name:'NOM DE',name2:"L'ASSO",
+  tagline:'Nos prochains événements — Réserve ta place',logo:'',email:'contact@votreasso.fr'
+});
+let isLogged=false, editingId=null, saving=false;
+
+/* ══ INIT FIREBASE ════════════════════════════════════════ */
+function initFirebase(cfg){
+  try{
+    if(fbApp) return true;
+    fbApp=initializeApp(cfg);
+    db=getFirestore(fbApp);
+    return true;
+  }catch(e){console.error('Firebase init error',e);return false;}
+}
+
+function getFbCfg(){return ls.get('fb_cfg',null);}
+
+async function connectFirebase(){
+  const cfg=getFbCfg();
+  if(!cfg){updateBackendStatus('warn','Firebase non configuré.','o');return;}
+  if(!initFirebase(cfg)){updateBackendStatus('err','Erreur initialisation Firebase.','r');return;}
+  updateBackendStatus('ok','Firebase connecté — données temps réel ✓','g');
+  startListeners();
+}
+
+function startListeners(){
+  if(!db)return;
+  /* Écoute temps réel des événements */
+  if(unsubEvents)unsubEvents();
+  unsubEvents=onSnapshot(collection(db,'events'),snap=>{
+    localEvents=[];
+    snap.forEach(d=>localEvents.push({id:d.id,...d.data()}));
+    localEvents.sort((a,b)=>a.order-b.order||(a.date||'').localeCompare(b.date||''));
+    ls.set('cache_events',localEvents);
+    renderSite();
+    if(isLogged)renderAdminList();
+  },err=>console.warn('Firestore events error',err));
+
+  /* Écoute temps réel des paramètres */
+  if(unsubSettings)unsubSettings();
+  unsubSettings=onSnapshot(doc(db,'config','settings'),snap=>{
+    if(snap.exists()){
+      localSettings={...localSettings,...snap.data()};
+      ls.set('cache_settings',localSettings);
+      renderSite();
+      if(isLogged)loadSettingsForm();
+    }
+  },err=>console.warn('Firestore settings error',err));
+}
+
+function updateBackendStatus(type,msg,dotClass){
+  const el=$('backend-status');
+  el.className='backend-banner '+(type==='ok'?'ok':type==='err'?'err':'warn');
+  el.innerHTML=`<div class="sdot ${dotClass}"></div><span>${msg}${type!=='ok'?' <button class="btn btn-sm btn-ghost" style="margin-left:6px" onclick="openFirebaseModal()">Configurer</button>':''}</span>`;
+}
+
+/* ══ RENDER SITE ══════════════════════════════════════════ */
+function renderSite(){
+  const s=localSettings;
+  $('site-asso-name').innerHTML=s.name+(s.name2?' <em>'+s.name2+'</em>':'');
+  $('site-tagline').textContent=s.tagline||'';
+  $('footer-name').textContent=(s.name||'')+' '+(s.name2||'');
+  $('footer-year').textContent=new Date().getFullYear();
+  const em=$('footer-email');em.textContent=s.email||'';em.href='mailto:'+(s.email||'');
+  document.title=((s.name||'')+(s.name2?' '+s.name2:'')).trim()+' — Événements';
+  const lc=$('logo-container');
+  lc.innerHTML=s.logo
+    ?'<img class="site-logo" src="'+s.logo+'" alt="Logo"/>'
+    :'<div class="site-logo-ph"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="8" stroke="#613402" stroke-width="1.5"/><circle cx="20" cy="18" r="6" stroke="#613402" stroke-width="1.5"/><path d="M8 34c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="#613402" stroke-width="1.5" stroke-linecap="round"/></svg></div>';
+  const ev=localEvents.filter(e=>e.status!=='hidden');
+  const grid=$('events-grid');
+  if(!ev.length){
+    grid.innerHTML='<div class="empty-state"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><p style="margin-top:14px">Aucun événement à venir.<br>Revenez bientôt !</p></div>';
+    return;
+  }
+  grid.innerHTML=ev.map((e,i)=>{
+    const sold=e.status==='soldout';
+    return '<a class="event-card" href="'+(sold?'#':e.link)+'" '
+      +(sold?'onclick="return false;" style="pointer-events:none;opacity:.6"'
+        :'target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\')\"')
+      +' style="animation-delay:'+i*.07+'s">'
+      +'<div class="card-img-wrap">'
+      +(e.img?'<img src="'+e.img+'" alt="'+e.name+'" loading="lazy"/>'
+        :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;flex-direction:column;gap:8px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg>Affiche à venir</div>')
+      +(e.price?'<div class="price-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
+      +'<div class="card-overlay-name">'+e.name+'</div>'
+      +(sold?'<div class="sold-out-overlay"><div class="sold-out-stamp">COMPLET</div></div>':'')
+      +'</div><div class="card-body">'
+      +'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDate(e.date,e.time)+'</strong></div>'
+      +(e.place?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+e.place+'</div>':'')
+      +(e.desc?'<p class="card-desc">'+e.desc+'</p>':'')
+      +'<div class="card-cta"><button class="cta-btn"'+(sold?' style="background:var(--mid);cursor:default"':'')+'>'
+      +(sold?'Complet':'Réserver')
+      +(!sold?'<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>':'')
+      +'</button></div></div></a>';
+  }).join('');
+}
+
+/* ══ TRACKING ════════════════════════════════════════════ */
+window.trackClick=function(n){if(typeof gtag!=='undefined')gtag('event','reservation_click',{event_category:'Billetterie',event_label:n,value:1});};
+
+/* ══ ADMIN TRIGGER ═══════════════════════════════════════ */
+let tc=0,tt;
+$('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
+window.addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdmin();});
+if(location.hash==='#admin')setTimeout(openAdmin,300);
+
+function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
+window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
+function showLogin(){$('login-screen').style.display='flex';$('admin-dashboard').classList.remove('show');setTimeout(()=>$('login-pw').focus(),100);}
+function showDashboard(){$('login-screen').style.display='none';$('admin-dashboard').classList.add('show');renderAdminList();loadSettingsForm();connectFirebase();}
+
+/* ══ AUTH ════════════════════════════════════════════════ */
+window.doLogin=async function(){
+  const pw=$('login-pw').value.trim();if(!pw)return;
+  if(await sha256(pw)===ls.get('admin_pw_hash',DEFAULT_PW_HASH)){
+    isLogged=true;$('login-pw').value='';$('login-error').classList.remove('show');showDashboard();
+  }else{$('login-error').classList.add('show');$('login-pw').value='';$('login-pw').focus();}
+};
+$('login-pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+window.doLogout=function(){isLogged=false;if(unsubEvents)unsubEvents();if(unsubSettings)unsubSettings();unsubEvents=unsubSettings=null;fbApp=db=null;showLogin();};
+
+/* Changer MDP */
+window.openPwModal=function(){$('pw-modal').classList.add('open');['pw-old','pw-new','pw-confirm'].forEach(id=>$(id).value='');$('pw-error').textContent='';$('pw-error').classList.remove('show');setTimeout(()=>$('pw-old').focus(),100);};
+window.closePwModal=function(){$('pw-modal').classList.remove('open');};
+window.doChangePw=async function(){
+  const o=$('pw-old').value,n=$('pw-new').value,c=$('pw-confirm').value,e=$('pw-error');
+  if(!o||!n||!c){e.textContent='Remplis tous les champs.';e.classList.add('show');return;}
+  if(n!==c){e.textContent='Les mots de passe ne correspondent pas.';e.classList.add('show');return;}
+  if(n.length<6){e.textContent='Minimum 6 caractères.';e.classList.add('show');return;}
+  if(await sha256(o)!==ls.get('admin_pw_hash',DEFAULT_PW_HASH)){e.textContent='Ancien MDP incorrect.';e.classList.add('show');return;}
+  ls.set('admin_pw_hash',await sha256(n));closePwModal();toast('Mot de passe mis à jour ✓');
+};
+
+/* ══ FIREBASE CONFIG MODAL ════════════════════════════════ */
+window.openFirebaseModal=function(){
+  const cfg=getFbCfg()||{};
+  $('fb-apikey').value=cfg.apiKey||'';
+  $('fb-projectid').value=cfg.projectId||'';
+  $('fb-authdomain').value=cfg.authDomain||'';
+  $('fb-appid').value=cfg.appId||'';
+  $('fb-cfg-status').style.display='none';
+  $('firebase-modal').classList.add('open');
+};
+window.closeFirebaseModal=function(){$('firebase-modal').classList.remove('open');};
+
+window.saveFirebaseConfig=async function(){
+  const apiKey=$('fb-apikey').value.trim();
+  const projectId=$('fb-projectid').value.trim();
+  const authDomain=$('fb-authdomain').value.trim()||projectId+'.firebaseapp.com';
+  const appId=$('fb-appid').value.trim();
+  const st=$('fb-cfg-status');
+  if(!apiKey||!projectId){st.style.display='block';st.style.color='#c0392b';st.textContent='⚠ API Key et Project ID sont requis.';return;}
+  const cfg={apiKey,authDomain,projectId,storageBucket:projectId+'.appspot.com',appId:appId||'placeholder'};
+  ls.set('fb_cfg',cfg);
+  st.style.display='block';st.style.color='var(--muted2)';st.textContent='Connexion en cours…';
+  // Reset pour réinitialiser l'app
+  fbApp=null;db=null;
+  if(!initFirebase(cfg)){st.style.color='#c0392b';st.textContent='✗ Erreur initialisation. Vérifie les valeurs.';return;}
+  try{
+    // Test : lit/écrit le doc settings
+    const ref=doc(db,'config','settings');
+    const snap=await getDoc(ref);
+    if(!snap.exists())await setDoc(ref,localSettings);
+    st.style.color='#3a8a3a';st.textContent='✓ Connexion réussie !';
+    updateBackendStatus('ok','Firebase connecté — données temps réel ✓','g');
+    startListeners();
+    setTimeout(closeFirebaseModal,1500);
+  }catch(e){
+    st.style.color='#c0392b';
+    st.textContent='✗ Erreur Firestore : '+e.message+'. Active Firestore dans ta console Firebase (mode test).';
+  }
+};
+
+/* ══ ADMIN LIST ══════════════════════════════════════════ */
+function renderAdminList(){
+  const list=$('admin-event-list');
+  if(!localEvents.length){list.innerHTML='<p style="color:var(--muted);font-size:13px">Aucun événement. Crée-en un !</p>';return;}
+  list.innerHTML=localEvents.map(ev=>
+    '<div class="admin-event-item">'
+    +(ev.img?'<img class="admin-thumb" src="'+ev.img+'" alt=""/>'
+      :'<div class="admin-thumb" style="display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg></div>')
+    +'<div class="admin-event-info">'
+    +'<div class="admin-event-name">'+ev.name+'</div>'
+    +'<div class="admin-event-meta">'+(ev.date?formatDate(ev.date,ev.time):'—')
+    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':'')+'</div></div>'
+    +'<div class="admin-event-actions">'
+    +'<button class="btn btn-icon btn-sm" onclick="openEventForm(\''+ev.id+'\')">✏️</button>'
+    +'<button class="btn btn-warn btn-sm" onclick="toggleSoldOut(\''+ev.id+'\')">'+(ev.status==='soldout'?'↩':'⛔')+'</button>'
+    +'<button class="btn btn-danger btn-sm" onclick="deleteEvent(\''+ev.id+'\')">🗑</button>'
+    +'</div></div>'
+  ).join('');
+}
+
+/* ══ EVENT FORM ══════════════════════════════════════════ */
+window.openEventForm=function(id){
+  switchTab('form',0);editingId=id;
+  const ev=id?localEvents.find(e=>e.id===id):null;
+  $('form-title').textContent=ev?'Modifier':'Nouvel événement';
+  $('f-id').value=ev?.id||'';$('f-img').value=ev?.img||'';$('f-name').value=ev?.name||'';
+  $('f-date').value=ev?.date||'';$('f-time').value=ev?.time||'';$('f-place').value=ev?.place||'';
+  $('f-price').value=ev?.price||'';$('f-price-type').value=ev?.priceType||'normal';
+  $('f-link').value=ev?.link||'';$('f-desc').value=ev?.desc||'';$('f-status').value=ev?.status||'active';
+  previewImg(ev?.img||'');$('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
+};
+window.resetForm=function(){
+  editingId=null;$('form-title').textContent='Nouvel événement';
+  ['f-img','f-name','f-date','f-time','f-place','f-price','f-link','f-desc','f-id'].forEach(id=>$(id).value='');
+  $('f-price-type').value='normal';$('f-status').value='active';previewImg('');
+};
+window.previewImg=function(url){
+  const w=$('img-preview');
+  w.innerHTML=url
+    ?'<img src="'+url+'" alt="" onerror="this.parentNode.innerHTML=\'<span style=color:#c0392b;font-size:12px>Image introuvable</span>\'" style="width:100%;height:100%;object-fit:cover;display:block"/>'
+    :'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Aperçu affiche</span>';
+};
+
+window.saveEvent=async function(){
+  if(saving)return;
+  const name=$('f-name').value.trim(),link=$('f-link').value.trim();
+  if(!name){toast('Le nom est obligatoire','error');return;}
+  if(!link){toast('Le lien est obligatoire','error');return;}
+  saving=true;
+  const data={name,date:$('f-date').value,time:$('f-time').value,place:$('f-place').value.trim(),
+    price:$('f-price').value.trim(),priceType:$('f-price-type').value,link,
+    img:$('f-img').value.trim(),desc:$('f-desc').value.trim(),
+    status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now()};
+  try{
+    if(!db)throw new Error('Firebase non connecté. Configure-le d\'abord.');
+    if(editingId){await updateDoc(doc(db,'events',editingId),data);toast('Mis à jour ✓');}
+    else{await addDoc(collection(db,'events'),data);toast('Événement ajouté ✓');}
+    resetForm();
+  }catch(e){toast(e.message,'error');}
+  saving=false;
+};
+
+window.toggleSoldOut=async function(id){
+  const ev=localEvents.find(e=>e.id===id);if(!ev)return;
+  const ns=ev.status==='soldout'?'active':'soldout';
+  try{
+    if(!db)throw new Error('Firebase non connecté.');
+    await updateDoc(doc(db,'events',id),{status:ns});
+    toast(ns==='soldout'?'Marqué complet':'Remis en vente');
+  }catch(e){toast(e.message,'error');}
+};
+
+window.deleteEvent=async function(id){
+  const ev=localEvents.find(e=>e.id===id);if(!ev)return;
+  if(!confirm('Supprimer "'+ev.name+'" ?'))return;
+  try{
+    if(!db)throw new Error('Firebase non connecté.');
+    await deleteDoc(doc(db,'events',id));
+    if(editingId===id)resetForm();
+    toast('Supprimé');
+  }catch(e){toast(e.message,'error');}
+};
+
+/* ══ SETTINGS ════════════════════════════════════════════ */
+function loadSettingsForm(){
+  $('s-name').value=localSettings.name||'';
+  $('s-name2').value=localSettings.name2||'';
+  $('s-tagline').value=localSettings.tagline||'';
+  $('s-logo').value=localSettings.logo||'';
+  $('s-email').value=localSettings.email||'';
+}
+window.saveSettings=async function(){
+  const s={name:$('s-name').value.trim(),name2:$('s-name2').value.trim(),
+    tagline:$('s-tagline').value.trim(),logo:$('s-logo').value.trim(),email:$('s-email').value.trim()};
+  localSettings={...localSettings,...s};
+  ls.set('cache_settings',localSettings);
+  try{
+    if(!db)throw new Error('Firebase non connecté.');
+    await setDoc(doc(db,'config','settings'),s,{merge:true});
+    renderSite();toast('Paramètres enregistrés ✓');
+  }catch(e){renderSite();toast(e.message,'error');}
+};
+
+/* ══ TABS ════════════════════════════════════════════════ */
+window.switchTab=function(name,idx){
+  document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.admin-tab-panel').forEach(p=>p.classList.remove('active'));
+  $('tab-'+name).classList.add('active');
+};
+
+/* ══ INIT ════════════════════════════════════════════════ */
+$('footer-year').textContent=new Date().getFullYear();
+renderSite(); // affichage depuis le cache immédiatement
+const cfg=getFbCfg();
+if(cfg&&initFirebase(cfg))startListeners(); // sync silencieuse en arrière-plan
+</script>
+</body>
+</html>
