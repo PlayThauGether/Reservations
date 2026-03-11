@@ -1,6 +1,6 @@
 {
   "name": "Play Thau'Gether — Événements",
-  "short_name": "PTG - Événements",
+  "short_name": "Play Thau'Gether",
   "description": "Nos prochains événements — Réserve ta place",
   "start_url": "./",
   "display": "standalone",
