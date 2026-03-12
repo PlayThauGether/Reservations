@@ -58,7 +58,7 @@ header{position:relative;z-index:1;padding:56px 0 0;text-align:center;transition
   transition:opacity .4s ease;
 }
 #page-loader.hide{opacity:0;pointer-events:none;}
-.loader-logo{width:72px;height:72px;border-radius:14px;object-fit:contain;}
+.loader-logo{width:90px;height:90px;border-radius:50%;object-fit:contain;}
 .loader-spinner{width:28px;height:28px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
 .logo-row{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:14px;}
 .site-logo{width:140px;height:140px;border-radius:0;object-fit:contain;border:none;padding:0;background:transparent;}
@@ -858,7 +858,21 @@ function renderSite(){
   }).join('');
 }
 
-/* ══ TRACKING ════════════════════════════════════════════ */
+// Rafraîchissement auto quand on revient sur l'app
+let hiddenAt=0;
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){
+    hiddenAt=Date.now();
+  } else {
+    // Si l'app était en arrière-plan depuis plus de 30 secondes → reload silencieux
+    if(hiddenAt && Date.now()-hiddenAt > 30000){
+      window.location.reload();
+    } else {
+      // Sinon juste re-trigger les listeners Firebase
+      if(db) startListeners();
+    }
+  }
+});
 window.trackClick=function(n){
   if(typeof gtag!=='undefined')gtag('event','reservation_click',{event_category:'Billetterie',event_label:n,value:1});
 };
@@ -1163,12 +1177,19 @@ window.switchTab=function(name,idx){
 
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
-// Fallback : cache le loader après 3s max même sans Firebase
-setTimeout(()=>{
+// Si on a du cache, on cache le loader immédiatement
+const hasCachedData = ls.get('cache_events',null);
+if(hasCachedData && hasCachedData.length>0){
   const loader=document.getElementById('page-loader');
   if(loader){loader.classList.add('hide');setTimeout(()=>loader.remove(),450);}
-},3000);
-renderSite(); // affichage depuis le cache immédiatement
+} else {
+  // Fallback : cache le loader après 3s max sans cache
+  setTimeout(()=>{
+    const loader=document.getElementById('page-loader');
+    if(loader){loader.classList.add('hide');setTimeout(()=>loader.remove(),450);}
+  },3000);
+}
+renderSite();
 // Connexion Firebase automatique depuis la config intégrée
 if(initFirebase(FIREBASE_CONFIG)){
   startListeners();
