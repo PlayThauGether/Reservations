@@ -437,11 +437,15 @@ textarea.form-input{resize:vertical;min-height:68px;}
     <div class="login-box">
       <h2>Espace <span>Admin</span></h2>
       <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="login-email" placeholder="admin@email.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
         <label class="form-label">Mot de passe</label>
         <input type="password" class="form-input" id="login-pw" placeholder="••••••••" autocomplete="current-password"/>
-        <div class="login-error" id="login-error">Mot de passe incorrect</div>
+        <div class="login-error" id="login-error">Email ou mot de passe incorrect</div>
       </div>
-      <button class="btn btn-accent btn-full" onclick="doLogin()">Connexion</button>
+      <button class="btn btn-accent btn-full" id="login-btn" onclick="doLogin()">Connexion</button>
       <button class="btn btn-ghost btn-full" onclick="closeAdmin()">Annuler</button>
     </div>
   </div>
@@ -451,7 +455,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
       <div class="admin-title">Panel <span>Admin</span></div>
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         <button class="btn btn-ghost btn-sm" onclick="openFirebaseModal()">🔥 Firebase</button>
-        <button class="btn btn-ghost btn-sm" onclick="openPwModal()">🔑 MDP</button>
         <button class="btn btn-ghost btn-sm" onclick="doLogout()">Déconnexion</button>
         <button class="btn btn-ghost btn-sm" onclick="closeAdmin()">✕</button>
       </div>
@@ -603,21 +606,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
   </div>
 </div>
 
-<!-- MODAL Mot de passe -->
-<div class="modal-backdrop" id="pw-modal">
-  <div class="modal-box" style="max-width:360px">
-    <h3>🔑 Changer le mot de passe</h3>
-    <div class="form-group"><label class="form-label">Ancien mot de passe</label><input type="password" class="form-input" id="pw-old" placeholder="••••••••"/></div>
-    <div class="form-group"><label class="form-label">Nouveau mot de passe</label><input type="password" class="form-input" id="pw-new" placeholder="••••••••"/></div>
-    <div class="form-group"><label class="form-label">Confirmer</label><input type="password" class="form-input" id="pw-confirm" placeholder="••••••••"/></div>
-    <div class="login-error" id="pw-error"></div>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button class="btn btn-accent" style="flex:1" onclick="doChangePw()">Valider</button>
-      <button class="btn btn-ghost" onclick="closePwModal()">Annuler</button>
-    </div>
-  </div>
-</div>
-
 <!-- MODAL Événement détail -->
 <div id="event-modal" onclick="if(event.target===this)closeEventModal()">
   <div class="emodal-box" id="emodal-box">
@@ -647,6 +635,8 @@ textarea.form-input{resize:vertical;min-height:68px;}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 /* ══ HELPERS ══════════════════════════════════════════════ */
 const $=id=>document.getElementById(id);
@@ -654,10 +644,6 @@ const ls={
   get:(k,d)=>{try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch{return d;}},
   set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
 };
-async function sha256(msg){
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
 let toastT;
 function toast(msg,type='ok'){
   const t=$('toast');t.textContent=msg;t.className='show'+(type==='error'?' error':'');
@@ -731,8 +717,7 @@ window.onMapsUrlInput=function(url){
 };
 
 /* ══ FIREBASE STATE ═══════════════════════════════════════ */
-let db=null, fbApp=null, unsubEvents=null, unsubSettings=null;
-const DEFAULT_PW_HASH='240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'; // admin1234
+let db=null, fbApp=null, fbAuth=null, unsubEvents=null, unsubSettings=null;
 
 // Config Firebase intégrée — fonctionne sur tous les appareils
 const FIREBASE_CONFIG={
@@ -758,6 +743,7 @@ function initFirebase(cfg){
     if(fbApp) return true;
     fbApp=initializeApp(cfg);
     db=getFirestore(fbApp);
+    fbAuth=getAuth(fbApp);
     return true;
   }catch(e){console.error('Firebase init error',e);return false;}
 }
@@ -992,29 +978,37 @@ if(location.hash==='#admin')setTimeout(openAdmin,300);
 
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
 window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
-function showLogin(){$('login-screen').style.display='flex';$('admin-dashboard').classList.remove('show');setTimeout(()=>$('login-pw').focus(),100);}
+function showLogin(){$('login-screen').style.display='flex';$('admin-dashboard').classList.remove('show');setTimeout(()=>$('login-email').focus(),100);}
 function showDashboard(){$('login-screen').style.display='none';$('admin-dashboard').classList.add('show');renderAdminList();loadSettingsForm();connectFirebase();}
 
-/* ══ AUTH ════════════════════════════════════════════════ */
+/* ══ AUTH FIREBASE ═══════════════════════════════════════ */
 window.doLogin=async function(){
-  const pw=$('login-pw').value.trim();if(!pw)return;
-  if(await sha256(pw)===ls.get('admin_pw_hash',DEFAULT_PW_HASH)){
-    isLogged=true;$('login-pw').value='';$('login-error').classList.remove('show');showDashboard();
-  }else{$('login-error').classList.add('show');$('login-pw').value='';$('login-pw').focus();}
+  const email=$('login-email').value.trim();
+  const pw=$('login-pw').value;
+  if(!email||!pw)return;
+  const btn=$('login-btn');
+  btn.textContent='Connexion…';btn.disabled=true;
+  try{
+    await signInWithEmailAndPassword(fbAuth,email,pw);
+    isLogged=true;
+    $('login-pw').value='';
+    $('login-error').classList.remove('show');
+    showDashboard();
+  }catch(e){
+    $('login-error').classList.add('show');
+    $('login-pw').value='';
+    $('login-pw').focus();
+  }finally{
+    btn.textContent='Connexion';btn.disabled=false;
+  }
 };
 $('login-pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-window.doLogout=function(){isLogged=false;if(unsubEvents)unsubEvents();if(unsubSettings)unsubSettings();unsubEvents=unsubSettings=null;fbApp=db=null;showLogin();};
+$('login-email').addEventListener('keydown',e=>{if(e.key==='Enter')$('login-pw').focus();});
 
-/* Changer MDP */
-window.openPwModal=function(){$('pw-modal').classList.add('open');['pw-old','pw-new','pw-confirm'].forEach(id=>$(id).value='');$('pw-error').textContent='';$('pw-error').classList.remove('show');setTimeout(()=>$('pw-old').focus(),100);};
-window.closePwModal=function(){$('pw-modal').classList.remove('open');};
-window.doChangePw=async function(){
-  const o=$('pw-old').value,n=$('pw-new').value,c=$('pw-confirm').value,e=$('pw-error');
-  if(!o||!n||!c){e.textContent='Remplis tous les champs.';e.classList.add('show');return;}
-  if(n!==c){e.textContent='Les mots de passe ne correspondent pas.';e.classList.add('show');return;}
-  if(n.length<6){e.textContent='Minimum 6 caractères.';e.classList.add('show');return;}
-  if(await sha256(o)!==ls.get('admin_pw_hash',DEFAULT_PW_HASH)){e.textContent='Ancien MDP incorrect.';e.classList.add('show');return;}
-  ls.set('admin_pw_hash',await sha256(n));closePwModal();toast('Mot de passe mis à jour ✓');
+window.doLogout=async function(){
+  if(fbAuth)await signOut(fbAuth);
+  isLogged=false;
+  showLogin();
 };
 
 /* ══ FIREBASE CONFIG MODAL ════════════════════════════════ */
