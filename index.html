@@ -412,10 +412,20 @@ textarea.form-input{resize:vertical;min-height:68px;}
 @media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
   .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
 
-/* ══ FIX CARTES MOBILE ════════════════════════════════════ */
+/* ══ SCROLL HINT MOBILE ═══════════════════════════════════ */
 @media(max-width:520px){
-  .card-img-wrap{max-height:220px;}
+  .events-grid{padding-bottom:60px;}
+  .event-card:first-child{margin-top:0;}
 }
+.scroll-hint{
+  display:none;
+  text-align:center;font-size:12px;color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:8px 0 24px;
+  animation:bounceY 1.6s ease-in-out infinite;
+}
+@keyframes bounceY{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+@media(max-width:520px){.scroll-hint{display:block;}}
 /* ══ BOUTONS CALENDRIER ═══════════════════════════════════ */
 .cal-trigger{
   display:inline-flex;align-items:center;gap:6px;
@@ -468,6 +478,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
     <div class="events-grid" id="events-grid">
       <div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Chargement…</p></div>
     </div>
+    <div class="scroll-hint">↓ &nbsp; Voir plus d'événements</div>
   </div>
 </main>
 
@@ -1338,11 +1349,11 @@ window.downloadIcal=function(id){
     e.link?'URL:'+e.link:'',
     'END:VEVENT','END:VCALENDAR'
   ].filter(Boolean).join('\r\n');
-  const blob=new Blob([ics],{type:'text/calendar'});
+  // data:text/calendar → iOS ouvre Calendrier directement, desktop télécharge
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
+  a.href='data:text/calendar;charset=utf8,'+encodeURIComponent(ics);
   a.download=e.name.replace(/[^a-z0-9]/gi,'_')+'.ics';
-  a.click();URL.revokeObjectURL(a.href);
+  a.click();
 };
 
 /* ══ INIT ════════════════════════════════════════════════ */
