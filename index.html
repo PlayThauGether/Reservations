@@ -417,16 +417,31 @@ textarea.form-input{resize:vertical;min-height:68px;}
   .card-img-wrap{max-height:220px;}
 }
 /* ══ BOUTONS CALENDRIER ═══════════════════════════════════ */
-.cal-btns{display:flex;gap:8px;margin-top:6px;}
-.cal-btn{
+.cal-trigger{
   display:inline-flex;align-items:center;gap:6px;
-  padding:9px 14px;border-radius:10px;font-size:13px;font-weight:500;
+  padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;
   border:1.5px solid var(--border2);background:var(--surface2);color:var(--muted2);
-  cursor:pointer;transition:background .2s,border-color .2s,color .2s;text-decoration:none;
-  flex:1;justify-content:center;
+  cursor:pointer;transition:background .2s,border-color .2s,color .2s;
+  white-space:nowrap;position:relative;
 }
-.cal-btn:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
-.cal-btn svg{flex-shrink:0;opacity:.7;}
+.cal-trigger:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+.cal-trigger svg{flex-shrink:0;}
+.cal-dropdown{
+  position:absolute;top:calc(100% + 6px);right:0;left:auto;z-index:20;
+  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
+  box-shadow:0 8px 28px rgba(44,26,8,.15);
+  min-width:180px;overflow:hidden;
+  display:none;flex-direction:column;
+}
+.cal-dropdown.open{display:flex;}
+.cal-option{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;font-size:13px;color:var(--text);
+  cursor:pointer;transition:background .15s;text-decoration:none;border:none;background:none;
+  font-family:var(--font-b);text-align:left;width:100%;
+}
+.cal-option:hover{background:var(--surface2);color:var(--accent);}
+.cal-option svg{opacity:.6;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -691,7 +706,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
       <div class="emodal-map" id="emodal-map" style="display:none">
         <iframe id="emodal-map-iframe" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
-      <div id="emodal-cal-btns"></div>
       <div class="emodal-cta" id="emodal-cta"></div>
     </div>
   </div>
@@ -1024,7 +1038,7 @@ window.openEventModal=function(id){
   // Meta
   const mapsLink=e.mapsUrl||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||''));
   $('emodal-meta').innerHTML=
-    (e.date?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDateLong(e.date,e.time)+'</strong></div>':'')
+    (e.date?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDateLong(e.date,e.time)+'</strong>'+'<div class="cal-trigger" onclick="toggleCalDropdown(event)" style="margin-left:auto"><svg width="12" height="12" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"/><line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"/><line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"/></svg> + Agenda<div class="cal-dropdown" id="cal-dd"><a class=\"cal-option\" id=\"cal-google-link\" href=\"#\" target=\"_blank\" rel=\"noopener\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"/><line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"/><line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"/></svg>Google Agenda</a><button class=\"cal-option\" id=\"cal-ical-btn\" onclick=\"\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>iCal / Apple</button></div></div></div>':'')
     +(e.place?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span><a href="'+mapsLink+'" target="_blank" rel="noopener noreferrer">'+e.place+'</a><span style="color:var(--mid);font-size:12px"> — ouvrir Maps ↗</span></span></div>':'')
     +(e.price?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.88 13.76V17h-1.75v-1.17c-1.07-.23-2.27-.78-2.27-2.42h1.6c0 .87.58 1.29 1.42 1.29.87 0 1.33-.42 1.33-1.05 0-.61-.35-.93-1.47-1.24-1.57-.44-2.7-1.04-2.7-2.55 0-1.32.99-2.15 2.09-2.4V6h1.75v1.49c1.08.27 1.92.96 1.92 2.2h-1.6c0-.8-.47-1.18-1.32-1.18-.82 0-1.26.42-1.26 1 0 .58.39.87 1.57 1.21 1.57.44 2.6 1.09 2.6 2.6 0 1.4-1.06 2.24-2.41 2.44z"/></svg><strong>'+e.price+'</strong></div>':'');
 
@@ -1051,7 +1065,7 @@ window.openEventModal=function(id){
 
 
   // Boutons Agenda
-  const calDiv=$('emodal-cal-btns');
+  // Met à jour les liens agenda dans le dropdown
   if(e.date){
     const dt=e.date.replace(/-/g,'');
     const timeStr=e.time?e.time.replace(':','')+'00':'120000';
@@ -1062,20 +1076,24 @@ window.openEventModal=function(id){
       +'&dates='+dtStart+'/'+dtEnd
       +(e.place?'&location='+encodeURIComponent(e.place):'')
       +(e.desc?'&details='+encodeURIComponent(e.desc):'');
-    calDiv.innerHTML='<div class="cal-btns">'
-      +'<a class="cal-btn" href="'+gcUrl+'" target="_blank" rel="noopener">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
-      +'Google Agenda</a>'
-      +'<button class="cal-btn" onclick="downloadIcal(\''+e.id+'\')">'
-      +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-      +'iCal / Apple</button>'
-      +'</div>';
-  } else { calDiv.innerHTML=''; }
+    const gLink=$('cal-google-link');
+    const iBtn=$('cal-ical-btn');
+    if(gLink)gLink.href=gcUrl;
+    if(iBtn)iBtn.onclick=()=>downloadIcal(e.id);
+  }
 
   $('event-modal').classList.add('open');
   document.body.style.overflow='hidden';
   incrementStat(e.id,'views');
 };
+window.toggleCalDropdown=function(ev){
+  ev.stopPropagation();
+  const dd=$('cal-dd');
+  if(dd)dd.classList.toggle('open');
+};
+document.addEventListener('click',()=>{
+  const dd=$('cal-dd');if(dd)dd.classList.remove('open');
+});
 window.closeEventModal=function(){
   $('event-modal').classList.remove('open');
   document.body.style.overflow='';
