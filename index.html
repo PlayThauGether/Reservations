@@ -6,8 +6,8 @@
 <title id="page-title">Play Thau'Gether — Événements</title>
 
 <!-- ═══ FAVICON ═══════════════════════════════════════════ -->
-<link rel="icon" type="image/png" sizes="192x192"  href="favicon.png"/>
-<link rel="apple-touch-icon"      sizes="192x192"  href="favicon.png"/>
+<link rel="icon" type="image/png" sizes="195x195"  href="favicon.png"/>
+<link rel="apple-touch-icon"      sizes="195x195"  href="favicon.png"/>
 <link rel="icon" type="image/png" sizes="512x512"  href="favicon-512.png"/>
 
 <!-- ═══ PWA — Installation sur Android & iPhone ══════════ -->
@@ -1313,6 +1313,16 @@ window.downloadIcal=function(id){
 };
 
 /* ══ INIT ════════════════════════════════════════════════ */
+// Cacher le loader — toujours, quoi qu'il arrive
+window._hl=function(){
+  var l=document.getElementById('page-loader');
+  if(!l)return;
+  l.classList.add('hide');
+  setTimeout(function(){if(l&&l.parentNode)l.parentNode.removeChild(l);},450);
+};
+setTimeout(window._hl, 2000); // fallback 2s si Firebase ne répond pas
+try{var _c=JSON.parse(localStorage.getItem('cache_events'));if(_c&&_c.length>0)window._hl();}catch(e){}
+
 $('footer-year').textContent=new Date().getFullYear();
 renderSite();
 if(initFirebase(FIREBASE_CONFIG)){
