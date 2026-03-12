@@ -35,6 +35,39 @@
   --r:14px;--font-d:'Playfair Display',serif;--font-b:'DM Sans',sans-serif;
   --card-w:290px;--shadow:0 4px 24px rgba(97,52,2,.1);--shadow-lg:0 16px 60px rgba(97,52,2,.18);
 }
+[data-theme="dark"]{
+  --bg:#1c1008;--bg2:#140c05;--surface:#2a1a0c;--surface2:#221408;
+  --border:rgba(205,179,150,.1);--border2:rgba(205,179,150,.18);
+  --accent:#e8a265;--accent-l:#f0b87a;--mid:#6b4d2e;
+  --text:#f0dfc8;--muted:#a07d5a;--muted2:#c4a07a;
+  --shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 16px 60px rgba(0,0,0,.5);
+}
+/* Theme toggle */
+#theme-toggle{
+  position:fixed;bottom:24px;right:24px;z-index:50;
+  width:42px;height:42px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;
+  box-shadow:var(--shadow);
+  transition:background .3s,transform .2s;
+}
+#theme-toggle:hover{transform:scale(1.1);}
+/* PWA install banner */
+#install-banner{
+  position:fixed;bottom:80px;right:16px;z-index:50;
+  background:var(--accent);color:#fff;
+  border-radius:14px;padding:12px 16px;
+  display:none;align-items:center;gap:10px;
+  box-shadow:var(--shadow-lg);max-width:240px;
+  font-size:13px;font-family:var(--font-b);font-weight:500;
+  animation:slideUp .4s cubic-bezier(.23,1,.32,1);
+}
+#install-banner.show{display:flex;}
+#install-banner button{background:rgba(255,255,255,.2);border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;}
+#install-banner button:hover{background:rgba(255,255,255,.35);}
+#install-banner .close-install{background:none;border:none;color:rgba(255,255,255,.7);padding:0;font-size:18px;line-height:1;cursor:pointer;margin-left:auto;}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:16px;line-height:1.6;min-height:100vh;overflow-x:hidden;}
@@ -429,6 +462,16 @@ textarea.form-input{resize:vertical;min-height:68px;}
     </div>
   </div>
 </main>
+<!-- Bouton mode sombre/clair -->
+<button id="theme-toggle" title="Mode sombre / clair" onclick="toggleTheme()">🌙</button>
+<!-- Bouton notifications -->
+<!-- Bannière installation PWA -->
+<div id="install-banner">
+  <span>📲 Installer l'app</span>
+  <button onclick="installPWA()">Installer</button>
+  <button class="close-install" onclick="dismissInstall()">×</button>
+</div>
+
 <footer>
   <div class="wrap">
     <p>© <span id="footer-year"></span> <strong id="footer-name"></strong></p>
@@ -590,6 +633,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
           <div class="form-group"><label class="form-label">Slogan / tagline</label><input type="text" class="form-input" id="s-tagline" placeholder="Nos prochains événements"/></div>
           <div class="form-group"><label class="form-label">URL du logo</label><input type="url" class="form-input" id="s-logo" placeholder="logo.png"/></div>
           <div class="form-group"><label class="form-label">Email de contact</label><input type="email" class="form-input" id="s-email" placeholder="contact@monasso.fr"/></div>
+
           <button class="btn btn-accent btn-full" onclick="saveSettings()">Enregistrer</button>
         </div>
         <!-- Stats -->
@@ -907,6 +951,45 @@ window.trackClick=function(n){
   if(typeof gtag!=='undefined')gtag('event','reservation_click',{event_category:'Billetterie',event_label:n,value:1});
 };
 
+/* ══ MODE SOMBRE ══════════════════════════════════════════ */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  const btn=$('theme-toggle');
+  if(btn)btn.textContent=t==='dark'?'☀️':'🌙';
+  const mc=document.querySelector('meta[name="theme-color"]');
+  if(mc)mc.content=t==='dark'?'#1c1008':'#613402';
+}
+window.toggleTheme=function(){
+  const cur=document.documentElement.getAttribute('data-theme')||'light';
+  const next=cur==='dark'?'light':'dark';
+  ls.set('theme',next);applyTheme(next);
+};
+applyTheme(ls.get('theme','light'));
+
+/* ══ PWA INSTALL ══════════════════════════════════════════ */
+let deferredInstall=null;
+const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredInstall=e;
+  if(!isStandalone()&&!ls.get('install_dismissed',false)){
+    setTimeout(()=>{const b=$('install-banner');if(b)b.classList.add('show');},3000);
+  }
+});
+window.installPWA=async function(){
+  if(!deferredInstall)return;
+  deferredInstall.prompt();
+  const r=await deferredInstall.userChoice;
+  if(r.outcome==='accepted'){const b=$('install-banner');if(b)b.classList.remove('show');}
+  deferredInstall=null;
+};
+window.dismissInstall=function(){
+  const b=$('install-banner');if(b)b.classList.remove('show');
+  ls.set('install_dismissed',true);
+};
+window.addEventListener('appinstalled',()=>{const b=$('install-banner');if(b)b.classList.remove('show');});
+
+/* ══ ONESIGNAL NOTIFICATIONS ══════════════════════════════ */
+
 /* ══ STATS FIRESTORE ══════════════════════════════════════ */
 async function incrementStat(eventId, field){
   if(!db||!eventId)return;
@@ -1156,6 +1239,7 @@ window.previewImg=function(url){
     :'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Aperçu affiche</span>';
 };
 
+/* ══ PUSH AUTO ════════════════════════════════════════════ */
 window.saveEvent=async function(){
   if(saving)return;
   const name=$('f-name').value.trim(),link=$('f-link').value.trim();
@@ -1171,8 +1255,16 @@ window.saveEvent=async function(){
     status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now()};
   try{
     if(!db)throw new Error('Firebase non connecté. Configure-le d\'abord.');
-    if(editingId){await updateDoc(doc(db,'events',editingId),data);toast('Mis à jour ✓');}
-    else{await addDoc(collection(db,'events'),data);toast('Événement ajouté ✓');}
+    if(editingId){
+      const prev=localEvents.find(e=>e.id===editingId);
+      await updateDoc(doc(db,'events',editingId),data);
+      toast('Mis à jour ✓');
+      }
+    }else{
+      await addDoc(collection(db,'events'),data);
+      toast('Événement ajouté ✓');
+      }
+    }
     resetForm();
   }catch(e){toast(e.message,'error');}
   saving=false;
