@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title id="page-title">Play Thau'Gether — Événements</title>
 
-<!-- ═══ FAVICON ══════════════════════════════════════════ -->
+<!-- ═══ FAVICON ═══════════════════════════════════════════ -->
 <link rel="icon" type="image/png" sizes="192x192"  href="favicon.png"/>
 <link rel="apple-touch-icon"      sizes="192x192"  href="favicon.png"/>
 <link rel="icon" type="image/png" sizes="512x512"  href="favicon-512.png"/>
@@ -427,95 +427,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
 }
 .cal-btn:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
 .cal-btn svg{flex-shrink:0;opacity:.7;}
-/* ══ GALERIE ══════════════════════════════════════════════ */
-.gallery-section{position:relative;z-index:1;padding:0 0 80px;}
-.gallery-section .wrap > h2{
-  font-family:var(--font-d);font-size:clamp(22px,3vw,36px);font-weight:700;
-  color:var(--accent);text-align:center;margin-bottom:10px;
-}
-.gallery-subtitle{text-align:center;font-size:13px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:36px;}
-.gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:16px;
-}
-.gallery-item{
-  position:relative;overflow:hidden;border-radius:12px;
-  background:var(--surface2);border:1px solid var(--border);
-  aspect-ratio:4/3;cursor:pointer;
-  transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s;
-  box-shadow:var(--shadow);
-  -webkit-user-select:none;user-select:none;
-}
-.gallery-item:hover{transform:scale(1.03);box-shadow:var(--shadow-lg);}
-.gallery-bg{
-  position:absolute;inset:0;background-size:cover;background-position:center;
-  transition:transform .4s cubic-bezier(.23,1,.32,1);
-  -webkit-user-select:none;user-select:none;
-}
-.gallery-item:hover .gallery-bg{transform:scale(1.06);}
-.gallery-item::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 40%,rgba(44,26,8,.7) 100%);
-  pointer-events:none;
-}
-.gallery-caption{
-  position:absolute;bottom:10px;left:12px;right:12px;z-index:2;
-  font-size:12px;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6);
-  font-weight:500;line-height:1.3;
-}
-/* Lightbox galerie */
-#gallery-lb{
-  display:none;position:fixed;inset:0;z-index:250;
-  background:rgba(22,10,3,.96);backdrop-filter:blur(16px);
-  align-items:center;justify-content:center;
-}
-#gallery-lb.open{display:flex;animation:fadeIn .2s ease;}
-#gallery-lb img{
-  max-width:90vw;max-height:86vh;object-fit:contain;
-  border-radius:12px;box-shadow:0 32px 100px rgba(0,0,0,.6);
-  -webkit-user-select:none;user-select:none;pointer-events:none;
-}
-.gallery-lb-close{
-  position:fixed;top:16px;right:18px;z-index:10;
-  width:36px;height:36px;border-radius:50%;
-  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:18px;color:#fff;
-  transition:background .2s;
-}
-.gallery-lb-close:hover{background:rgba(255,255,255,.3);}
-.gallery-lb-caption{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  color:rgba(255,255,255,.7);font-size:13px;text-align:center;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80vw;
-}
-.gallery-lb-nav{
-  position:fixed;top:50%;transform:translateY(-50%);
-  width:44px;height:44px;border-radius:50%;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:#fff;font-size:20px;
-  transition:background .2s;z-index:10;
-}
-.gallery-lb-nav:hover{background:rgba(255,255,255,.25);}
-#gallery-lb-prev{left:16px;}#gallery-lb-next{right:16px;}
-/* Admin galerie */
-.gallery-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
-.gallery-admin-item{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--surface2);border:1px solid var(--border);}
-.gallery-admin-img{width:100%;height:100%;object-fit:cover;display:block;}
-.gallery-admin-del{
-  position:absolute;top:4px;right:4px;z-index:2;
-  width:22px;height:22px;border-radius:50%;
-  background:rgba(192,57,43,.85);border:none;color:#fff;
-  font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-}
-.gallery-admin-del:hover{background:#c0392b;}
-.gallery-admin-caption{
-  position:absolute;bottom:0;left:0;right:0;padding:3px 5px;
-  background:rgba(44,26,8,.65);color:#fff;font-size:10px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
 </style>
 </head>
 <body>
@@ -545,15 +456,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
   </div>
 </main>
 
-<!-- ═══ GALERIE PHOTOS ════════════════════════════════════ -->
-<section class="gallery-section" id="gallery-section" style="display:none">
-  <div class="wrap">
-    <div class="ornament"><div class="ornament-icon">✦</div></div>
-    <h2>Nos événements passés</h2>
-    <p class="gallery-subtitle">Retrouve l'ambiance de nos éditions précédentes</p>
-    <div class="gallery-grid" id="gallery-grid"></div>
-  </div>
-</section>
 <footer>
   <div class="wrap">
     <p>© <span id="footer-year"></span> <strong id="footer-name"></strong></p>
@@ -634,7 +536,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
           <button class="admin-tab active" onclick="switchTab('form',0)">Événement</button>
           <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
           <button class="admin-tab" onclick="switchTab('stats',2);loadStats()">Stats</button>
-          <button class="admin-tab" onclick="switchTab('gallery',3)">Galerie</button>
         </div>
         <!-- Formulaire événement -->
         <div class="admin-tab-panel active" id="tab-form">
@@ -735,19 +636,9 @@ textarea.form-input{resize:vertical;min-height:68px;}
             <p style="color:var(--muted);font-size:13px">Clique sur "Stats" pour charger…</p>
           </div>
 
-        <!-- Galerie admin -->
-        <div class="admin-tab-panel" id="tab-gallery">
-          <div class="sec-title">Photos — Événements passés</div>
-          <div class="gallery-admin-grid" id="gallery-admin-grid"></div>
-          <div class="form-group">
-            <label class="form-label">URL de la photo</label>
-            <input type="url" class="form-input" id="g-url" placeholder="https://…"/>
-          </div>
           <div class="form-group">
             <label class="form-label">Légende (optionnel)</label>
-            <input type="text" class="form-input" id="g-caption" placeholder="Soirée jeux — Mars 2025"/>
           </div>
-          <button class="btn btn-accent btn-full" onclick="addGalleryPhoto()">+ Ajouter la photo</button>
         </div>
         </div>
       </div>
@@ -946,14 +837,10 @@ function startListeners(){
     renderSite();
     if(isLogged)renderAdminList();
     // Cache le loader dès la première réponse Firebase
-    const loader=document.getElementById('page-loader');
-    if(loader)loader.classList.add('hide');
-    setTimeout(()=>{if(loader)loader.remove();},450);
+    if(window._hl)window._hl();
   },err=>{
     console.warn('Firestore events error',err);
-    const loader=document.getElementById('page-loader');
-    if(loader)loader.classList.add('hide');
-    setTimeout(()=>{if(loader)loader.remove();},450);
+    if(window._hl)window._hl();
   });
 
   /* Écoute temps réel des paramètres */
@@ -1425,109 +1312,15 @@ window.downloadIcal=function(id){
   a.click();URL.revokeObjectURL(a.href);
 };
 
-/* ══ GALERIE ═════════════════════════════════════════════ */
-let localGallery=[];let unsubGallery=null;let lbIndex=0;
-
-function startGalleryListener(){
-  if(!db||unsubGallery)return;
-  unsubGallery=onSnapshot(collection(db,'gallery'),snap=>{
-    localGallery=[];
-    snap.forEach(d=>localGallery.push({id:d.id,...d.data()}));
-    localGallery.sort((a,b)=>(a.order||0)-(b.order||0));
-    renderGallery();
-    if(isLogged)renderGalleryAdmin();
-  });
-}
-function renderGallery(){
-  const sec=$('gallery-section');
-  if(!localGallery.length){sec.style.display='none';return;}
-  sec.style.display='block';
-  $('gallery-grid').innerHTML=localGallery.map((p,i)=>
-    '<div class="gallery-item" onclick="openLb('+i+')" oncontextmenu="return false">'
-    +'<div class="gallery-bg" style="background-image:url(''+p.url+'')"></div>'
-    +(p.caption?'<div class="gallery-caption">'+p.caption+'</div>':'')
-    +'</div>'
-  ).join('');
-}
-function renderGalleryAdmin(){
-  const g=$('gallery-admin-grid');if(!g)return;
-  g.innerHTML=localGallery.length?localGallery.map(p=>
-    '<div class="gallery-admin-item">'
-    +'<img class="gallery-admin-img" src="'+p.url+'" alt="" oncontextmenu="return false"/>'
-    +(p.caption?'<div class="gallery-admin-caption">'+p.caption+'</div>':'')
-    +'<button class="gallery-admin-del" onclick="deleteGalleryPhoto(\''+p.id+'\')">✕</button>'
-    +'</div>'
-  ).join(''):'<p style="color:var(--muted);font-size:13px">Aucune photo.</p>';
-}
-window.addGalleryPhoto=async function(){
-  const url=$('g-url').value.trim();
-  const caption=$('g-caption').value.trim();
-  if(!url){toast('URL de la photo requise','error');return;}
-  if(!db){toast('Firebase non connecté','error');return;}
-  try{
-    await addDoc(collection(db,'gallery'),{url,caption,order:Date.now()});
-    $('g-url').value='';$('g-caption').value='';
-    toast('Photo ajoutée ✓');
-  }catch(e){toast(e.message,'error');}
-};
-window.deleteGalleryPhoto=async function(id){
-  if(!confirm('Supprimer cette photo ?'))return;
-  try{await deleteDoc(doc(db,'gallery',id));toast('Supprimée');}
-  catch(e){toast(e.message,'error');}
-};
-window.openLb=function(i){
-  lbIndex=i;updateLb();
-  $('gallery-lb').classList.add('open');
-  document.body.style.overflow='hidden';
-};
-window.closeLb=function(){
-  $('gallery-lb').classList.remove('open');
-  document.body.style.overflow='';
-};
-window.lbNav=function(dir){
-  lbIndex=(lbIndex+dir+localGallery.length)%localGallery.length;updateLb();
-};
-function updateLb(){
-  const p=localGallery[lbIndex];
-  $('gallery-lb-img').src=p.url;
-  $('gallery-lb-caption').textContent=p.caption||'';
-}
-document.addEventListener('keydown',e=>{
-  if(!$('gallery-lb').classList.contains('open'))return;
-  if(e.key==='ArrowLeft')lbNav(-1);
-  if(e.key==='ArrowRight')lbNav(1);
-  if(e.key==='Escape')closeLb();
-});
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
-// Si on a du cache, on cache le loader immédiatement
-const hasCachedData = ls.get('cache_events',null);
-if(hasCachedData && hasCachedData.length>0){
-  const loader=document.getElementById('page-loader');
-  if(loader){loader.classList.add('hide');setTimeout(()=>loader.remove(),450);}
-} else {
-  // Fallback : cache le loader après 3s max sans cache
-  setTimeout(()=>{
-    const loader=document.getElementById('page-loader');
-    if(loader){loader.classList.add('hide');setTimeout(()=>loader.remove(),450);}
-  },3000);
-}
 renderSite();
-// Connexion Firebase automatique depuis la config intégrée
 if(initFirebase(FIREBASE_CONFIG)){
   startListeners();
-  startGalleryListener();
   ls.set('fb_cfg',FIREBASE_CONFIG);
 }
 </script>
 
-<!-- LIGHTBOX Galerie -->
-<div id="gallery-lb" onclick="if(event.target===this)closeLb()">
-  <button class="gallery-lb-close" onclick="closeLb()">✕</button>
-  <button class="gallery-lb-nav" id="gallery-lb-prev" onclick="lbNav(-1)">‹</button>
-  <img id="gallery-lb-img" src="" alt="" oncontextmenu="return false"/>
-  <button class="gallery-lb-nav" id="gallery-lb-next" onclick="lbNav(1)">›</button>
-  <div class="gallery-lb-caption" id="gallery-lb-caption"></div>
 </div>
 </body>
 </html>
