@@ -898,20 +898,9 @@ document.addEventListener('dragstart',e=>{
   if(e.target.tagName==='IMG')e.preventDefault();
 });
 
-// Rafraîchissement auto quand on revient sur l'app
-let hiddenAt=0;
-document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){
-    hiddenAt=Date.now();
-  } else {
-    // Si l'app était en arrière-plan depuis plus de 30 secondes → reload silencieux
-    if(hiddenAt && Date.now()-hiddenAt > 30000){
-      window.location.reload();
-    } else {
-      // Sinon juste re-trigger les listeners Firebase
-      if(db) startListeners();
-    }
-  }
+// Rafraîchissement uniquement à l'ouverture de la PWA
+window.addEventListener('pageshow', e => {
+  if(e.persisted) window.location.reload();
 });
 window.trackClick=function(n){
   if(typeof gtag!=='undefined')gtag('event','reservation_click',{event_category:'Billetterie',event_label:n,value:1});
