@@ -77,9 +77,12 @@ header{position:relative;z-index:1;padding:56px 0 0;text-align:center;transition
 .event-card{width:var(--card-w);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;color:inherit;position:relative;transition:transform .32s cubic-bezier(.23,1,.32,1),box-shadow .32s,border-color .3s;animation:fadeUp .55s both;box-shadow:var(--shadow);}
 .event-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--border2);}
 .card-img-wrap{position:relative;width:100%;aspect-ratio:1080/1350;overflow:hidden;background:var(--surface2);flex-shrink:0;}
-.card-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.23,1,.32,1);}
-.event-card:hover .card-img-wrap img{transform:scale(1.04);}
+.card-img-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s cubic-bezier(.23,1,.32,1);}
+.event-card:hover .card-img-bg{transform:scale(1.04);}
 .card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,26,8,.75) 100%);z-index:1;pointer-events:none;}
+/* Blocage téléchargement */
+.card-img-wrap, .card-img-bg, .emodal-poster{-webkit-user-select:none;user-select:none;pointer-events:auto;}
+.card-img-bg::after{content:'';position:absolute;inset:0;}
 .price-badge{position:absolute;top:12px;right:12px;z-index:2;background:var(--accent);color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:20px;box-shadow:0 3px 12px rgba(97,52,2,.35);}
 .price-badge.free{background:var(--surface);color:var(--accent);border:1.5px solid var(--accent);}
 .card-overlay-name{position:absolute;bottom:14px;left:14px;right:14px;z-index:2;font-family:var(--font-d);font-size:20px;font-weight:700;line-height:1.15;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6);}
@@ -339,7 +342,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
   letter-spacing:.12em;text-transform:uppercase;font-weight:500;
   text-shadow:0 1px 6px rgba(0,0,0,.5);
 }
-.event-card.coming-soon .card-img-wrap img{filter:blur(18px);transform:scale(1.12);}
+.event-card.coming-soon .card-img-bg{filter:blur(18px);transform:scale(1.12);}
 .event-card.coming-soon .card-img-wrap::after{background:linear-gradient(to bottom,rgba(44,26,8,.55) 0%,rgba(44,26,8,.75) 100%);}
 .event-card.coming-soon .card-body{opacity:.45;pointer-events:none;}
 .event-card.coming-soon .card-cta .cta-btn{background:var(--mid);cursor:default;pointer-events:none;}
@@ -827,7 +830,7 @@ function renderSite(){
       +(clickable?' onclick="openEventModal(\''+e.id+'\')"':'')
       +' style="animation-delay:'+i*.07+'s'+(sold?';opacity:.65':'')+'">'
       +'<div class="card-img-wrap">'
-      +(e.img?'<img src="'+e.img+'" alt="'+e.name+'" loading="lazy"/>'
+      +(e.img?'<div class="card-img-bg" style="background-image:url(\''+e.img+'\')"></div>'
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;flex-direction:column;gap:8px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg>Affiche à venir</div>')
       +(e.price&&!soon?'<div class="price-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
       +(soon?'':' <div class="card-overlay-name">'+e.name+'</div>')
@@ -846,6 +849,14 @@ function renderSite(){
       +'</div></div></div>';
   }).join('');
 }
+
+// Protection images — bloquer clic droit et glisser
+document.addEventListener('contextmenu',e=>{
+  if(e.target.closest('.card-img-wrap,.emodal-poster,.emodal-poster-bg'))e.preventDefault();
+});
+document.addEventListener('dragstart',e=>{
+  if(e.target.tagName==='IMG')e.preventDefault();
+});
 
 // Rafraîchissement auto quand on revient sur l'app
 let hiddenAt=0;
