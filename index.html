@@ -567,7 +567,10 @@ textarea.form-input{resize:vertical;min-height:68px;}
               <span><div class="stats-legend-dot" style="background:var(--mid)"></div>Vues vignette</span>
               <span><div class="stats-legend-dot" style="background:var(--accent)"></div>Clics réservation</span>
             </div>
-            <button class="btn btn-ghost btn-sm" onclick="loadStats()">↺ Actualiser</button>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-ghost btn-sm" onclick="loadStats()">↺ Actualiser</button>
+              <button class="btn btn-ghost btn-sm" style="color:#c0392b" onclick="resetStats()">🗑 Remettre à 0</button>
+            </div>
           </div>
           <div id="stats-list" class="stats-list">
             <p style="color:var(--muted);font-size:13px">Clique sur "Stats" pour charger…</p>
@@ -874,6 +877,19 @@ async function incrementStat(eventId, field){
   }catch(e){/* silencieux — stats non critiques */}
 }
 window.incrementStat=incrementStat;
+
+window.resetStats=async function(){
+  if(!db){toast('Firebase non connecté','error');return;}
+  if(!confirm('Remettre toutes les stats à 0 ? Cette action est irréversible.'))return;
+  try{
+    const snap=await getDocs(collection(db,'stats'));
+    const promises=[];
+    snap.forEach(d=>promises.push(setDoc(doc(db,'stats',d.id),{views:0,reservations:0})));
+    await Promise.all(promises);
+    toast('Stats remises à 0 ✓');
+    loadStats();
+  }catch(e){toast('Erreur : '+e.message,'error');}
+};
 
 window.loadStats=async function(){
   const list=$('stats-list');
