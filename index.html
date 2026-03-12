@@ -412,21 +412,22 @@ textarea.form-input{resize:vertical;min-height:68px;}
 @media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
   .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
 
-/* ══ SCROLL HINT MOBILE — peek sur la 1ère carte ══════════ */
-@media(max-width:520px){
-  .events-grid{padding-bottom:60px;}
-  /* La grille fait 92vh max → la 1ère carte dépasse légèrement en bas */
-  main .wrap{max-height:92svh;overflow:hidden;position:relative;}
-  main .wrap::after{
-    content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
-    background:linear-gradient(to bottom,transparent,var(--bg) 85%);
-    pointer-events:none;z-index:2;
-  }
-  /* Dès qu'on scroll, on enlève le masque */
-  main{overflow-y:auto;}
-  main.scrolled .wrap{max-height:none;overflow:visible;}
-  main.scrolled .wrap::after{display:none;}
+/* ══ SCROLL ARROW MOBILE ══════════════════════════════════ */
+#scroll-arrow{
+  display:none;
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  z-index:50;
+  background:var(--accent);color:#fff;
+  border-radius:20px;padding:7px 16px 7px 14px;
+  font-size:12px;font-weight:500;letter-spacing:.05em;
+  gap:6px;align-items:center;
+  box-shadow:0 4px 16px rgba(97,52,2,.35);
+  animation:bounceY 1.4s ease-in-out infinite;
+  pointer-events:none;
+  white-space:nowrap;
 }
+@keyframes bounceY{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(5px);}}
+@media(max-width:520px){#scroll-arrow{display:flex;}}
 /* ══ BOUTONS CALENDRIER ═══════════════════════════════════ */
 .cal-trigger{
   display:inline-flex;align-items:center;gap:6px;
@@ -456,7 +457,10 @@ textarea.form-input{resize:vertical;min-height:68px;}
 </style>
 </head>
 <body>
-<div class="deco deco-1"></div><div class="deco deco-2"></div><div class="deco deco-3"></div>
+<div id="scroll-arrow">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+  Voir les événements
+</div>
 
 <div id="page-loader">
   <img src="favicon.png" class="loader-logo" onerror="this.style.display='none'"/>
@@ -1356,8 +1360,11 @@ window.downloadIcal=function(id){
   a.click();
 };
 
-// Peek mobile — enlève le masque au 1er scroll
-window.addEventListener('scroll',function(){document.querySelector('main').classList.add('scrolled');},{once:true,passive:true});
+// Flèche scroll mobile — disparaît au 1er scroll
+window.addEventListener('scroll',function(){
+  const a=document.getElementById('scroll-arrow');
+  if(a)a.style.display='none';
+},{once:true,passive:true});
 
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
