@@ -700,6 +700,21 @@ textarea.form-input{resize:vertical;min-height:68px;}
 <div id="toast"></div>
 
 <!-- Firebase SDK -->
+<script>
+/* Loader — script indépendant, survit à tout crash Firebase */
+window._hl=function(){
+  var l=document.getElementById('page-loader');
+  if(!l)return;
+  l.style.transition='opacity .4s';
+  l.style.opacity='0';
+  l.style.pointerEvents='none';
+  setTimeout(function(){if(l&&l.parentNode)l.parentNode.removeChild(l);},450);
+};
+/* Toujours cacher après 2.5s max */
+setTimeout(window._hl, 2500);
+/* Cacher immédiatement si cache dispo */
+try{var _ec=JSON.parse(localStorage.getItem('cache_events'));if(_ec&&_ec.length>0)window._hl();}catch(e){}
+</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot }
@@ -1313,16 +1328,6 @@ window.downloadIcal=function(id){
 };
 
 /* ══ INIT ════════════════════════════════════════════════ */
-// Cacher le loader — toujours, quoi qu'il arrive
-window._hl=function(){
-  var l=document.getElementById('page-loader');
-  if(!l)return;
-  l.classList.add('hide');
-  setTimeout(function(){if(l&&l.parentNode)l.parentNode.removeChild(l);},450);
-};
-setTimeout(window._hl, 2000); // fallback 2s si Firebase ne répond pas
-try{var _c=JSON.parse(localStorage.getItem('cache_events'));if(_c&&_c.length>0)window._hl();}catch(e){}
-
 $('footer-year').textContent=new Date().getFullYear();
 renderSite();
 if(initFirebase(FIREBASE_CONFIG)){
