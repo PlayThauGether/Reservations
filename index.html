@@ -152,6 +152,17 @@ footer a{color:var(--accent);}
 .sec-title::after{content:'';flex:1;height:1px;background:var(--border2);}
 /* Admin list */
 .admin-event-list{display:flex;flex-direction:column;gap:10px;}
+/* ══ DRAG & DROP ══════════════════════════════════════════ */
+.drag-handle{
+  display:flex;align-items:center;justify-content:center;
+  width:24px;flex-shrink:0;cursor:grab;color:var(--mid);
+  padding:4px 2px;border-radius:4px;transition:color .15s;
+}
+.drag-handle:active{cursor:grabbing;}
+.drag-handle:hover{color:var(--accent);}
+.admin-event-item.dragging{opacity:.4;border:1.5px dashed var(--accent);}
+.admin-event-item.drag-over{border-color:var(--accent);background:rgba(97,52,2,.05);}
+
 .admin-event-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;transition:border-color .2s;}
 .admin-event-item:hover{border-color:var(--border2);}
 .admin-thumb{width:42px;height:52px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--surface2);}
@@ -1254,6 +1265,52 @@ function renderAdminList(){
   ).join('');
 }
 
+
+/* ══ DRAG & DROP ADMIN ════════════════════════════════════ */
+function initDragDrop(){
+  const list=$('admin-event-list');
+  if(!list)return;
+  let dragSrc=null;
+  list.querySelectorAll('.admin-event-item').forEach(item=>{
+    item.addEventListener('dragstart',e=>{
+      dragSrc=item;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+    });
+    item.addEventListener('dragend',()=>{
+      item.classList.remove('dragging');
+      list.querySelectorAll('.admin-event-item').forEach(i=>i.classList.remove('drag-over'));
+    });
+    item.addEventListener('dragover',e=>{
+      e.preventDefault();
+      if(item!==dragSrc){
+        list.querySelectorAll('.admin-event-item').forEach(i=>i.classList.remove('drag-over'));
+        item.classList.add('drag-over');
+      }
+    });
+    item.addEventListener('drop',async e=>{
+      e.preventDefault();
+      if(!dragSrc||dragSrc===item)return;
+      // Récupère l'ordre actuel des IDs dans le DOM
+      const items=[...list.querySelectorAll('.admin-event-item')];
+      const srcIdx=items.indexOf(dragSrc);
+      const tgtIdx=items.indexOf(item);
+      // Réorganise localEvents
+      const moved=localEvents.splice(srcIdx,1)[0];
+      localEvents.splice(tgtIdx,0,moved);
+      // Réassigne les ordres
+      localEvents.forEach((ev,i)=>ev.order=i*1000);
+      // Sauvegarde dans Firestore
+      if(db){
+        try{
+          await Promise.all(localEvents.map(ev=>updateDoc(doc(db,'events',ev.id),{order:ev.order})));
+          toast('Ordre sauvegardé ✓');
+        }catch(err){toast('Erreur sauvegarde','error');}
+      }
+      renderAdminList();
+    });
+  });
+}
 /* ══ EVENT FORM ══════════════════════════════════════════ */
 window.openEventForm=function(id){
   switchTab('form',0);editingId=id;
