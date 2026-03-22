@@ -337,6 +337,30 @@ textarea.form-input{resize:vertical;min-height:68px;}
   border:1px solid var(--border2);cursor:default;
 }
 /* ══ CARTE "BIENTÔT" ══════════════════════════════════════ */
+
+/* ══ COUNTDOWN ════════════════════════════════════════════ */
+.countdown-wrap{
+  display:flex;gap:8px;align-items:center;justify-content:center;
+  margin-top:4px;
+}
+.cd-block{
+  display:flex;flex-direction:column;align-items:center;
+  background:rgba(22,10,3,.55);border-radius:8px;
+  padding:6px 10px;min-width:44px;
+  backdrop-filter:blur(4px);
+}
+.cd-num{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:#fff;line-height:1;letter-spacing:.04em;
+}
+.cd-label{
+  font-size:9px;color:rgba(255,255,255,.6);
+  text-transform:uppercase;letter-spacing:.1em;margin-top:2px;
+}
+.cd-sep{font-size:20px;color:rgba(255,255,255,.4);font-weight:300;margin-bottom:10px;}
+/* Champ reveal date — visible seulement quand statut = coming_soon */
+#reveal-date-group{display:none;}
+
 .event-card.coming-soon{cursor:default;}
 .coming-soon-overlay{
   position:absolute;inset:0;z-index:6;
@@ -622,12 +646,20 @@ textarea.form-input{resize:vertical;min-height:68px;}
           </div>
           <div class="form-group">
             <label class="form-label">Statut</label>
-            <select class="form-input" id="f-status">
+            <select class="form-input" id="f-status" onchange="onStatusChange(this.value)">
               <option value="active">En vente</option>
               <option value="coming_soon">Bientôt — teaser flou</option>
               <option value="soldout">Complet</option>
               <option value="hidden">Masqué</option>
             </select>
+          </div>
+          <div class="form-group" id="reveal-date-group">
+            <label class="form-label">Date & heure de dévoilement automatique</label>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0"><input type="date" class="form-input" id="f-reveal-date"/></div>
+              <div class="form-group" style="margin-bottom:0"><input type="time" class="form-input" id="f-reveal-time" placeholder="20:00"/></div>
+            </div>
+            <div class="form-hint">À cette date/heure, l'événement passera automatiquement en "En vente"</div>
           </div>
           <input type="hidden" id="f-id"/>
           <div style="display:flex;gap:10px;margin-top:4px">
@@ -878,7 +910,7 @@ function startListeners(){
     snap.forEach(d=>localEvents.push({id:d.id,...d.data()}));
     localEvents.sort((a,b)=>a.order-b.order||(a.date||'').localeCompare(b.date||''));
     ls.set('cache_events',localEvents);
-    renderSite();
+    renderSite();startCountdowns();
     if(isLogged)renderAdminList();
     // Cache le loader dès la première réponse Firebase
     if(window._hl)window._hl();
@@ -938,7 +970,7 @@ function renderSite(){
       +(e.price&&!soon?'<div class="price-badge'+(e.priceType==='free'?' free':'')+'">'+e.price+'</div>':'')
       +(soon?'':' <div class="card-overlay-name">'+e.name+'</div>')
       +(sold?'<div class="sold-out-overlay"><div class="sold-out-stamp">COMPLET</div></div>':'')
-      +(soon?'<div class="coming-soon-overlay"><div class="coming-soon-badge">Bientôt</div><div class="coming-soon-sub">Restez connectés ✦</div></div>':'')
+      +(soon?'<div class="coming-soon-overlay"><div class="coming-soon-badge">Bientôt</div>'+(e.revealAt?'<div class="countdown-wrap" id="cd-'+e.id+'"><div class="cd-block"><span class="cd-num">--</span><span class="cd-label">Jours</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num">--</span><span class="cd-label">Heures</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num">--</span><span class="cd-label">Min</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num">--</span><span class="cd-label">Sec</span></div></div>':'<div class="coming-soon-sub">Restez connectés ✦</div>')+'</div>':'')
       +'</div><div class="card-body">'
       +'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+(soon?'Date à venir…':formatDate(e.date,e.time))+'</strong></div>'
       +(e.place&&!soon?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><a href="'+(e.mapsUrl||mapsUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--mid)">'+e.place+'</a></div>':'')
@@ -1231,12 +1263,18 @@ window.openEventForm=function(id){
   $('f-link').value=ev?.link||'';$('f-desc').value=ev?.desc||'';
   $('f-desc-long').value=ev?.descLong||'';
   $('f-status').value=ev?.status||'active';
+  onStatusChange(ev?.status||'active');
+  if(ev?.revealAt){
+    const d=new Date(ev.revealAt);
+    $('f-reveal-date').value=d.toLocaleDateString('en-CA');
+    $('f-reveal-time').value=d.toTimeString().slice(0,5);
+  }else{$('f-reveal-date').value='';$('f-reveal-time').value='';}
   previewImg(ev?.img||'');$('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
 };
 window.resetForm=function(){
   editingId=null;$('form-title').textContent='Nouvel événement';
   ['f-img','f-name','f-date','f-time','f-place','f-maps-url','f-price','f-link','f-desc','f-desc-long','f-id'].forEach(id=>$(id).value='');
-  $('f-price-type').value='normal';$('f-status').value='active';previewImg('');
+  $('f-price-type').value='normal';$('f-status').value='active';onStatusChange('active');$('f-reveal-date').value='';$('f-reveal-time').value='';previewImg('');
   $('f-maps-hint').textContent='';
 };
 window.previewImg=function(url){
@@ -1258,7 +1296,8 @@ window.saveEvent=async function(){
     price:$('f-price').value.trim(),priceType:$('f-price-type').value,link,
     img:$('f-img').value.trim(),desc:$('f-desc').value.trim(),
     descLong:$('f-desc-long').value.trim(),
-    status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now()};
+    status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now(),
+    revealAt:($('f-status').value==='coming_soon'&&$('f-reveal-date').value)?new Date($('f-reveal-date').value+'T'+($('f-reveal-time').value||'00:00')+':00').getTime():null};
   try{
     if(!db)throw new Error('Firebase non connecté. Configure-le d\'abord.');
     if(editingId){await updateDoc(doc(db,'events',editingId),data);toast('Mis à jour ✓');}
@@ -1366,9 +1405,43 @@ window.addEventListener('scroll',function(){
   if(a)a.style.display='none';
 },{once:true,passive:true});
 
+
+/* ══ COUNTDOWN & AUTO-REVEAL ══════════════════════════════ */
+window.onStatusChange=function(v){
+  $('reveal-date-group').style.display=v==='coming_soon'?'block':'none';
+};
+
+let cdInterval=null;
+function startCountdowns(){
+  if(cdInterval)clearInterval(cdInterval);
+  function tick(){
+    const now=Date.now();
+    localEvents.filter(e=>e.status==='coming_soon'&&e.revealAt).forEach(e=>{
+      const diff=e.revealAt-now;
+      const el=document.getElementById('cd-'+e.id);
+      if(!el)return;
+      if(diff<=0){
+        // Révélation automatique !
+        if(db)updateDoc(doc(db,'events',e.id),{status:'active',revealAt:null}).catch(()=>{});
+        return;
+      }
+      const days=Math.floor(diff/86400000);
+      const hours=Math.floor((diff%86400000)/3600000);
+      const mins=Math.floor((diff%3600000)/60000);
+      const secs=Math.floor((diff%60000)/1000);
+      const blocks=el.querySelectorAll('.cd-num');
+      if(blocks[0])blocks[0].textContent=String(days).padStart(2,'0');
+      if(blocks[1])blocks[1].textContent=String(hours).padStart(2,'0');
+      if(blocks[2])blocks[2].textContent=String(mins).padStart(2,'0');
+      if(blocks[3])blocks[3].textContent=String(secs).padStart(2,'0');
+    });
+  }
+  tick();
+  cdInterval=setInterval(tick,1000);
+}
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
-renderSite();
+renderSite();startCountdowns();
 if(initFirebase(FIREBASE_CONFIG)){
   startListeners();
   ls.set('fb_cfg',FIREBASE_CONFIG);
