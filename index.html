@@ -1167,7 +1167,7 @@ window.openEventModal=function(id){
   $('event-modal').classList.add('open');
   document.body.style.overflow='hidden';
   incrementStat(e.id,'views');
-  history.replaceState(null,'','#e-'+e.id);
+  history.pushState({modal:e.id},'','#e-'+e.id);
 };
 window.toggleCalDropdown=function(ev){
   ev.stopPropagation();
@@ -1177,12 +1177,16 @@ window.toggleCalDropdown=function(ev){
 document.addEventListener('click',()=>{
   const dd=$('cal-dd');if(dd)dd.classList.remove('open');
 });
-window.closeEventModal=function(){
+window.closeEventModal=function(fromPopstate){
   $('event-modal').classList.remove('open');
   document.body.style.overflow='';
   $('emodal-map-iframe').src='';
-  if(location.hash.startsWith('#e-'))history.replaceState(null,'',location.pathname);
+  if(!fromPopstate&&location.hash.startsWith('#e-'))history.back();
 };
+// Swipe retour / bouton retour navigateur → ferme la modal
+window.addEventListener('popstate',function(){
+  if($('event-modal').classList.contains('open'))closeEventModal(true);
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEventModal();});
 
 
