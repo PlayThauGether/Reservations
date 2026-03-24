@@ -1183,9 +1183,11 @@ window.closeEventModal=function(fromPopstate){
   $('emodal-map-iframe').src='';
   if(!fromPopstate&&location.hash.startsWith('#e-'))history.back();
 };
-// Swipe retour / bouton retour navigateur → ferme la modal
-window.addEventListener('popstate',function(){
-  if($('event-modal').classList.contains('open'))closeEventModal(true);
+// Swipe retour : ferme uniquement quand on passe au-delà de notre propre entrée
+window.addEventListener('popstate',function(ev){
+  if($('event-modal').classList.contains('open')&&!ev.state?.modal){
+    closeEventModal(true);
+  }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEventModal();});
 
