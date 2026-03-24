@@ -327,11 +327,11 @@ textarea.form-input{resize:vertical;min-height:68px;}
 .emodal-meta-item strong{color:var(--text);font-weight:500;}
 .emodal-meta-item a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
 .emodal-desc{font-size:14px;color:var(--text);line-height:1.8;white-space:pre-wrap;}
-.emodal-map{
-  width:100%;height:190px;border-radius:12px;overflow:hidden;
-  border:1px solid var(--border);flex-shrink:0;
-}
-.emodal-map iframe{width:100%;height:100%;border:none;display:block;}
+.emodal-map{flex-shrink:0;}
+.maps-link-btn{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--muted2);font-size:13px;font-weight:500;transition:background .2s,border-color .2s;}
+.maps-link-btn:hover{background:var(--surface);border-color:var(--accent);}
+.maps-link-btn span{flex:1;}
+
 .emodal-cta{margin-top:auto;padding-top:4px;display:flex;gap:10px;}
 .emodal-reserve{
   flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
@@ -461,7 +461,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
     width:36px;height:36px;
   }
   .emodal-content{padding:20px 18px 60px;}
-  .emodal-map{height:180px;}
+
 }
 @media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
   .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
@@ -784,9 +784,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
       <div class="emodal-meta" id="emodal-meta"></div>
       <div class="emodal-divider"></div>
       <p class="emodal-desc" id="emodal-desc"></p>
-      <div class="emodal-map" id="emodal-map" style="display:none">
-        <iframe id="emodal-map-iframe" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
-      </div>
+      <div class="emodal-map" id="emodal-map" style="display:none"></div>
       <div class="emodal-cta" id="emodal-cta"></div>
     </div>
   </div>
@@ -1130,13 +1128,16 @@ window.openEventModal=function(id){
 
   // Carte Maps — utilise les coordonnées du lien si possible, sinon adresse complète
   const mapWrap=$('emodal-map');
-  const embedUrl=buildMapsEmbed(e.mapsUrl,e.place);
-  if(embedUrl){
-    $('emodal-map-iframe').src=embedUrl;
+  const mapsLink2=e.mapsUrl||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||''));
+  if(e.place||e.mapsUrl){
+    const a=document.createElement('a');
+    a.href=mapsLink2;a.target='_blank';a.rel='noopener noreferrer';
+    a.className='maps-link-btn';
+    a.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Voir sur Google Maps</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+    mapWrap.innerHTML='';mapWrap.appendChild(a);
     mapWrap.style.display='block';
   }else{
     mapWrap.style.display='none';
-    $('emodal-map-iframe').src='';
   }
 
   // CTA
@@ -1180,7 +1181,7 @@ document.addEventListener('click',()=>{
 window.closeEventModal=function(fromPopstate){
   $('event-modal').classList.remove('open');
   document.body.style.overflow='';
-  $('emodal-map-iframe').src='';
+  $('emodal-map').innerHTML='';
   if(!fromPopstate&&location.hash.startsWith('#e-'))history.back();
 };
 // Swipe retour : ferme uniquement quand on passe au-delà de notre propre entrée
@@ -1207,6 +1208,7 @@ window.shareEvent=async function(id){
     prompt('Copie ce lien :',url);
   }
 };
+
 /* ══ ADMIN TRIGGER ═══════════════════════════════════════ */
 let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
