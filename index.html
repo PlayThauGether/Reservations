@@ -347,6 +347,19 @@ textarea.form-input{resize:vertical;min-height:68px;}
   font-size:14px;font-weight:600;background:var(--surface2);color:var(--muted);
   border:1px solid var(--border2);cursor:default;
 }
+
+/* ══ BOUTON PARTAGE ═══════════════════════════════════════ */
+.share-btn{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:14px 16px;border-radius:12px;
+  font-size:15px;font-weight:600;
+  background:var(--surface2);color:var(--muted2);
+  border:1.5px solid var(--border2);cursor:pointer;
+  transition:background .2s,border-color .2s,color .2s;
+  white-space:nowrap;flex-shrink:0;
+}
+.share-btn:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+.share-btn svg{flex-shrink:0;}
 /* ══ CARTE "BIENTÔT" ══════════════════════════════════════ */
 
 /* ══ COUNTDOWN ════════════════════════════════════════════ */
@@ -1121,9 +1134,10 @@ window.openEventModal=function(id){
   }
 
   // CTA
+  const shareBtn='<button class="share-btn" onclick="shareEvent(\''+e.id+'\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>';
   $('emodal-cta').innerHTML=sold
-    ?'<div class="emodal-sold">⛔ Cet événement est complet</div>'
-    :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>';
+    ?'<div class="emodal-sold" style="flex:1">⛔ Cet événement est complet</div>'+shareBtn
+    :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>'+shareBtn;
 
 
   // Boutons Agenda
@@ -1147,6 +1161,7 @@ window.openEventModal=function(id){
   $('event-modal').classList.add('open');
   document.body.style.overflow='hidden';
   incrementStat(e.id,'views');
+  history.replaceState(null,'','#e-'+e.id);
 };
 window.toggleCalDropdown=function(ev){
   ev.stopPropagation();
@@ -1159,15 +1174,39 @@ document.addEventListener('click',()=>{
 window.closeEventModal=function(){
   $('event-modal').classList.remove('open');
   document.body.style.overflow='';
-  $('emodal-map-iframe').src=''; // arrête le chargement Maps
+  $('emodal-map-iframe').src='';
+  if(location.hash.startsWith('#e-'))history.replaceState(null,'',location.pathname);
 };
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEventModal();});
 
+
+/* ══ PARTAGE ÉVÉNEMENT ════════════════════════════════════ */
+window.shareEvent=async function(id){
+  const e=localEvents.find(ev=>ev.id===id);if(!e)return;
+  const url=location.origin+location.pathname+'#e-'+id;
+  if(navigator.share){
+    try{await navigator.share({title:e.name,text:'Découvre cet événement : '+e.name,url});return;}catch(err){}
+  }
+  // Fallback : copier dans le presse-papiers
+  try{
+    await navigator.clipboard.writeText(url);
+    toast('Lien copié ✓');
+  }catch{
+    prompt('Copie ce lien :',url);
+  }
+};
 /* ══ ADMIN TRIGGER ═══════════════════════════════════════ */
 let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
 window.addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdmin();});
 if(location.hash==='#admin')setTimeout(openAdmin,300);
+// Ouvrir directement un événement si lien partagé
+if(location.hash.startsWith('#e-')){
+  const sharedId=location.hash.slice(3);
+  // Attendre que les events soient chargés
+  const tryOpen=()=>{if(localEvents.length){openEventModal(sharedId);}else{setTimeout(tryOpen,300);}};
+  setTimeout(tryOpen,400);
+}
 
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
 window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
