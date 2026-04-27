@@ -365,6 +365,94 @@ textarea.form-input{resize:vertical;min-height:68px;}
 
 
 
+
+/* ══ DÉROULANTS FORMULAIRE ════════════════════════════════ */
+// Ferme tous les menus si clic extérieur
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.input-with-dd')){
+    document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+  }
+});
+window.toggleDd=function(id){
+  const menu=document.getElementById(id);if(!menu)return;
+  const wasOpen=menu.classList.contains('open');
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+  if(!wasOpen){
+    fillDdMenu(id);
+    menu.classList.add('open');
+  }
+};
+function fillDdMenu(id){
+  const menu=document.getElementById(id);if(!menu)return;
+  if(id==='dd-venues'){
+    const arr=getTplVenues();
+    menu.innerHTML=arr.length
+      ?arr.map((v,i)=>'<div class="dd-opt" onclick="pickVenue('+i+')"><span>📍 '+v.name+'</span><span class="dd-opt-sub">'+v.maps+'</span></div>').join('')
+      +'<div class="dd-empty">+ Enregistre des lieux dans l\'onglet Modèles</div>'
+      :'<div class="dd-empty">Aucun lieu — va dans l\'onglet Modèles</div>';
+  }else if(id==='dd-names'){
+    const arr=getTplNames();
+    menu.innerHTML=arr.length
+      ?arr.map((n,i)=>'<div class="dd-opt" onclick="pickName('+i+')"><span>🏷 '+n+'</span></div>').join('')
+      +'<div class="dd-empty">+ Enregistre des noms dans l\'onglet Modèles</div>'
+      :'<div class="dd-empty">Aucun nom — va dans l\'onglet Modèles</div>';
+  }else if(id==='dd-texts'){
+    const arr=getTplTexts();
+    menu.innerHTML=arr.length
+      ?arr.map((t,i)=>'<div class="dd-opt" onclick="pickText('+i+')"><span>📝 '+t.name+'</span><span class="dd-opt-sub">'+(t.short||'').slice(0,50)+'</span></div>').join('')
+      +'<div class="dd-empty">+ Enregistre des textes dans l\'onglet Modèles</div>'
+      :'<div class="dd-empty">Aucun texte — va dans l\'onglet Modèles</div>';
+  }
+}
+window.pickVenue=function(i){
+  const v=getTplVenues()[i];if(!v)return;
+  $('f-place').value=v.name;
+  if(v.maps){$('f-maps-url').value=v.maps;onMapsUrlInput(v.maps);}
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+};
+window.pickName=function(i){
+  const n=getTplNames()[i];if(!n)return;
+  $('f-name').value=n;
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+};
+window.pickText=function(i){
+  const t=getTplTexts()[i];if(!t)return;
+  if(t.short)$('f-desc').value=t.short;
+  if(t.long)$('f-desc-long').value=t.long;
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+};
+/* Noms d'événements */
+function getTplNames(){try{return JSON.parse(localStorage.getItem('tpl_names'))||[];}catch{return[];}}
+function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr));}
+
+/* ══ CHAMPS AVEC DÉROULANT ════════════════════════════════ */
+.input-with-dd{position:relative;display:flex;gap:0;}
+.input-with-dd .form-input{flex:1;border-radius:8px 0 0 8px;z-index:1;}
+.dd-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;flex-shrink:0;
+  background:var(--surface2);border:1.5px solid var(--border2);
+  border-left:none;border-radius:0 8px 8px 0;
+  cursor:pointer;color:var(--muted);font-size:13px;
+  transition:background .15s,color .15s;
+}
+.dd-toggle:hover{background:var(--surface);color:var(--accent);}
+.dd-menu{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:999;
+  background:var(--surface);border:1.5px solid var(--border2);border-radius:10px;
+  box-shadow:0 8px 28px rgba(44,26,8,.18);
+  display:none;flex-direction:column;overflow:hidden;max-height:220px;overflow-y:auto;
+}
+.dd-menu.open{display:flex;}
+.dd-opt{
+  padding:10px 14px;font-size:13px;color:var(--text);cursor:pointer;
+  border-bottom:1px solid var(--border);transition:background .12s;
+  display:flex;flex-direction:column;gap:2px;
+}
+.dd-opt:last-child{border-bottom:none;}
+.dd-opt:hover{background:var(--surface2);}
+.dd-opt-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dd-empty{padding:10px 14px;font-size:12px;color:var(--muted);font-style:italic;}
 /* ══ TEMPLATES ════════════════════════════════════════════ */
 .tpl-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
 .tpl-item{display:flex;align-items:center;gap:10px;padding:9px 12px;
@@ -665,22 +753,29 @@ textarea.form-input{resize:vertical;min-height:68px;}
           </div>
           <div class="form-group">
             <label class="form-label">Nom de l'événement *</label>
-            <input type="text" class="form-input" id="f-name" placeholder="Concert de printemps"/>
+            <div class="input-with-dd">
+              <input type="text" class="form-input" id="f-name" placeholder="Concert de printemps"/>
+              <button type="button" class="dd-toggle" onclick="toggleDd('dd-names')" title="Noms enregistrés">▾</button>
+              <div class="dd-menu" id="dd-names"></div>
+            </div>
           </div>
           <div class="form-row">
             <div class="form-group"><label class="form-label">Date *</label><input type="date" class="form-input" id="f-date"/></div>
             <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="f-time"/></div>
           </div>
           <div class="form-group">
-            <label class="form-label">Lien Google Maps</label>
-            <input type="url" class="form-input" id="f-maps-url" placeholder="https://maps.app.goo.gl/… ou maps.google.com/…" oninput="onMapsUrlInput(this.value)"/>
-            <div class="form-hint" id="f-maps-hint"></div>
-            <div class="form-hint">💡 Copie le lien depuis Google Maps → "Partager" → "Copier le lien"</div>
+            <label class="form-label">Lieu</label>
+            <div class="input-with-dd">
+              <input type="text" class="form-input" id="f-place" placeholder="La Hune, Sète…" oninput="this.dataset.manual='1'"/>
+              <button type="button" class="dd-toggle" onclick="toggleDd('dd-venues')" title="Lieux enregistrés">▾</button>
+              <div class="dd-menu" id="dd-venues"></div>
+            </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Nom du lieu affiché</label>
-            <input type="text" class="form-input" id="f-place" placeholder="Salle des fêtes, Paris"/>
-            <div class="form-hint">Auto-rempli depuis le lien Maps, modifiable</div>
+            <label class="form-label">Lien Google Maps</label>
+            <input type="url" class="form-input" id="f-maps-url" placeholder="https://maps.app.goo.gl/…" oninput="onMapsUrlInput(this.value)"/>
+            <div class="form-hint" id="f-maps-hint"></div>
+            <div class="form-hint">💡 Copie le lien depuis Google Maps → "Partager" → "Copier le lien"</div>
           </div>
           <div class="form-row">
             <div class="form-group"><label class="form-label">Prix</label><input type="text" class="form-input" id="f-price" placeholder="12 €"/></div>
@@ -697,12 +792,12 @@ textarea.form-input{resize:vertical;min-height:68px;}
             <input type="url" class="form-input" id="f-link" placeholder="https://billetterie.fr/…"/>
           </div>
           <div class="form-group">
-            <label class="form-label">Textes enregistrés</label>
-            <div id="tpl-text-chips" class="tpl-quick"></div>
-          </div>
-          <div class="form-group">
             <label class="form-label">Description courte (vignette)</label>
-            <textarea class="form-input" id="f-desc" rows="2" placeholder="2 lignes max, affichées sur la carte…"></textarea>
+            <div class="input-with-dd">
+              <textarea class="form-input" id="f-desc" rows="2" placeholder="2 lignes max, affichées sur la carte…" style="border-radius:8px 0 0 8px;resize:vertical"></textarea>
+              <button type="button" class="dd-toggle" onclick="toggleDd('dd-texts')" title="Textes enregistrés" style="height:auto;align-self:stretch;border-radius:0 8px 8px 0;">▾</button>
+              <div class="dd-menu" id="dd-texts"></div>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Description complète (page événement)</label>
@@ -776,6 +871,13 @@ textarea.form-input{resize:vertical;min-height:68px;}
         <!-- Modèles -->
         <div class="admin-tab-panel" id="tab-templates">
           <div class="sec-title">Modèles réutilisables</div>
+          <!-- Noms d'événements -->
+          <div class="tpl-section-title">🏷 Noms d'événements</div>
+          <div id="tpl-names-list" class="tpl-list"></div>
+          <div class="form-group" style="display:flex;gap:8px">
+            <input type="text" class="form-input" id="tpl-n-name" placeholder="Soirée Loups-Garous | La Hune" style="flex:1"/>
+            <button class="btn btn-accent" onclick="saveTplName()" style="white-space:nowrap">+ Ajouter</button>
+          </div>
           <!-- Lieux -->
           <div class="tpl-section-title">📍 Lieux enregistrés</div>
           <div id="tpl-venues-list" class="tpl-list"></div>
@@ -1280,17 +1382,91 @@ window.shareEvent=async function(id){
 };
 
 
+
+/* ══ DÉROULANTS FORMULAIRE ════════════════════════════════ */
+// Ferme tous les menus si clic extérieur
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.input-with-dd')){
+    document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+  }
+});
+window.toggleDd=function(id){
+  const menu=document.getElementById(id);if(!menu)return;
+  const wasOpen=menu.classList.contains('open');
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+  if(!wasOpen){
+    fillDdMenu(id);
+    menu.classList.add('open');
+  }
+};
+function fillDdMenu(id){
+  const menu=document.getElementById(id);if(!menu)return;
+  if(id==='dd-venues'){
+    const arr=getTplVenues();
+    menu.innerHTML=arr.length
+      ?arr.map((v,i)=>'<div class="dd-opt" onclick="pickVenue('+i+')"><span>📍 '+v.name+'</span><span class="dd-opt-sub">'+v.maps+'</span></div>').join('')
+      +'<div class="dd-empty">+ Enregistre des lieux dans l\'onglet Modèles</div>'
+      :'<div class="dd-empty">Aucun lieu — va dans l\'onglet Modèles</div>';
+  }else if(id==='dd-names'){
+    const arr=getTplNames();
+    menu.innerHTML=arr.length
+      ?arr.map((n,i)=>'<div class="dd-opt" onclick="pickName('+i+')"><span>🏷 '+n+'</span></div>').join('')
+      +'<div class="dd-empty">+ Enregistre des noms dans l\'onglet Modèles</div>'
+      :'<div class="dd-empty">Aucun nom — va dans l\'onglet Modèles</div>';
+  }else if(id==='dd-texts'){
+    const arr=getTplTexts();
+    menu.innerHTML=arr.length
+      ?arr.map((t,i)=>'<div class="dd-opt" onclick="pickText('+i+')"><span>📝 '+t.name+'</span><span class="dd-opt-sub">'+(t.short||'').slice(0,50)+'</span></div>').join('')
+      +'<div class="dd-empty">+ Enregistre des textes dans l\'onglet Modèles</div>'
+      :'<div class="dd-empty">Aucun texte — va dans l\'onglet Modèles</div>';
+  }
+}
+window.pickVenue=function(i){
+  const v=getTplVenues()[i];if(!v)return;
+  $('f-place').value=v.name;
+  if(v.maps){$('f-maps-url').value=v.maps;onMapsUrlInput(v.maps);}
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+};
+window.pickName=function(i){
+  const n=getTplNames()[i];if(!n)return;
+  $('f-name').value=n;
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+};
+window.pickText=function(i){
+  const t=getTplTexts()[i];if(!t)return;
+  if(t.short)$('f-desc').value=t.short;
+  if(t.long)$('f-desc-long').value=t.long;
+  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+};
+/* Noms d'événements */
+function getTplNames(){try{return JSON.parse(localStorage.getItem('tpl_names'))||[];}catch{return[];}}
+function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr));}
 /* ══ TEMPLATES ════════════════════════════════════════════ */
 function getTplVenues(){try{return JSON.parse(localStorage.getItem('tpl_venues'))||[];}catch{return[];}}
 function getTplTexts(){try{return JSON.parse(localStorage.getItem('tpl_texts'))||[];}catch{return[];}}
 function saveTplVenues(arr){localStorage.setItem('tpl_venues',JSON.stringify(arr));}
 function saveTplTexts(arr){localStorage.setItem('tpl_texts',JSON.stringify(arr));}
 
+window.saveTplName=function(){
+  const n=$('tpl-n-name').value.trim();
+  if(!n){toast('Nom requis','error');return;}
+  const arr=getTplNames();
+  if(arr.includes(n)){toast('Déjà enregistré','error');return;}
+  arr.push(n);saveTplNames(arr);
+  $('tpl-n-name').value='';
+  renderTemplates();toast('Nom enregistré ✓');
+};
+window.delTplName=function(i){
+  const arr=getTplNames();arr.splice(i,1);saveTplNames(arr);renderTemplates();
+};
 window.renderTemplates=function(){
   const venues=getTplVenues();
   const texts=getTplTexts();
+  const names=getTplNames();
   const vl=$('tpl-venues-list');
   const tl=$('tpl-texts-list');
+  const nl=$('tpl-names-list');
+  if(nl)nl.innerHTML=names.length?names.map((n,i)=>'<div class="tpl-item"><div class="tpl-item-name" style="flex:1">🏷 '+n+'</div><button class="tpl-del-btn" onclick="delTplName('+i+')">✕</button></div>').join(''):'<p style="font-size:12px;color:var(--muted)">Aucun nom enregistré</p>';
   if(vl)vl.innerHTML=venues.length?venues.map((v,i)=>
     '<div class="tpl-item">'
     +'<div style="flex:1"><div class="tpl-item-name">'+v.name+'</div>'
@@ -1350,32 +1526,7 @@ window.applyText=function(i){
   toast('Texte appliqué ✓');
 };
 
-// Chips rapides dans le formulaire
-function renderVenueChips(){
-  const c=$('tpl-venue-chips');if(!c)return;
-  const venues=getTplVenues();
-  c.innerHTML=venues.map((v,i)=>
-    '<button class="tpl-chip" onclick="applyVenueChip('+i+')">📍 '+v.name+'</button>'
-  ).join('');
-}
-function renderTextChips(){
-  const c=$('tpl-text-chips');if(!c)return;
-  const texts=getTplTexts();
-  c.innerHTML=texts.map((t,i)=>
-    '<button class="tpl-chip" onclick="applyTextChip('+i+')">📝 '+t.name+'</button>'
-  ).join('');
-}
-window.applyVenueChip=function(i){
-  const v=getTplVenues()[i];if(!v)return;
-  $('f-place').value=v.name;
-  $('f-maps-url').value=v.maps;
-  if(v.maps)onMapsUrlInput(v.maps);
-};
-window.applyTextChip=function(i){
-  const t=getTplTexts()[i];if(!t)return;
-  if(t.short)$('f-desc').value=t.short;
-  if(t.long)$('f-desc-long').value=t.long;
-};
+
 /* ══ ADMIN TRIGGER ═══════════════════════════════════════ */
 let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
@@ -1392,7 +1543,7 @@ if(location.hash.startsWith('#e-')){
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
 window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
 function showLogin(){$('login-screen').style.display='flex';$('admin-dashboard').classList.remove('show');setTimeout(()=>$('login-email').focus(),100);}
-function showDashboard(){$('login-screen').style.display='none';$('admin-dashboard').classList.add('show');renderAdminList();loadSettingsForm();connectFirebase();renderVenueChips();renderTextChips();}
+function showDashboard(){$('login-screen').style.display='none';$('admin-dashboard').classList.add('show');renderAdminList();loadSettingsForm();connectFirebase();}
 
 /* ══ AUTH FIREBASE ═══════════════════════════════════════ */
 window.doLogin=async function(){
