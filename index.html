@@ -363,6 +363,31 @@ textarea.form-input{resize:vertical;min-height:68px;}
 .share-btn svg{flex-shrink:0;}
 /* ══ CARTE "BIENTÔT" ══════════════════════════════════════ */
 
+
+
+/* ══ TEMPLATES ════════════════════════════════════════════ */
+.tpl-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.tpl-item{display:flex;align-items:center;gap:10px;padding:9px 12px;
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+.tpl-item-name{flex:1;font-size:13px;font-weight:500;color:var(--text);}
+.tpl-item-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.tpl-use-btn{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--surface2);
+  border:1px solid var(--border2);color:var(--muted2);cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.tpl-use-btn:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+.tpl-del-btn{font-size:11px;padding:4px 8px;border-radius:6px;background:transparent;
+  border:none;color:var(--muted);cursor:pointer;flex-shrink:0;}
+.tpl-del-btn:hover{color:#c0392b;}
+.tpl-section-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.08em;margin:16px 0 8px;}
+/* Boutons de remplissage rapide dans le formulaire */
+.tpl-quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.tpl-chip{font-size:11px;padding:3px 10px;border-radius:12px;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--muted2);cursor:pointer;transition:background .15s,border-color .15s;}
+.tpl-chip:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+/* ══ AUTO-SUPPRESSION ═════════════════════════════════════ */
+.delete-badge{font-size:10px;color:#c0392b;background:rgba(192,57,43,.1);
+  border-radius:4px;padding:1px 5px;margin-left:4px;}
 /* ══ COUNTDOWN ════════════════════════════════════════════ */
 .countdown-wrap{
   display:flex;gap:8px;align-items:center;justify-content:center;
@@ -624,6 +649,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
           <button class="admin-tab active" onclick="switchTab('form',0)">Événement</button>
           <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
           <button class="admin-tab" onclick="switchTab('stats',2);loadStats()">Stats</button>
+          <button class="admin-tab" onclick="switchTab('templates',3);renderTemplates()">Modèles</button>
         </div>
         <!-- Formulaire événement -->
         <div class="admin-tab-panel active" id="tab-form">
@@ -671,6 +697,10 @@ textarea.form-input{resize:vertical;min-height:68px;}
             <input type="url" class="form-input" id="f-link" placeholder="https://billetterie.fr/…"/>
           </div>
           <div class="form-group">
+            <label class="form-label">Textes enregistrés</label>
+            <div id="tpl-text-chips" class="tpl-quick"></div>
+          </div>
+          <div class="form-group">
             <label class="form-label">Description courte (vignette)</label>
             <textarea class="form-input" id="f-desc" rows="2" placeholder="2 lignes max, affichées sur la carte…"></textarea>
           </div>
@@ -694,6 +724,11 @@ textarea.form-input{resize:vertical;min-height:68px;}
               <div class="form-group" style="margin-bottom:0"><input type="time" class="form-input" id="f-reveal-time" placeholder="20:00"/></div>
             </div>
             <div class="form-hint">À cette date/heure, l'événement passera automatiquement en "En vente"</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Suppression automatique <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(optionnel)</span></label>
+            <input type="date" class="form-input" id="f-delete-at"/>
+            <div class="form-hint">L'événement sera supprimé automatiquement à cette date</div>
           </div>
           <input type="hidden" id="f-id"/>
           <div style="display:flex;gap:10px;margin-top:4px">
@@ -736,6 +771,39 @@ textarea.form-input{resize:vertical;min-height:68px;}
             <label class="form-label">Légende (optionnel)</label>
           </div>
         </div>
+        </div>
+
+        <!-- Modèles -->
+        <div class="admin-tab-panel" id="tab-templates">
+          <div class="sec-title">Modèles réutilisables</div>
+          <!-- Lieux -->
+          <div class="tpl-section-title">📍 Lieux enregistrés</div>
+          <div id="tpl-venues-list" class="tpl-list"></div>
+          <div class="form-group">
+            <label class="form-label">Nom du lieu</label>
+            <input type="text" class="form-input" id="tpl-v-name" placeholder="La Hune — Tiers-lieu"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lien Google Maps</label>
+            <input type="url" class="form-input" id="tpl-v-maps" placeholder="https://maps.app.goo.gl/…"/>
+          </div>
+          <button class="btn btn-accent" style="width:100%;margin-bottom:20px" onclick="saveTplVenue()">+ Enregistrer ce lieu</button>
+          <!-- Textes -->
+          <div class="tpl-section-title">📝 Textes pré-enregistrés</div>
+          <div id="tpl-texts-list" class="tpl-list"></div>
+          <div class="form-group">
+            <label class="form-label">Nom du modèle</label>
+            <input type="text" class="form-input" id="tpl-t-name" placeholder="Description Loups-Garous"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Texte (description courte)</label>
+            <textarea class="form-input" id="tpl-t-short" rows="2" placeholder="Résumé affiché sur la carte…"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Texte long (détail modal)</label>
+            <textarea class="form-input" id="tpl-t-long" rows="4" placeholder="Description complète…"></textarea>
+          </div>
+          <button class="btn btn-accent" style="width:100%" onclick="saveTplText()">+ Enregistrer ce texte</button>
         </div>
       </div>
     </div>
@@ -810,7 +878,7 @@ try{var _ec=JSON.parse(localStorage.getItem('cache_events'));if(_ec&&_ec.length>
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot }
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot, increment }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -942,6 +1010,11 @@ function startListeners(){
     snap.forEach(d=>localEvents.push({id:d.id,...d.data()}));
     localEvents.sort((a,b)=>a.order-b.order||(a.date||'').localeCompare(b.date||''));
     ls.set('cache_events',localEvents);
+    // Auto-suppression des événements expirés
+    const today=new Date().toISOString().slice(0,10);
+    localEvents.filter(e=>e.deleteAt&&e.deleteAt<today).forEach(e=>{
+      deleteDoc(doc(db,'events',e.id)).catch(()=>{});
+    });
     renderSite();startCountdowns();
     if(isLogged)renderAdminList();
     // Cache le loader dès la première réponse Firebase
@@ -1037,11 +1110,8 @@ window.trackClick=function(n){
 async function incrementStat(eventId, field){
   if(!db||!eventId)return;
   try{
-    const ref=doc(db,'stats',eventId);
-    const snap=await getDoc(ref);
-    const cur=snap.exists()?snap.data():{views:0,reservations:0};
-    await setDoc(ref,{...cur,[field]:(cur[field]||0)+1},{merge:true});
-  }catch(e){/* silencieux — stats non critiques */}
+    await setDoc(doc(db,'stats',eventId),{[field]:increment(1)},{merge:true});
+  }catch(e){/* silencieux */}
 }
 window.incrementStat=incrementStat;
 
@@ -1209,6 +1279,103 @@ window.shareEvent=async function(id){
   }
 };
 
+
+/* ══ TEMPLATES ════════════════════════════════════════════ */
+function getTplVenues(){try{return JSON.parse(localStorage.getItem('tpl_venues'))||[];}catch{return[];}}
+function getTplTexts(){try{return JSON.parse(localStorage.getItem('tpl_texts'))||[];}catch{return[];}}
+function saveTplVenues(arr){localStorage.setItem('tpl_venues',JSON.stringify(arr));}
+function saveTplTexts(arr){localStorage.setItem('tpl_texts',JSON.stringify(arr));}
+
+window.renderTemplates=function(){
+  const venues=getTplVenues();
+  const texts=getTplTexts();
+  const vl=$('tpl-venues-list');
+  const tl=$('tpl-texts-list');
+  if(vl)vl.innerHTML=venues.length?venues.map((v,i)=>
+    '<div class="tpl-item">'
+    +'<div style="flex:1"><div class="tpl-item-name">'+v.name+'</div>'
+    +'<div class="tpl-item-sub">'+v.maps+'</div></div>'
+    +'<button class="tpl-use-btn" onclick="applyVenue('+i+')">Utiliser</button>'
+    +'<button class="tpl-del-btn" onclick="delTplVenue('+i+')">✕</button>'
+    +'</div>'
+  ).join(''):'<p style="font-size:12px;color:var(--muted)">Aucun lieu enregistré</p>';
+  if(tl)tl.innerHTML=texts.length?texts.map((t,i)=>
+    '<div class="tpl-item">'
+    +'<div style="flex:1"><div class="tpl-item-name">'+t.name+'</div>'
+    +'<div class="tpl-item-sub">'+(t.short||t.long||'').slice(0,60)+'…</div></div>'
+    +'<button class="tpl-use-btn" onclick="applyText('+i+')">Utiliser</button>'
+    +'<button class="tpl-del-btn" onclick="delTplText('+i+')">✕</button>'
+    +'</div>'
+  ).join(''):'<p style="font-size:12px;color:var(--muted)">Aucun texte enregistré</p>';
+};
+
+window.saveTplVenue=function(){
+  const name=$('tpl-v-name').value.trim();
+  const maps=$('tpl-v-maps').value.trim();
+  if(!name){toast('Nom requis','error');return;}
+  const arr=getTplVenues();arr.push({name,maps});saveTplVenues(arr);
+  $('tpl-v-name').value='';$('tpl-v-maps').value='';
+  renderTemplates();renderVenueChips();toast('Lieu enregistré ✓');
+};
+window.saveTplText=function(){
+  const name=$('tpl-t-name').value.trim();
+  const short=$('tpl-t-short').value.trim();
+  const long=$('tpl-t-long').value.trim();
+  if(!name){toast('Nom requis','error');return;}
+  const arr=getTplTexts();arr.push({name,short,long});saveTplTexts(arr);
+  $('tpl-t-name').value='';$('tpl-t-short').value='';$('tpl-t-long').value='';
+  renderTemplates();renderTextChips();toast('Texte enregistré ✓');
+};
+window.delTplVenue=function(i){
+  const arr=getTplVenues();arr.splice(i,1);saveTplVenues(arr);
+  renderTemplates();renderVenueChips();
+};
+window.delTplText=function(i){
+  const arr=getTplTexts();arr.splice(i,1);saveTplTexts(arr);
+  renderTemplates();renderTextChips();
+};
+window.applyVenue=function(i){
+  const v=getTplVenues()[i];if(!v)return;
+  switchTab('form',0);
+  $('f-place').value=v.name;
+  $('f-maps-url').value=v.maps;
+  if(v.maps)onMapsUrlInput(v.maps);
+  toast('Lieu appliqué ✓');
+};
+window.applyText=function(i){
+  const t=getTplTexts()[i];if(!t)return;
+  switchTab('form',0);
+  if(t.short)$('f-desc').value=t.short;
+  if(t.long)$('f-desc-long').value=t.long;
+  toast('Texte appliqué ✓');
+};
+
+// Chips rapides dans le formulaire
+function renderVenueChips(){
+  const c=$('tpl-venue-chips');if(!c)return;
+  const venues=getTplVenues();
+  c.innerHTML=venues.map((v,i)=>
+    '<button class="tpl-chip" onclick="applyVenueChip('+i+')">📍 '+v.name+'</button>'
+  ).join('');
+}
+function renderTextChips(){
+  const c=$('tpl-text-chips');if(!c)return;
+  const texts=getTplTexts();
+  c.innerHTML=texts.map((t,i)=>
+    '<button class="tpl-chip" onclick="applyTextChip('+i+')">📝 '+t.name+'</button>'
+  ).join('');
+}
+window.applyVenueChip=function(i){
+  const v=getTplVenues()[i];if(!v)return;
+  $('f-place').value=v.name;
+  $('f-maps-url').value=v.maps;
+  if(v.maps)onMapsUrlInput(v.maps);
+};
+window.applyTextChip=function(i){
+  const t=getTplTexts()[i];if(!t)return;
+  if(t.short)$('f-desc').value=t.short;
+  if(t.long)$('f-desc-long').value=t.long;
+};
 /* ══ ADMIN TRIGGER ═══════════════════════════════════════ */
 let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
@@ -1225,7 +1392,7 @@ if(location.hash.startsWith('#e-')){
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
 window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
 function showLogin(){$('login-screen').style.display='flex';$('admin-dashboard').classList.remove('show');setTimeout(()=>$('login-email').focus(),100);}
-function showDashboard(){$('login-screen').style.display='none';$('admin-dashboard').classList.add('show');renderAdminList();loadSettingsForm();connectFirebase();}
+function showDashboard(){$('login-screen').style.display='none';$('admin-dashboard').classList.add('show');renderAdminList();loadSettingsForm();connectFirebase();renderVenueChips();renderTextChips();}
 
 /* ══ AUTH FIREBASE ═══════════════════════════════════════ */
 window.doLogin=async function(){
@@ -1309,7 +1476,7 @@ function renderAdminList(){
     +'<div class="admin-event-info">'
     +'<div class="admin-event-name">'+(ev.status==='coming_soon'?'⏳ [Bientôt] '+ev.name:ev.name)+'</div>'
     +'<div class="admin-event-meta">'+(ev.date?formatDate(ev.date,ev.time):'—')
-    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+'</div></div>'
+    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+(ev.deleteAt?'<span class="delete-badge">🗑 '+new Date(ev.deleteAt+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+'</span>':'')+'</div></div>'
     +'<div class="admin-event-actions">'
     +'<button class="btn btn-icon btn-sm" title="Modifier" onclick="openEventForm(\''+ev.id+'\')">✏️</button>'
     +'<button class="btn btn-icon btn-sm" title="Dupliquer" onclick="duplicateEvent(\''+ev.id+'\')">📋</button>'
@@ -1380,6 +1547,7 @@ window.openEventForm=function(id){
   $('f-desc-long').value=ev?.descLong||'';
   $('f-status').value=ev?.status||'active';
   onStatusChange(ev?.status||'active');
+  $('f-delete-at').value=ev?.deleteAt||'';
   if(ev?.revealAt){
     const d=new Date(ev.revealAt);
     $('f-reveal-date').value=d.toLocaleDateString('en-CA');
@@ -1390,7 +1558,7 @@ window.openEventForm=function(id){
 window.resetForm=function(){
   editingId=null;$('form-title').textContent='Nouvel événement';
   ['f-img','f-name','f-date','f-time','f-place','f-maps-url','f-price','f-link','f-desc','f-desc-long','f-id'].forEach(id=>$(id).value='');
-  $('f-price-type').value='normal';$('f-status').value='active';onStatusChange('active');$('f-reveal-date').value='';$('f-reveal-time').value='';previewImg('');
+  $('f-price-type').value='normal';$('f-status').value='active';onStatusChange('active');$('f-reveal-date').value='';$('f-reveal-time').value='';$('f-delete-at').value='';previewImg('');
   $('f-maps-hint').textContent='';
 };
 window.previewImg=function(url){
@@ -1413,7 +1581,8 @@ window.saveEvent=async function(){
     img:$('f-img').value.trim(),desc:$('f-desc').value.trim(),
     descLong:$('f-desc-long').value.trim(),
     status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now(),
-    revealAt:($('f-status').value==='coming_soon'&&$('f-reveal-date').value)?new Date($('f-reveal-date').value+'T'+($('f-reveal-time').value||'00:00')+':00').getTime():null};
+    revealAt:($('f-status').value==='coming_soon'&&$('f-reveal-date').value)?new Date($('f-reveal-date').value+'T'+($('f-reveal-time').value||'00:00')+':00').getTime():null,
+    deleteAt:$('f-delete-at').value?$('f-delete-at').value:null};
   try{
     if(!db)throw new Error('Firebase non connecté. Configure-le d\'abord.');
     if(editingId){await updateDoc(doc(db,'events',editingId),data);toast('Mis à jour ✓');}
