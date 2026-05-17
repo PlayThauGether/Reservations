@@ -2330,27 +2330,35 @@ window.renderGalleryAdmin=function(){
   }
   el.innerHTML=localAlbums.map(a=>{
     const photos=a.photos||[];
+    const coverIdx=typeof a.cover==='number'?a.cover:0;
     return '<div class="album-admin-item" data-id="'+a.id+'">'
       +'<div class="album-admin-header">'
       +'<span class="album-admin-name">📁 '+a.name+'</span>'
-      +'<span class="album-admin-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</span>'
-      +'<button class="btn btn-accent btn-sm" style="padding:4px 10px;font-size:11px" data-action="add-photos" data-name="'+a.name.replace(/"/g,'&quot;')+'">+ Photos</button>'
+      +'<span class="album-admin-count">'+photos.length+' média'+(photos.length>1?'s':'')+'</span>'
+      +'<button class="btn btn-accent btn-sm" style="padding:4px 10px;font-size:11px" data-action="add-photos" data-name="'+a.name.replace(/"/g,'&quot;')+'">+ Ajouter</button>'
       +'<button class="btn btn-danger btn-sm" data-action="del-album" style="padding:4px 8px">🗑</button>'
       +'</div>'
       +'<div class="album-admin-body" id="ab-'+a.id+'">'
       +(photos.length
-        ?'<div class="album-photo-grid">'+photos.map((p,i)=>
-          '<div class="album-photo-thumb">'
-          +'<img src="'+p.url+'" alt="" oncontextmenu="return false" ondragstart="return false"/>'
-          +'<button class="album-photo-del" data-action="del-photo" data-idx="'+i+'">✕</button>'
-          +'</div>'
-        ).join('')+'</div>'
-        :'<p style="font-size:12px;color:var(--muted)">Pas encore de photos.</p>'
+        ?'<div class="album-photo-grid">'+photos.map((p,i)=>{
+            const isVideo=p.type==='video';
+            const isCover=coverIdx===i;
+            const thumb=isVideo
+              ?'https://img.youtube.com/vi/'+p.ytId+'/default.jpg'
+              :fixUrl(p.url);
+            return '<div class="album-photo-thumb" style="'+(isCover?'outline:2px solid var(--accent);':'')+'">'
+              +'<img src="'+thumb+'" alt="" oncontextmenu="return false" ondragstart="return false" style="'+(isVideo?'opacity:.8':'')+'"/>'
+              +(isVideo?'<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;pointer-events:none">▶</div>':'')
+              +(isCover?'<div class="album-photo-cover-badge">★</div>':'')
+              +'<button class="album-photo-del" data-action="del-photo" data-idx="'+i+'">✕</button>'
+              +(!isCover&&!isVideo?'<button class="album-photo-cover-btn" data-action="set-cover" data-idx="'+i+'">★ Couv.</button>':'')
+              +'</div>';
+          }).join('')+'</div>'
+        :'<p style="font-size:12px;color:var(--muted)">Pas encore de médias.</p>'
       )
       +'</div>'
       +'</div>';
   }).join('');
-  // Délégation d\'événements
   el.onclick=function(e){
     const item=e.target.closest('.album-admin-item');if(!item)return;
     const id=item.dataset.id;
@@ -2358,6 +2366,8 @@ window.renderGalleryAdmin=function(){
       e.stopPropagation();openAddPhoto(id,e.target.dataset.name);
     } else if(e.target.dataset.action==='del-album'){
       e.stopPropagation();deleteAlbum(id);
+    } else if(e.target.dataset.action==='set-cover'){
+      e.stopPropagation();setCover(id,parseInt(e.target.dataset.idx));
     } else if(e.target.dataset.action==='del-photo'){
       e.stopPropagation();deletePhoto(id,parseInt(e.target.dataset.idx));
     } else if(e.target.closest('.album-admin-header')&&!e.target.closest('button')){
