@@ -2199,8 +2199,13 @@ function startAlbumListener(){
 
 function fixUrl(url){
   if(!url)return url;
-  // Convertit HEIC/HEIF en JPG pour Cloudinary
-  return url.replace(/\.heic(\?.*)?$/i,'.jpg').replace(/\.heif(\?.*)?$/i,'.jpg');
+  // Pour les URLs Cloudinary : injecte f_auto,q_auto pour forcer un format compatible navigateur
+  if(url.includes('res.cloudinary.com')&&url.includes('/upload/')){
+    if(!url.includes('f_auto')&&!url.includes('f_jpg')&&!url.includes('f_png')){
+      url=url.replace('/upload/','/upload/f_auto,q_auto/');
+    }
+  }
+  return url;
 }
 
 let currentAlbumView=null;
