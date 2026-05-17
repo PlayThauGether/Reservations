@@ -2201,13 +2201,20 @@ function startAlbumListener(){
 
 /* ── PUBLIC ───────────────────────────────────────────── */
 
-function fixUrl(url){
+function fixUrl(url, size='thumb'){
   if(!url)return url;
   if(url.includes('res.cloudinary.com')&&url.includes('/upload/')){
-    // Utilise la transformation f_jpg de Cloudinary pour forcer la conversion HEIC → JPG
-    if(/\.(heic|heif)(\?|$)/i.test(url)){
-      url=url.replace('/upload/','/upload/f_jpg/');
+    // Conversion HEIC → JPG via transformation
+    const isHeic=/\.(heic|heif)(\?|$)/i.test(url);
+    let transform='';
+    if(size==='thumb') transform='w_600,h_450,c_fill,q_auto,f_auto';
+    else if(size==='full') transform='w_1600,q_auto,f_auto';
+    else transform='f_auto';
+    if(isHeic){
+      url=url.replace('/upload/','/upload/'+transform+'/');
       url=url.replace(/\.(heic|heif)(\?.*)?$/i,'.jpg');
+    } else {
+      url=url.replace('/upload/','/upload/'+transform+'/');
     }
   }
   return url;
@@ -2233,7 +2240,7 @@ function renderFolderView(){
     +albumsWithPhotos.map(a=>{
       const photos=a.photos||[];
       const coverIdx=typeof a.cover==='number'?a.cover:0;
-      const cover=fixUrl(photos[coverIdx]?.url||photos[0]?.url||'');
+      const cover=fixUrl(photos[coverIdx]?.url||photos[0]?.url||'','thumb');
       return '<div class="folder-card" data-folder="'+a.id+'">'
         +(cover?'<img class="folder-cover" src="'+cover+'" alt="" draggable="false" oncontextmenu="return false"/>':'')
         +'<div class="folder-overlay"></div>'
@@ -2313,7 +2320,7 @@ function updateLb(){
     const vw=document.getElementById('lb-video-el');
     if(vw){vw.style.display='none';vw.innerHTML='';}
     $('photo-lb-img').style.display='block';
-    $('photo-lb-img').src=fixUrl(p.url);
+    $('photo-lb-img').src=fixUrl(p.url,'full');
   }
   $('lb-caption').textContent=p.caption||'';
 }
