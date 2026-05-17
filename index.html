@@ -645,8 +645,11 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
 }
 .photo-item:hover .photo-bg{transform:scale(1.05);}
 .photo-bg{
-  position:absolute;inset:0;
-  background-size:cover;background-position:center;
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
   transition:transform .4s cubic-bezier(.23,1,.32,1);
   -webkit-user-select:none;user-select:none;
   pointer-events:none;
@@ -2251,11 +2254,18 @@ function renderAlbumView(albumId){
     +'<div class="album-view-title">'+a.name+'</div>'
     +'<div class="album-view-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</div>'
     +'<div class="photo-grid">'
-    +photos.map((p,i)=>
-      '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
-      +'<div class="photo-bg" style="background-image:url('+JSON.stringify(fixUrl(p.url))+')"></div>'
-      +'</div>'
-    ).join('')
+    +photos.map((p,i)=>{
+      if(p.type==='video'){
+        const thumb='https://img.youtube.com/vi/'+p.ytId+'/hqdefault.jpg';
+        return '<div class="photo-item is-video" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
+          +'<img class="photo-bg" src="'+thumb+'" alt="" draggable="false" oncontextmenu="return false"/>'
+          +(p.caption?'<div class="gallery-caption">'+p.caption+'</div>':'')
+          +'</div>';
+      }
+      return '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
+        +'<img class="photo-bg" src="'+fixUrl(p.url)+'" alt="" draggable="false" oncontextmenu="return false"/>'
+        +'</div>';
+    }).join('')
     +'</div>';
 }
 
