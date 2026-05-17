@@ -894,22 +894,23 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
             <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
             <!-- Toggle mode -->
             <div style="display:flex;gap:6px;margin-bottom:12px">
-              <button id="g-mode-tag-btn" class="btn btn-accent btn-sm" style="flex:1" onclick="setPhotoMode('tag')">🏷 Tag Cloudinary</button>
-              <button id="g-mode-url-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('url')">🔗 URLs manuelles</button>
+              <button id="g-mode-tag-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('tag')">🏷 Tag Cloudinary <span style="font-size:10px;opacity:.6">(expérimental)</span></button>
+              <button id="g-mode-url-btn" class="btn btn-accent btn-sm" style="flex:1" onclick="setPhotoMode('url')">🔗 URLs (recommandé)</button>
             </div>
             <!-- Mode Tag -->
-            <div id="g-mode-tag">
+            <div id="g-mode-tag" style="display:none">
               <div class="form-group">
                 <label class="form-label">Nom du tag Cloudinary</label>
                 <input type="text" class="form-input" id="g-tag-name" placeholder="soiree-mars-2026"/>
-                <div class="form-hint">Dans Cloudinary : sélectionne tes photos → Actions → Add tag</div>
+                <div class="form-hint" style="color:#c0392b">⚠️ Peut ne pas fonctionner selon les paramètres Cloudinary. Utilise "URLs" si ça échoue.</div>
               </div>
             </div>
             <!-- Mode URL -->
-            <div id="g-mode-url" style="display:none">
+            <div id="g-mode-url">
               <div class="form-group">
-                <label class="form-label">URLs (une par ligne)</label>
-                <textarea class="form-input" id="g-photo-urls" rows="4" placeholder="https://res.cloudinary.com/…"></textarea>
+                <label class="form-label">URLs Cloudinary (une par ligne)</label>
+                <textarea class="form-input" id="g-photo-urls" rows="5" placeholder="https://res.cloudinary.com/…&#10;https://res.cloudinary.com/…&#10;&#10;💡 Dans Cloudinary : clique sur une photo → panneau droit → copie l'URL"></textarea>
+                <div class="form-hint">💡 <strong>Astuce rapide</strong> : dans Cloudinary, clique sur chaque photo → panneau droit → icône 🔗 pour copier l'URL. Colle toutes tes URLs ici d'un coup.</div>
               </div>
             </div>
             <div class="form-group">
@@ -2273,12 +2274,16 @@ window.addPhotos=async function(){
       if(res.status===401||res.status===403)throw new Error('Accès refusé — va dans Cloudinary → Settings → Security → décoche "Resource list"');
       if(!res.ok)throw new Error('Erreur Cloudinary ('+res.status+') — vérifie ton Cloud Name dans Paramètres');
       const data=await res.json();
-      urls=(data.resources||[]).map(r=>r.secure_url||('https://res.cloudinary.com/'+cloud+'/image/upload/'+r.public_id+'.'+r.format));
+      urls=(data.resources||[]).map(r=>{
+        const url=r.secure_url||('https://res.cloudinary.com/'+cloud+'/image/upload/'+r.public_id+'.'+r.format);
+        return url.replace(/\.heic(\?.*)?$/i,'.jpg').replace(/\.heif(\?.*)?$/i,'.jpg');
+      });
       if(!urls.length){toast('Aucune photo trouvée pour ce tag','error');btn.textContent='Ajouter';btn.disabled=false;return;}
     }catch(e){toast(e.message,'error');btn.textContent='Ajouter';btn.disabled=false;return;}
   }else{
     const raw=$('g-photo-urls').value.trim();
-    urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'));
+    urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'))
+      .map(u=>u.replace(/\.heic(\?.*)?$/i,'.jpg').replace(/\.heif(\?.*)?$/i,'.jpg'));
     if(!urls.length){toast('Aucune URL valide','error');return;}
   }
   const newPhotos=[...(album.photos||[]),...urls.map(url=>({url,caption:caption||''}))];
