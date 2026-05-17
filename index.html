@@ -2201,7 +2201,7 @@ function startAlbumListener(){
     snap.forEach(d=>localAlbums.push({id:d.id,...d.data()}));
     localAlbums.sort((a,b)=>(a.order||a.createdAt||0)-(b.order||b.createdAt||0));
     renderGalleryPublic();
-    if(isLogged)renderGalleryAdmin();
+    if(isLogged&&!_savingOrder)renderGalleryAdmin();
   });
 }
 
@@ -2445,19 +2445,24 @@ window.renderGalleryAdmin=function(){
   };
 };
 
-window.moveAlbum=async function(id,dir){
+let _savingOrder=false;
+window.moveAlbum=function(id,dir){
   const idx=localAlbums.findIndex(a=>a.id===id);
   const newIdx=idx+dir;
   if(newIdx<0||newIdx>=localAlbums.length)return;
+  // Swap immédiat dans le tableau local
   const tmp=localAlbums[idx];
   localAlbums[idx]=localAlbums[newIdx];
   localAlbums[newIdx]=tmp;
   localAlbums.forEach((a,i)=>a.order=i*1000);
-  try{
-    await Promise.all(localAlbums.map(a=>updateDoc(doc(db,'albums',a.id),{order:a.order})));
-    renderGalleryAdmin();
-    toast('Ordre mis à jour ✓');
-  }catch(e){toast(e.message,'error');}
+  // Afficher tout de suite sans attendre Firestore
+  renderGalleryAdmin();
+  // Sauvegarder en arrière-plan (les onSnapshot intermédiaires sont ignorés)
+  _savingOrder=true;
+  Promise.all(localAlbums.map(a=>updateDoc(doc(db,'albums',a.id),{order:a.order})))
+    .then(()=>{toast('Ordre mis à jour ✓');})
+    .catch(()=>{toast('Erreur sauvegarde','error');})
+    .finally(()=>{_savingOrder=false;});
 };
 window.renameAlbum=async function(id){
   const a=localAlbums.find(x=>x.id===id);if(!a)return;
