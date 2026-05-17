@@ -2454,26 +2454,53 @@ window.renameAlbum=async function(id){
 
 function initAlbumDragDrop(){
   const list=$('album-list-admin');if(!list)return;
-  let dragSrc=null;
+  let dragSrc=null;let dragOver=null;
+
   list.querySelectorAll('.album-admin-item').forEach(item=>{
+    // Drag uniquement depuis la poignée
+    const handle=item.querySelector('.drag-handle');
+    if(handle){
+      handle.addEventListener('mousedown',()=>{ item.draggable=true; });
+      handle.addEventListener('mouseleave',()=>{ if(!dragSrc)item.draggable=false; });
+    }
+
     item.addEventListener('dragstart',e=>{
-      dragSrc=item;item.classList.add('dragging');
+      if(!item.draggable)return;
+      dragSrc=item;
       e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',item.dataset.id);
+      setTimeout(()=>item.classList.add('dragging'),0);
     });
+
     item.addEventListener('dragend',()=>{
-      item.classList.remove('dragging');
-      list.querySelectorAll('.album-admin-item').forEach(i=>i.classList.remove('drag-over'));
+      item.draggable=false;
+      dragSrc=null;dragOver=null;
+      list.querySelectorAll('.album-admin-item').forEach(i=>{
+        i.classList.remove('dragging','drag-over');
+      });
     });
-    item.addEventListener('dragover',e=>{
+
+    item.addEventListener('dragenter',e=>{
       e.preventDefault();
-      if(item!==dragSrc){
-        list.querySelectorAll('.album-admin-item').forEach(i=>i.classList.remove('drag-over'));
-        item.classList.add('drag-over');
+      if(item===dragSrc)return;
+      if(dragOver&&dragOver!==item)dragOver.classList.remove('drag-over');
+      dragOver=item;
+      item.classList.add('drag-over');
+    });
+
+    item.addEventListener('dragover',e=>{e.preventDefault();});
+
+    item.addEventListener('dragleave',e=>{
+      if(!item.contains(e.relatedTarget)){
+        item.classList.remove('drag-over');
+        if(dragOver===item)dragOver=null;
       }
     });
+
     item.addEventListener('drop',async e=>{
-      e.preventDefault();
+      e.preventDefault();e.stopPropagation();
       if(!dragSrc||dragSrc===item)return;
+      item.classList.remove('drag-over');
       const items=[...list.querySelectorAll('.album-admin-item')];
       const srcIdx=items.indexOf(dragSrc);
       const tgtIdx=items.indexOf(item);
@@ -2483,7 +2510,7 @@ function initAlbumDragDrop(){
       try{
         await Promise.all(localAlbums.map(a=>updateDoc(doc(db,'albums',a.id),{order:a.order})));
         toast('Ordre sauvegardé ✓');
-      }catch(err){toast('Erreur','error');}
+      }catch(err){toast('Erreur sauvegarde','error');}
       renderGalleryAdmin();
     });
   });
