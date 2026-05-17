@@ -749,14 +749,21 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
       <h1 class="asso-name" id="site-asso-name">Chargement…</h1>
     </div>
     <p class="tagline" id="site-tagline"></p>
-    <a href="https://campsite.bio/playthaugether" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--border2);transition:background .2s,border-color .2s;" onmouseover="this.style.background='var(--surface)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--border2)'">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      Nos Réseaux
-    </a>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px">
+      <a href="https://campsite.bio/playthaugether" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--border2);transition:background .2s,border-color .2s;" onmouseover="this.style.background='var(--surface)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--border2)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Nos Réseaux
+      </a>
+      <button id="btn-gallery-page" onclick="showGalleryPage()" style="display:none;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--border2);cursor:pointer;transition:background .2s,border-color .2s;" onmouseover="this.style.background='var(--surface)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--border2)'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Galerie Photo
+      </button>
+    </div>
     <div class="ornament"><div class="ornament-icon">✦</div></div>
   </div>
 </header>
-<main>
+<!-- Vue Événements -->
+<main id="view-events">
   <div class="wrap">
     <div class="events-grid" id="events-grid">
       <div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Chargement…</p></div>
@@ -764,15 +771,22 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
   </div>
 </main>
 
-<!-- ═══ GALERIE PHOTO ════════════════════════════════════ -->
-<section class="gallery-section" id="gallery-section" style="display:none">
+<!-- Vue Galerie Photo -->
+<main id="view-gallery" style="display:none">
   <div class="wrap">
-    <div class="ornament"><div class="ornament-icon">✦</div></div>
-    <h2>Galerie Photo</h2>
-    <p class="gallery-sub">Nos meilleurs souvenirs</p>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;padding-top:16px">
+      <button onclick="hideGalleryPage()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted2);font-size:13px;cursor:pointer;transition:background .15s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--surface2)'">
+        ← Retour
+      </button>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,42px);color:var(--accent);letter-spacing:.04em;margin:0">Galerie Photo</h2>
+    </div>
     <div class="album-list" id="album-list-public"></div>
+    <div id="gallery-empty" style="display:none;text-align:center;padding:60px 0;color:var(--muted)">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity=".3" style="margin-bottom:16px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <p>Aucune photo pour le moment</p>
+    </div>
   </div>
-</section>
+</main>
 
 <!-- Lightbox -->
 <div id="photo-lb" onclick="if(event.target===this||event.target.id==='photo-lb')closeLb()">
@@ -856,9 +870,42 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <div class="sdot o"></div>
           <span>Firebase non configuré — <button class="btn btn-sm btn-ghost" style="margin-left:4px" onclick="openFirebaseModal()">Configurer</button></span>
         </div>
-        <div class="sec-title">Événements</div>
-        <div id="admin-event-list" class="admin-event-list"></div>
-        <button class="btn btn-accent" style="margin-top:16px" onclick="openEventForm(null)">+ Ajouter un événement</button>
+        <!-- Toggle Événements / Galerie -->
+        <div style="display:flex;gap:8px;margin-bottom:20px">
+          <button id="main-tab-events" class="btn btn-accent" style="flex:1" onclick="switchMainTab('events')">🎭 Événements</button>
+          <button id="main-tab-gallery" class="btn btn-ghost" style="flex:1" onclick="switchMainTab('gallery')">🖼 Galerie Photo</button>
+        </div>
+        <!-- Vue Événements -->
+        <div id="main-view-events">
+          <div class="sec-title">Événements</div>
+          <div id="admin-event-list" class="admin-event-list"></div>
+          <button class="btn btn-accent" style="margin-top:16px" onclick="openEventForm(null)">+ Ajouter un événement</button>
+        </div>
+        <!-- Vue Galerie -->
+        <div id="main-view-gallery" style="display:none">
+          <div class="sec-title">Galerie Photo</div>
+          <div class="form-hint" style="margin-bottom:16px">Héberge tes photos sur <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">Cloudinary</a> (gratuit) puis colle les URLs ici.</div>
+          <div class="form-group" style="display:flex;gap:8px">
+            <input type="text" class="form-input" id="g-album-name" placeholder="Soirée Loups-Garous — Mars 2026" style="flex:1"/>
+            <button class="btn btn-accent" onclick="createAlbum()" style="white-space:nowrap">+ Créer album</button>
+          </div>
+          <div id="album-list-admin"></div>
+          <div id="g-add-photo-form" style="display:none;margin-top:16px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
+            <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
+            <div class="form-group">
+              <label class="form-label">URLs Cloudinary (une par ligne)</label>
+              <textarea class="form-input" id="g-photo-urls" rows="4" placeholder="https://res.cloudinary.com/…"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Légende (optionnel)</label>
+              <input type="text" class="form-input" id="g-photo-caption" placeholder="Ambiance de la soirée…"/>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-accent" style="flex:1" onclick="addPhotos()">Ajouter</button>
+              <button class="btn btn-ghost" onclick="closeAddPhoto()">Annuler</button>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- Side -->
       <div class="admin-side">
@@ -867,7 +914,6 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
           <button class="admin-tab" onclick="switchTab('stats',2);loadStats()">Stats</button>
           <button class="admin-tab" onclick="switchTab('templates',3);renderTemplates()">Modèles</button>
-          <button class="admin-tab" onclick="switchTab('galerie',4);renderGalleryAdmin()">Galerie</button>
         </div>
         <!-- Formulaire événement -->
         <div class="admin-tab-panel active" id="tab-form">
@@ -1037,9 +1083,6 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           </div>
           <button class="btn btn-accent" style="width:100%" onclick="saveTplText()">+ Enregistrer ce texte</button>
 
-        <!-- Galerie -->
-        <div class="admin-tab-panel" id="tab-galerie">
-          <div class="sec-title">Galerie Photo</div>
           <div class="form-hint" style="margin-bottom:16px">Héberge tes photos sur <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">Cloudinary</a> (gratuit) puis colle les URLs ici.</div>
           <!-- Créer un album -->
           <div class="form-group" style="display:flex;gap:8px">
@@ -2053,24 +2096,26 @@ function startAlbumListener(){
 
 /* ── PUBLIC ───────────────────────────────────────────── */
 function renderGalleryPublic(){
-  const sec=$('gallery-section');
   const hasPhotos=localAlbums.some(a=>a.photos&&a.photos.length>0);
-  if(!hasPhotos){sec.style.display='none';return;}
-  sec.style.display='block';
-  $('album-list-public').innerHTML=localAlbums
-    .filter(a=>a.photos&&a.photos.length>0)
-    .map(a=>{
-      const allPhotos=a.photos||[];
-      return '<div class="album-section">'
-        +'<div class="album-title">'+a.name+'<span class="album-count">'+allPhotos.length+' photo'+(allPhotos.length>1?'s':'')+'</span></div>'
-        +'<div class="photo-grid">'
-        +allPhotos.map((p,i)=>
-          '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
-          +'<div class="photo-bg" style="background-image:url('+JSON.stringify(p.url)+')"></div>'
-          +'</div>'
-        ).join('')
-        +'</div></div>';
-    }).join('');
+  // Afficher/masquer le bouton Galerie dans le header
+  const btn=$('btn-gallery-page');
+  if(btn)btn.style.display=hasPhotos?'inline-flex':'none';
+  // Remplir la vue galerie publique
+  const albumsWithPhotos=localAlbums.filter(a=>a.photos&&a.photos.length>0);
+  const empty=$('gallery-empty');
+  if(empty)empty.style.display=albumsWithPhotos.length?'none':'block';
+  $('album-list-public').innerHTML=albumsWithPhotos.map(a=>{
+    const allPhotos=a.photos||[];
+    return '<div class="album-section" style="margin-bottom:40px">'
+      +'<div class="album-title">'+a.name+'<span class="album-count">'+allPhotos.length+' photo'+(allPhotos.length>1?'s':'')+'</span></div>'
+      +'<div class="photo-grid">'
+      +allPhotos.map((p,i)=>
+        '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
+        +'<div class="photo-bg" style="background-image:url('+JSON.stringify(p.url)+')"></div>'
+        +'</div>'
+      ).join('')
+      +'</div></div>';
+  }).join('');
 }
 
 /* ── LIGHTBOX ─────────────────────────────────────────── */
@@ -2205,6 +2250,42 @@ window.deletePhoto=async function(albumId,idx){
     toast('Photo supprimée');
   }catch(e){toast(e.message,'error');}
 };
+
+/* ══ NAVIGATION GALERIE ═══════════════════════════════════ */
+window.switchMainTab=function(tab){
+  const evView=$('main-view-events');
+  const galView=$('main-view-gallery');
+  const evBtn=$('main-tab-events');
+  const galBtn=$('main-tab-gallery');
+  if(tab==='events'){
+    evView.style.display='block';galView.style.display='none';
+    evBtn.className='btn btn-accent';galBtn.className='btn btn-ghost';
+  }else{
+    evView.style.display='none';galView.style.display='block';
+    evBtn.className='btn btn-ghost';galBtn.className='btn btn-accent';
+    renderGalleryAdmin();
+  }
+};
+window.showGalleryPage=function(){
+  $('view-events').style.display='none';
+  $('view-gallery').style.display='block';
+  history.pushState({gallery:true},'','#galerie');
+  window.scrollTo(0,0);
+};
+window.hideGalleryPage=function(fromPop){
+  $('view-gallery').style.display='none';
+  $('view-events').style.display='block';
+  if(!fromPop)history.back();
+  window.scrollTo(0,0);
+};
+// Popstate pour la page galerie publique
+window.addEventListener('popstate',function(e){
+  if($('view-gallery').style.display==='block'&&!e.state?.gallery){
+    hideGalleryPage(true);
+  }
+});
+// Hash direct
+if(location.hash==='#galerie')setTimeout(()=>showGalleryPage(),400);
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
 renderSite();startCountdowns();
