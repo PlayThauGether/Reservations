@@ -2269,9 +2269,11 @@ window.addPhotos=async function(){
     btn.textContent='Chargement…';btn.disabled=true;
     try{
       const res=await fetch('https://res.cloudinary.com/'+cloud+'/image/list/'+encodeURIComponent(tag)+'.json');
-      if(!res.ok)throw new Error('Tag introuvable ou Cloud Name incorrect');
+      if(res.status===404)throw new Error('Tag "'+tag+'" introuvable. Vérifie le nom exact dans Cloudinary.');
+      if(res.status===401||res.status===403)throw new Error('Accès refusé — va dans Cloudinary → Settings → Security → décoche "Resource list"');
+      if(!res.ok)throw new Error('Erreur Cloudinary ('+res.status+') — vérifie ton Cloud Name dans Paramètres');
       const data=await res.json();
-      urls=(data.resources||[]).map(r=>'https://res.cloudinary.com/'+cloud+'/image/upload/'+r.public_id+'.'+r.format);
+      urls=(data.resources||[]).map(r=>r.secure_url||('https://res.cloudinary.com/'+cloud+'/image/upload/'+r.public_id+'.'+r.format));
       if(!urls.length){toast('Aucune photo trouvée pour ce tag','error');btn.textContent='Ajouter';btn.disabled=false;return;}
     }catch(e){toast(e.message,'error');btn.textContent='Ajouter';btn.disabled=false;return;}
   }else{
