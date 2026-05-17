@@ -756,7 +756,8 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
 }
 .folder-card:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(44,26,8,.18);}
 .folder-cover{
-  position:absolute;inset:0;background-size:cover;background-position:center;
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;
   transition:transform .4s cubic-bezier(.23,1,.32,1);
 }
 .folder-card:hover .folder-cover{transform:scale(1.07);}
@@ -2199,8 +2200,14 @@ function startAlbumListener(){
 
 function fixUrl(url){
   if(!url)return url;
-  // Remplace .heic/.heif par .jpg (Cloudinary convertit automatiquement)
-  return url.replace(/\.heic$/i,'.jpg').replace(/\.heif$/i,'.jpg');
+  if(url.includes('res.cloudinary.com')&&url.includes('/upload/')){
+    // Utilise la transformation f_jpg de Cloudinary pour forcer la conversion HEIC → JPG
+    if(/\.(heic|heif)(\?|$)/i.test(url)){
+      url=url.replace('/upload/','/upload/f_jpg/');
+      url=url.replace(/\.(heic|heif)(\?.*)?$/i,'.jpg');
+    }
+  }
+  return url;
 }
 
 let currentAlbumView=null;
@@ -2225,7 +2232,7 @@ function renderFolderView(){
       const coverIdx=typeof a.cover==='number'?a.cover:0;
       const cover=fixUrl(photos[coverIdx]?.url||photos[0]?.url||'');
       return '<div class="folder-card" data-folder="'+a.id+'">'
-        +(cover?'<div class="folder-cover"><img src="'+cover+'" alt="" draggable="false" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" oncontextmenu="return false"/></div>':'')
+        +(cover?'<img class="folder-cover" src="'+cover+'" alt="" draggable="false" oncontextmenu="return false"/>':'')
         +'<div class="folder-overlay"></div>'
         +'<div class="folder-info">'
         +'<div class="folder-name">'+a.name+'</div>'
