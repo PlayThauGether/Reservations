@@ -728,6 +728,74 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
   color:#fff;font-size:10px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
 }
+.album-photo-cover-btn{
+  position:absolute;bottom:3px;left:3px;right:3px;
+  background:rgba(22,10,3,.7);border:none;border-radius:4px;
+  color:rgba(255,255,255,.8);font-size:9px;cursor:pointer;
+  padding:2px 4px;text-align:center;
+  transition:background .15s;
+}
+.album-photo-cover-btn:hover{background:var(--accent);}
+.album-photo-cover-badge{
+  position:absolute;top:3px;left:3px;
+  background:var(--accent);border-radius:4px;
+  color:#fff;font-size:9px;padding:2px 5px;
+  font-weight:600;pointer-events:none;
+}
+
+/* ══ VUE DOSSIERS ═════════════════════════════════════════ */
+.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+@media(max-width:520px){.folder-grid{grid-template-columns:repeat(2,1fr);gap:10px;}}
+.folder-card{
+  position:relative;overflow:hidden;border-radius:14px;
+  aspect-ratio:4/3;cursor:pointer;
+  background:var(--surface2);border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s;
+  -webkit-user-select:none;user-select:none;
+}
+.folder-card:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(44,26,8,.18);}
+.folder-cover{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  transition:transform .4s cubic-bezier(.23,1,.32,1);
+}
+.folder-card:hover .folder-cover{transform:scale(1.07);}
+.folder-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 30%,rgba(22,10,3,.75) 100%);
+}
+.folder-info{
+  position:absolute;bottom:0;left:0;right:0;padding:14px 16px;z-index:2;
+}
+.folder-name{
+  font-family:var(--font-d);font-size:16px;font-weight:700;
+  color:#fff;line-height:1.2;text-shadow:0 1px 6px rgba(0,0,0,.5);
+  margin-bottom:3px;
+}
+.folder-count{font-size:11px;color:rgba(255,255,255,.65);letter-spacing:.06em;}
+/* Vue album (retour) */
+.album-back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:20px;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--muted2);font-size:13px;cursor:pointer;
+  margin-bottom:24px;transition:background .15s;
+}
+.album-back-btn:hover{background:var(--surface);}
+.album-view-title{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3.5vw,38px);
+  color:var(--accent);letter-spacing:.04em;margin-bottom:6px;
+}
+.album-view-count{font-size:12px;color:var(--muted);margin-bottom:24px;}
+
+/* ══ VIDÉOS GALERIE ═══════════════════════════════════════ */
+.photo-item.is-video::after{content:'▶';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:28px;color:rgba(255,255,255,.9);
+  text-shadow:0 2px 12px rgba(0,0,0,.6);pointer-events:none;z-index:2;}
+.photo-item.is-video .photo-bg{filter:brightness(.75);}
+.lb-video-wrap{width:min(90vw,860px);aspect-ratio:16/9;position:relative;}
+.lb-video-wrap iframe{width:100%;height:100%;border:none;border-radius:8px;}
 </style>
 </head>
 <body>
@@ -894,8 +962,9 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
             <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
             <!-- Toggle mode -->
             <div style="display:flex;gap:6px;margin-bottom:12px">
-              <button id="g-mode-tag-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('tag')">🏷 Tag Cloudinary <span style="font-size:10px;opacity:.6">(expérimental)</span></button>
-              <button id="g-mode-url-btn" class="btn btn-accent btn-sm" style="flex:1" onclick="setPhotoMode('url')">🔗 URLs (recommandé)</button>
+              <button id="g-mode-tag-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('tag')">🏷 Tag</button>
+              <button id="g-mode-url-btn" class="btn btn-accent btn-sm" style="flex:1" onclick="setPhotoMode('url')">🖼 Photos</button>
+              <button id="g-mode-video-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('video')">▶ Vidéo</button>
             </div>
             <!-- Mode Tag -->
             <div id="g-mode-tag" style="display:none">
@@ -913,7 +982,19 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
                 <div class="form-hint">💡 <strong>Astuce rapide</strong> : dans Cloudinary, clique sur chaque photo → panneau droit → icône 🔗 pour copier l'URL. Colle toutes tes URLs ici d'un coup.</div>
               </div>
             </div>
-            <div class="form-group">
+            <!-- Mode Vidéo -->
+            <div id="g-mode-video" style="display:none">
+              <div class="form-group">
+                <label class="form-label">Lien YouTube</label>
+                <input type="url" class="form-input" id="g-video-url" placeholder="https://www.youtube.com/watch?v=… ou youtu.be/…"/>
+                <div class="form-hint">Fonctionne avec les liens YouTube normaux, non répertoriés, et youtu.be</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Titre de la vidéo</label>
+                <input type="text" class="form-input" id="g-video-title" placeholder="Ambiance soirée Loups-Garous…"/>
+              </div>
+            </div>
+            <div class="form-group" id="g-caption-group">
               <label class="form-label">Légende (optionnel)</label>
               <input type="text" class="form-input" id="g-photo-caption" placeholder="Ambiance de la soirée…"/>
             </div>
@@ -2115,28 +2196,67 @@ function startAlbumListener(){
 }
 
 /* ── PUBLIC ───────────────────────────────────────────── */
+
+function fixUrl(url){
+  if(!url)return url;
+  // Convertit HEIC/HEIF en JPG pour Cloudinary
+  return url.replace(/\.heic(\?.*)?$/i,'.jpg').replace(/\.heif(\?.*)?$/i,'.jpg');
+}
+
+let currentAlbumView=null;
+
 function renderGalleryPublic(){
   const hasPhotos=localAlbums.some(a=>a.photos&&a.photos.length>0);
-  // Afficher/masquer le bouton Galerie dans le header
   const btn=$('btn-gallery-page');
   if(btn)btn.style.display=hasPhotos?'inline-flex':'none';
-  // Remplir la vue galerie publique
+  // Si on était sur un album, rafraîchir la vue album
+  if(currentAlbumView)renderAlbumView(currentAlbumView);
+  else renderFolderView();
+}
+
+function renderFolderView(){
+  currentAlbumView=null;
   const albumsWithPhotos=localAlbums.filter(a=>a.photos&&a.photos.length>0);
   const empty=$('gallery-empty');
   if(empty)empty.style.display=albumsWithPhotos.length?'none':'block';
-  $('album-list-public').innerHTML=albumsWithPhotos.map(a=>{
-    const allPhotos=a.photos||[];
-    return '<div class="album-section" style="margin-bottom:40px">'
-      +'<div class="album-title">'+a.name+'<span class="album-count">'+allPhotos.length+' photo'+(allPhotos.length>1?'s':'')+'</span></div>'
-      +'<div class="photo-grid">'
-      +allPhotos.map((p,i)=>
-        '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
-        +'<div class="photo-bg" style="background-image:url('+JSON.stringify(p.url)+')"></div>'
-        +'</div>'
-      ).join('')
-      +'</div></div>';
-  }).join('');
+  $('album-list-public').innerHTML='<div class="folder-grid">'
+    +albumsWithPhotos.map(a=>{
+      const photos=a.photos||[];
+      const coverIdx=typeof a.cover==='number'?a.cover:0;
+      const cover=fixUrl(photos[coverIdx]?.url||photos[0]?.url||'');
+      return '<div class="folder-card" data-folder="'+a.id+'">'
+        +(cover?'<div class="folder-cover" style="background-image:url('+JSON.stringify(cover)+')"></div>':'')
+        +'<div class="folder-overlay"></div>'
+        +'<div class="folder-info">'
+        +'<div class="folder-name">'+a.name+'</div>'
+        +'<div class="folder-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</div>'
+        +'</div></div>';
+    }).join('')
+    +'</div>';
 }
+
+function renderAlbumView(albumId){
+  const a=localAlbums.find(x=>x.id===albumId);if(!a)return renderFolderView();
+  currentAlbumView=albumId;
+  const photos=a.photos||[];
+  $('album-list-public').innerHTML=
+    '<button class="album-back-btn" id="gallery-back-btn">← Tous les albums</button>'
+    +'<div class="album-view-title">'+a.name+'</div>'
+    +'<div class="album-view-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</div>'
+    +'<div class="photo-grid">'
+    +photos.map((p,i)=>
+      '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
+      +'<div class="photo-bg" style="background-image:url('+JSON.stringify(fixUrl(p.url))+')"></div>'
+      +'</div>'
+    ).join('')
+    +'</div>';
+}
+
+window.openAlbum=function(id){
+  history.pushState({album:id},'','#galerie-'+id);
+  renderAlbumView(id);
+  window.scrollTo(0,0);
+};
 
 /* ── LIGHTBOX ─────────────────────────────────────────── */
 window.openLb=function(albumId,idx){
@@ -2148,23 +2268,50 @@ window.openLb=function(albumId,idx){
   document.body.style.overflow='hidden';
   history.pushState({lb:true},'','');
 };
+window.stopLbVideo=function(){
+  const vw=document.getElementById('lb-video-el');
+  if(vw){vw.innerHTML='';vw.style.display='none';}
+  $('photo-lb-img').style.display='block';
+};
 window.closeLb=function(fromPop){
+  stopLbVideo();
   $('photo-lb').classList.remove('open');
   document.body.style.overflow='';
   if(!fromPop&&history.state?.lb)history.back();
 };
 window.lbNav=function(dir){
+  stopLbVideo();
   lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;updateLb();
 };
 function updateLb(){
   const p=lbPhotos[lbIdx];
-  $('photo-lb-img').src=p.url;
+  const wrap=document.querySelector('.lb-img-wrap');
+  if(p.type==='video'){
+    $('photo-lb-img').style.display='none';
+    let vw=document.getElementById('lb-video-el');
+    if(!vw){vw=document.createElement('div');vw.id='lb-video-el';vw.className='lb-video-wrap';wrap.insertBefore(vw,wrap.firstChild);}
+    vw.style.display='block';
+    vw.innerHTML='<iframe src="https://www.youtube.com/embed/'+p.ytId+'?autoplay=1&rel=0" allowfullscreen allow="autoplay"></iframe>';
+  }else{
+    const vw=document.getElementById('lb-video-el');
+    if(vw){vw.style.display='none';vw.innerHTML='';}
+    $('photo-lb-img').style.display='block';
+    $('photo-lb-img').src=fixUrl(p.url);
+  }
   $('lb-caption').textContent=p.caption||'';
 }
 window.addEventListener('popstate',function(e){
   if($('photo-lb').classList.contains('open')&&!e.state?.lb)closeLb(true);
 });
 document.getElementById('album-list-public').addEventListener('click',e=>{
+  const folder=e.target.closest('.folder-card');
+  if(folder){openAlbum(folder.dataset.folder);return;}
+  if(e.target.id==='gallery-back-btn'||e.target.closest('#gallery-back-btn')){
+    currentAlbumView=null;
+    history.back();
+    renderFolderView();
+    return;
+  }
   const item=e.target.closest('.photo-item');
   if(item)openLb(item.dataset.album,parseInt(item.dataset.idx));
 });
@@ -2250,9 +2397,12 @@ window.closeAddPhoto=function(){
 window.setPhotoMode=function(mode){
   $('g-mode-tag').style.display=mode==='tag'?'block':'none';
   $('g-mode-url').style.display=mode==='url'?'block':'none';
-  $('g-mode-tag-btn').className='btn btn-sm '+(mode==='tag'?'btn-accent':'btn-ghost');
-  $('g-mode-url-btn').className='btn btn-sm '+(mode==='url'?'btn-accent':'btn-ghost');
-  $('g-mode-tag-btn').style.flex='1';$('g-mode-url-btn').style.flex='1';
+  if($('g-mode-video'))$('g-mode-video').style.display=mode==='video'?'block':'none';
+  if($('g-caption-group'))$('g-caption-group').style.display=mode==='video'?'none':'block';
+  ['tag','url','video'].forEach(m=>{
+    const b=$('g-mode-'+m+'-btn');
+    if(b){b.className='btn btn-sm '+(mode===m?'btn-accent':'btn-ghost');b.style.flex='1';}
+  });
 };
 window.addPhotos=async function(){
   if(!currentAlbumId){toast('Sélectionne un album','error');return;}
@@ -2260,7 +2410,8 @@ window.addPhotos=async function(){
   const album=localAlbums.find(a=>a.id===currentAlbumId);
   if(!album){toast('Album introuvable','error');return;}
   const btn=$('g-add-btn');
-  const isTagMode=$('g-mode-tag').style.display!=='none';
+  const isVideoMode=$('g-mode-video')&&$('g-mode-video').style.display!=='none';
+  const isTagMode=!isVideoMode&&$('g-mode-tag').style.display!=='none';
   let urls=[];
   if(isTagMode){
     const tag=$('g-tag-name').value.trim();
@@ -2280,6 +2431,19 @@ window.addPhotos=async function(){
       });
       if(!urls.length){toast('Aucune photo trouvée pour ce tag','error');btn.textContent='Ajouter';btn.disabled=false;return;}
     }catch(e){toast(e.message,'error');btn.textContent='Ajouter';btn.disabled=false;return;}
+  }else if(isVideoMode){
+    const raw=$('g-video-url').value.trim();
+    const title=$('g-video-title').value.trim();
+    if(!raw){toast('URL YouTube requise','error');return;}
+    const ytId=extractYouTubeId(raw);
+    if(!ytId){toast('URL YouTube invalide','error');return;}
+    const newPhotos=[...(album.photos||[]),{type:'video',ytId,caption:title||''}];
+    try{
+      await updateDoc(doc(db,'albums',currentAlbumId),{photos:newPhotos});
+      toast('Vidéo ajoutée ✓');closeAddPhoto();
+    }catch(e){toast(e.message,'error');}
+    if(btn){btn.textContent='Ajouter';btn.disabled=false;}
+    return;
   }else{
     const raw=$('g-photo-urls').value.trim();
     urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'))
@@ -2293,6 +2457,17 @@ window.addPhotos=async function(){
     closeAddPhoto();
   }catch(e){toast(e.message,'error');}
   if(btn){btn.textContent='Ajouter';btn.disabled=false;}
+};
+
+function extractYouTubeId(url){
+  const m=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
+  return m?m[1]:null;
+}
+window.setCover=async function(albumId,idx){
+  try{
+    await updateDoc(doc(db,'albums',albumId),{cover:idx});
+    toast('Photo de couverture mise à jour ✓');
+  }catch(e){toast(e.message,'error');}
 };
 window.deletePhoto=async function(albumId,idx){
   const album=localAlbums.find(a=>a.id===albumId);if(!album)return;
@@ -2332,8 +2507,11 @@ window.hideGalleryPage=function(fromPop){
 };
 // Popstate pour la page galerie publique
 window.addEventListener('popstate',function(e){
-  if($('view-gallery').style.display==='block'&&!e.state?.gallery){
-    hideGalleryPage(true);
+  if($('photo-lb').classList.contains('open')&&!e.state?.lb){closeLb(true);return;}
+  if($('view-gallery').style.display==='block'){
+    if(e.state?.album){renderAlbumView(e.state.album);}
+    else if(currentAlbumView){currentAlbumView=null;renderFolderView();}
+    else if(!e.state?.gallery){hideGalleryPage(true);}
   }
 });
 // Hash direct
