@@ -2501,9 +2501,12 @@ function initAlbumDragDrop(){
       e.preventDefault();e.stopPropagation();
       if(!dragSrc||dragSrc===item)return;
       item.classList.remove('drag-over');
-      const items=[...list.querySelectorAll('.album-admin-item')];
-      const srcIdx=items.indexOf(dragSrc);
-      const tgtIdx=items.indexOf(item);
+      // Utilise les IDs pour trouver les positions dans localAlbums
+      const srcId=dragSrc.dataset.id;
+      const tgtId=item.dataset.id;
+      const srcIdx=localAlbums.findIndex(a=>a.id===srcId);
+      const tgtIdx=localAlbums.findIndex(a=>a.id===tgtId);
+      if(srcIdx===-1||tgtIdx===-1)return;
       const moved=localAlbums.splice(srcIdx,1)[0];
       localAlbums.splice(tgtIdx,0,moved);
       localAlbums.forEach((a,i)=>a.order=i*1000);
