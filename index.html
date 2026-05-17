@@ -892,16 +892,32 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <div id="album-list-admin"></div>
           <div id="g-add-photo-form" style="display:none;margin-top:16px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
             <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
-            <div class="form-group">
-              <label class="form-label">URLs Cloudinary (une par ligne)</label>
-              <textarea class="form-input" id="g-photo-urls" rows="4" placeholder="https://res.cloudinary.com/…"></textarea>
+            <!-- Toggle mode -->
+            <div style="display:flex;gap:6px;margin-bottom:12px">
+              <button id="g-mode-tag-btn" class="btn btn-accent btn-sm" style="flex:1" onclick="setPhotoMode('tag')">🏷 Tag Cloudinary</button>
+              <button id="g-mode-url-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('url')">🔗 URLs manuelles</button>
+            </div>
+            <!-- Mode Tag -->
+            <div id="g-mode-tag">
+              <div class="form-group">
+                <label class="form-label">Nom du tag Cloudinary</label>
+                <input type="text" class="form-input" id="g-tag-name" placeholder="soiree-mars-2026"/>
+                <div class="form-hint">Dans Cloudinary : sélectionne tes photos → Actions → Add tag</div>
+              </div>
+            </div>
+            <!-- Mode URL -->
+            <div id="g-mode-url" style="display:none">
+              <div class="form-group">
+                <label class="form-label">URLs (une par ligne)</label>
+                <textarea class="form-input" id="g-photo-urls" rows="4" placeholder="https://res.cloudinary.com/…"></textarea>
+              </div>
             </div>
             <div class="form-group">
               <label class="form-label">Légende (optionnel)</label>
               <input type="text" class="form-input" id="g-photo-caption" placeholder="Ambiance de la soirée…"/>
             </div>
             <div style="display:flex;gap:8px">
-              <button class="btn btn-accent" style="flex:1" onclick="addPhotos()">Ajouter</button>
+              <button class="btn btn-accent" style="flex:1" id="g-add-btn" onclick="addPhotos()">Ajouter</button>
               <button class="btn btn-ghost" onclick="closeAddPhoto()">Annuler</button>
             </div>
           </div>
@@ -1019,6 +1035,7 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <div class="form-group"><label class="form-label">Slogan / tagline</label><input type="text" class="form-input" id="s-tagline" placeholder="Nos prochains événements"/></div>
           <div class="form-group"><label class="form-label">URL du logo</label><input type="url" class="form-input" id="s-logo" placeholder="logo.png"/></div>
           <div class="form-group"><label class="form-label">Email de contact</label><input type="email" class="form-input" id="s-email" placeholder="contact@monasso.fr"/></div>
+          <div class="form-group"><label class="form-label">Cloudinary Cloud Name <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(pour la galerie)</span></label><input type="text" class="form-input" id="s-cloudinary" placeholder="mon-cloud-name"/><div class="form-hint">Trouve-le sur cloudinary.com → Dashboard (ex: <code>dxyz1234</code>)</div></div>
           <button class="btn btn-accent btn-full" onclick="saveSettings()">Enregistrer</button>
         </div>
         <!-- Stats -->
@@ -1990,10 +2007,12 @@ function loadSettingsForm(){
   $('s-tagline').value=localSettings.tagline||'';
   $('s-logo').value=localSettings.logo||'';
   $('s-email').value=localSettings.email||'';
+  $('s-cloudinary').value=ls.get('cloudinary_cloud','');
 }
 window.saveSettings=async function(){
   const s={name:$('s-name').value.trim(),name2:$('s-name2').value.trim(),
     tagline:$('s-tagline').value.trim(),logo:$('s-logo').value.trim(),email:$('s-email').value.trim()};
+  const cld=$('s-cloudinary').value.trim();if(cld)ls.set('cloudinary_cloud',cld);
   localSettings={...localSettings,...s};
   ls.set('cache_settings',localSettings);
   try{
@@ -2227,20 +2246,46 @@ window.openAddPhoto=function(albumId,albumName){
 window.closeAddPhoto=function(){
   $('g-add-photo-form').style.display='none';currentAlbumId=null;
 };
+window.setPhotoMode=function(mode){
+  $('g-mode-tag').style.display=mode==='tag'?'block':'none';
+  $('g-mode-url').style.display=mode==='url'?'block':'none';
+  $('g-mode-tag-btn').className='btn btn-sm '+(mode==='tag'?'btn-accent':'btn-ghost');
+  $('g-mode-url-btn').className='btn btn-sm '+(mode==='url'?'btn-accent':'btn-ghost');
+  $('g-mode-tag-btn').style.flex='1';$('g-mode-url-btn').style.flex='1';
+};
 window.addPhotos=async function(){
   if(!currentAlbumId){toast('Sélectionne un album','error');return;}
-  const raw=$('g-photo-urls').value.trim();
   const caption=$('g-photo-caption').value.trim();
-  const urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'));
-  if(!urls.length){toast('Aucune URL valide','error');return;}
   const album=localAlbums.find(a=>a.id===currentAlbumId);
   if(!album){toast('Album introuvable','error');return;}
+  const btn=$('g-add-btn');
+  const isTagMode=$('g-mode-tag').style.display!=='none';
+  let urls=[];
+  if(isTagMode){
+    const tag=$('g-tag-name').value.trim();
+    if(!tag){toast('Nom de tag requis','error');return;}
+    const cloud=ls.get('cloudinary_cloud','');
+    if(!cloud){toast('Entre ton Cloud Name dans Paramètres d\'abord','error');return;}
+    btn.textContent='Chargement…';btn.disabled=true;
+    try{
+      const res=await fetch('https://res.cloudinary.com/'+cloud+'/image/list/'+encodeURIComponent(tag)+'.json');
+      if(!res.ok)throw new Error('Tag introuvable ou Cloud Name incorrect');
+      const data=await res.json();
+      urls=(data.resources||[]).map(r=>'https://res.cloudinary.com/'+cloud+'/image/upload/'+r.public_id+'.'+r.format);
+      if(!urls.length){toast('Aucune photo trouvée pour ce tag','error');btn.textContent='Ajouter';btn.disabled=false;return;}
+    }catch(e){toast(e.message,'error');btn.textContent='Ajouter';btn.disabled=false;return;}
+  }else{
+    const raw=$('g-photo-urls').value.trim();
+    urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'));
+    if(!urls.length){toast('Aucune URL valide','error');return;}
+  }
   const newPhotos=[...(album.photos||[]),...urls.map(url=>({url,caption:caption||''}))];
   try{
     await updateDoc(doc(db,'albums',currentAlbumId),{photos:newPhotos});
     toast(urls.length+' photo'+(urls.length>1?'s':'')+' ajoutée'+(urls.length>1?'s':'')+' ✓');
     closeAddPhoto();
   }catch(e){toast(e.message,'error');}
+  if(btn){btn.textContent='Ajouter';btn.disabled=false;}
 };
 window.deletePhoto=async function(albumId,idx){
   const album=localAlbums.find(a=>a.id===albumId);if(!album)return;
