@@ -621,6 +621,113 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
 }
 .cal-option:hover{background:var(--surface2);color:var(--accent);}
 .cal-option svg{opacity:.6;flex-shrink:0;}
+
+/* ══ GALERIE PHOTO ════════════════════════════════════════ */
+.gallery-section{position:relative;z-index:1;padding:60px 0 80px;}
+.gallery-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);
+  color:var(--accent);text-align:center;margin-bottom:4px;letter-spacing:.04em;}
+.gallery-sub{text-align:center;font-size:12px;color:var(--muted);
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:36px;}
+/* Albums */
+.album-list{display:flex;flex-direction:column;gap:48px;}
+.album-title{font-family:var(--font-d);font-size:20px;font-weight:700;
+  color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.album-title::after{content:'';flex:1;height:1px;background:var(--border2);}
+.album-count{font-size:12px;color:var(--muted);font-family:var(--font-b);font-weight:400;}
+/* Grille photos */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+@media(max-width:520px){.photo-grid{grid-template-columns:repeat(2,1fr);gap:6px;}}
+.photo-item{
+  position:relative;overflow:hidden;border-radius:10px;
+  aspect-ratio:4/3;cursor:pointer;
+  background:var(--surface2);
+  -webkit-user-select:none;user-select:none;
+}
+.photo-item:hover .photo-bg{transform:scale(1.05);}
+.photo-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform .4s cubic-bezier(.23,1,.32,1);
+  -webkit-user-select:none;user-select:none;
+  pointer-events:none;
+}
+/* Watermark */
+.photo-item::before{
+  content:'© Play Thau\'Gether';
+  position:absolute;bottom:6px;right:8px;z-index:3;
+  font-size:9px;color:rgba(255,255,255,.55);
+  text-shadow:0 1px 3px rgba(0,0,0,.5);
+  font-weight:500;letter-spacing:.04em;
+  pointer-events:none;
+}
+/* Lightbox */
+#photo-lb{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(10,5,0,.96);
+  align-items:center;justify-content:center;
+}
+#photo-lb.open{display:flex;}
+.lb-img-wrap{
+  position:relative;max-width:90vw;max-height:88vh;
+  display:flex;align-items:center;justify-content:center;
+}
+#photo-lb-img{
+  max-width:90vw;max-height:82vh;object-fit:contain;
+  border-radius:8px;display:block;
+  -webkit-user-select:none;user-select:none;pointer-events:none;
+}
+.lb-watermark{
+  position:absolute;bottom:10px;right:12px;
+  font-size:11px;color:rgba(255,255,255,.4);
+  font-weight:500;letter-spacing:.05em;pointer-events:none;
+}
+.lb-close{
+  position:fixed;top:16px;right:18px;z-index:10;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;color:#fff;transition:background .2s;
+}
+.lb-close:hover{background:rgba(255,255,255,.25);}
+.lb-nav{
+  position:fixed;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:#fff;font-size:22px;transition:background .2s;z-index:10;
+}
+.lb-nav:hover{background:rgba(255,255,255,.22);}
+#lb-prev{left:14px;}#lb-next{right:14px;}
+.lb-caption{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  color:rgba(255,255,255,.5);font-size:12px;text-align:center;
+  max-width:80vw;pointer-events:none;
+}
+/* Admin galerie */
+.album-admin-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;margin-bottom:12px;overflow:hidden;
+}
+.album-admin-header{
+  display:flex;align-items:center;gap:10px;padding:11px 14px;
+  cursor:pointer;
+}
+.album-admin-name{flex:1;font-size:14px;font-weight:600;color:var(--text);}
+.album-admin-count{font-size:12px;color:var(--muted);}
+.album-admin-body{padding:10px 14px 14px;border-top:1px solid var(--border);display:none;}
+.album-admin-body.open{display:block;}
+.album-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-bottom:10px;}
+.album-photo-thumb{
+  position:relative;aspect-ratio:4/3;border-radius:6px;
+  overflow:hidden;background:var(--surface2);
+}
+.album-photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+.album-photo-del{
+  position:absolute;top:3px;right:3px;width:20px;height:20px;
+  border-radius:50%;background:rgba(192,57,43,.85);border:none;
+  color:#fff;font-size:10px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
 </style>
 </head>
 <body>
@@ -656,6 +763,28 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
     </div>
   </div>
 </main>
+
+<!-- ═══ GALERIE PHOTO ════════════════════════════════════ -->
+<section class="gallery-section" id="gallery-section" style="display:none">
+  <div class="wrap">
+    <div class="ornament"><div class="ornament-icon">✦</div></div>
+    <h2>Galerie Photo</h2>
+    <p class="gallery-sub">Nos meilleurs souvenirs</p>
+    <div class="album-list" id="album-list-public"></div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="photo-lb" onclick="if(event.target===this||event.target.id==='photo-lb')closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
+  <div class="lb-img-wrap">
+    <img id="photo-lb-img" src="" alt="" oncontextmenu="return false" ondragstart="return false"/>
+    <div class="lb-watermark">© Play Thau'Gether</div>
+  </div>
+  <button class="lb-nav" id="lb-next" onclick="lbNav(1)">›</button>
+  <div class="lb-caption" id="lb-caption"></div>
+</div>
 
 <footer>
   <div class="wrap">
@@ -738,6 +867,7 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
           <button class="admin-tab" onclick="switchTab('stats',2);loadStats()">Stats</button>
           <button class="admin-tab" onclick="switchTab('templates',3);renderTemplates()">Modèles</button>
+          <button class="admin-tab" onclick="switchTab('galerie',4);renderGalleryAdmin()">Galerie</button>
         </div>
         <!-- Formulaire événement -->
         <div class="admin-tab-panel active" id="tab-form">
@@ -906,6 +1036,35 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
             <textarea class="form-input" id="tpl-t-long" rows="4" placeholder="Description complète…"></textarea>
           </div>
           <button class="btn btn-accent" style="width:100%" onclick="saveTplText()">+ Enregistrer ce texte</button>
+
+        <!-- Galerie -->
+        <div class="admin-tab-panel" id="tab-galerie">
+          <div class="sec-title">Galerie Photo</div>
+          <div class="form-hint" style="margin-bottom:16px">Héberge tes photos sur <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">Cloudinary</a> (gratuit) puis colle les URLs ici.</div>
+          <!-- Créer un album -->
+          <div class="form-group" style="display:flex;gap:8px">
+            <input type="text" class="form-input" id="g-album-name" placeholder="Soirée Loups-Garous — Mars 2026" style="flex:1"/>
+            <button class="btn btn-accent" onclick="createAlbum()" style="white-space:nowrap">+ Album</button>
+          </div>
+          <!-- Liste des albums -->
+          <div id="album-list-admin"></div>
+          <!-- Ajouter photo -->
+          <div id="g-add-photo-form" style="display:none;margin-top:16px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
+            <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
+            <div class="form-group">
+              <label class="form-label">URL Cloudinary</label>
+              <textarea class="form-input" id="g-photo-urls" rows="3" placeholder="https://res.cloudinary.com/…&#10;Une URL par ligne (ou colle plusieurs d'un coup)"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Légende (optionnel, appliquée à toutes)</label>
+              <input type="text" class="form-input" id="g-photo-caption" placeholder="Ambiance de la soirée…"/>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-accent" style="flex:1" onclick="addPhotos()">Ajouter</button>
+              <button class="btn btn-ghost" onclick="closeAddPhoto()">Annuler</button>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -1875,11 +2034,183 @@ function startCountdowns(){
   tick();
   cdInterval=setInterval(tick,1000);
 }
+
+/* ══ GALERIE PHOTO ════════════════════════════════════════ */
+let localAlbums=[];let unsubAlbums=null;
+let lbPhotos=[];let lbIdx=0;
+let currentAlbumId=null;
+
+function startAlbumListener(){
+  if(!db||unsubAlbums)return;
+  unsubAlbums=onSnapshot(collection(db,'albums'),snap=>{
+    localAlbums=[];
+    snap.forEach(d=>localAlbums.push({id:d.id,...d.data()}));
+    localAlbums.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    renderGalleryPublic();
+    if(isLogged)renderGalleryAdmin();
+  });
+}
+
+/* ── PUBLIC ───────────────────────────────────────────── */
+function renderGalleryPublic(){
+  const sec=$('gallery-section');
+  const hasPhotos=localAlbums.some(a=>a.photos&&a.photos.length>0);
+  if(!hasPhotos){sec.style.display='none';return;}
+  sec.style.display='block';
+  $('album-list-public').innerHTML=localAlbums
+    .filter(a=>a.photos&&a.photos.length>0)
+    .map(a=>{
+      const allPhotos=a.photos||[];
+      return '<div class="album-section">'
+        +'<div class="album-title">'+a.name+'<span class="album-count">'+allPhotos.length+' photo'+(allPhotos.length>1?'s':'')+'</span></div>'
+        +'<div class="photo-grid">'
+        +allPhotos.map((p,i)=>
+          '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
+          +'<div class="photo-bg" style="background-image:url('+JSON.stringify(p.url)+')"></div>'
+          +'</div>'
+        ).join('')
+        +'</div></div>';
+    }).join('');
+}
+
+/* ── LIGHTBOX ─────────────────────────────────────────── */
+window.openLb=function(albumId,idx){
+  const album=localAlbums.find(a=>a.id===albumId);
+  if(!album)return;
+  lbPhotos=album.photos||[];lbIdx=idx;
+  updateLb();
+  $('photo-lb').classList.add('open');
+  document.body.style.overflow='hidden';
+  history.pushState({lb:true},'','');
+};
+window.closeLb=function(fromPop){
+  $('photo-lb').classList.remove('open');
+  document.body.style.overflow='';
+  if(!fromPop&&history.state?.lb)history.back();
+};
+window.lbNav=function(dir){
+  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;updateLb();
+};
+function updateLb(){
+  const p=lbPhotos[lbIdx];
+  $('photo-lb-img').src=p.url;
+  $('lb-caption').textContent=p.caption||'';
+}
+window.addEventListener('popstate',function(e){
+  if($('photo-lb').classList.contains('open')&&!e.state?.lb)closeLb(true);
+});
+document.getElementById('album-list-public').addEventListener('click',e=>{
+  const item=e.target.closest('.photo-item');
+  if(item)openLb(item.dataset.album,parseInt(item.dataset.idx));
+});
+document.addEventListener('keydown',e=>{
+  if(!$('photo-lb').classList.contains('open'))return;
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+  if(e.key==='Escape')closeLb();
+});
+
+/* ── ADMIN ────────────────────────────────────────────── */
+window.renderGalleryAdmin=function(){
+  const el=$('album-list-admin');if(!el)return;
+  if(!localAlbums.length){
+    el.innerHTML='<p style="font-size:13px;color:var(--muted)">Aucun album. Crée-en un !</p>';return;
+  }
+  el.innerHTML=localAlbums.map(a=>{
+    const photos=a.photos||[];
+    return '<div class="album-admin-item" data-id="'+a.id+'">'
+      +'<div class="album-admin-header">'
+      +'<span class="album-admin-name">📁 '+a.name+'</span>'
+      +'<span class="album-admin-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</span>'
+      +'<button class="btn btn-accent btn-sm" style="padding:4px 10px;font-size:11px" data-action="add-photos" data-name="'+a.name.replace(/"/g,'&quot;')+'">+ Photos</button>'
+      +'<button class="btn btn-danger btn-sm" data-action="del-album" style="padding:4px 8px">🗑</button>'
+      +'</div>'
+      +'<div class="album-admin-body" id="ab-'+a.id+'">'
+      +(photos.length
+        ?'<div class="album-photo-grid">'+photos.map((p,i)=>
+          '<div class="album-photo-thumb">'
+          +'<img src="'+p.url+'" alt="" oncontextmenu="return false" ondragstart="return false"/>'
+          +'<button class="album-photo-del" data-action="del-photo" data-idx="'+i+'">✕</button>'
+          +'</div>'
+        ).join('')+'</div>'
+        :'<p style="font-size:12px;color:var(--muted)">Pas encore de photos.</p>'
+      )
+      +'</div>'
+      +'</div>';
+  }).join('');
+  // Délégation d\'événements
+  el.onclick=function(e){
+    const item=e.target.closest('.album-admin-item');if(!item)return;
+    const id=item.dataset.id;
+    if(e.target.dataset.action==='add-photos'){
+      e.stopPropagation();openAddPhoto(id,e.target.dataset.name);
+    } else if(e.target.dataset.action==='del-album'){
+      e.stopPropagation();deleteAlbum(id);
+    } else if(e.target.dataset.action==='del-photo'){
+      e.stopPropagation();deletePhoto(id,parseInt(e.target.dataset.idx));
+    } else if(e.target.closest('.album-admin-header')&&!e.target.closest('button')){
+      toggleAlbumAdmin(id);
+    }
+  };
+};
+window.toggleAlbumAdmin=function(id){
+  const b=document.getElementById('ab-'+id);
+  if(b)b.classList.toggle('open');
+};
+window.createAlbum=async function(){
+  const name=$('g-album-name').value.trim();
+  if(!name){toast("Nom d'album requis",'error');return;}
+  if(!db){toast('Firebase non connecté','error');return;}
+  try{
+    await addDoc(collection(db,'albums'),{name,photos:[],createdAt:Date.now()});
+    $('g-album-name').value='';
+    toast('Album créé ✓');
+  }catch(e){toast(e.message,'error');}
+};
+window.deleteAlbum=async function(id){
+  if(!confirm('Supprimer cet album et toutes ses photos ?'))return;
+  try{await deleteDoc(doc(db,'albums',id));toast('Album supprimé');}
+  catch(e){toast(e.message,'error');}
+};
+window.openAddPhoto=function(albumId,albumName){
+  currentAlbumId=albumId;
+  $('g-add-photo-title').textContent='Ajouter des photos → '+albumName;
+  $('g-photo-urls').value='';$('g-photo-caption').value='';
+  $('g-add-photo-form').style.display='block';
+  $('g-add-photo-form').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+window.closeAddPhoto=function(){
+  $('g-add-photo-form').style.display='none';currentAlbumId=null;
+};
+window.addPhotos=async function(){
+  if(!currentAlbumId){toast('Sélectionne un album','error');return;}
+  const raw=$('g-photo-urls').value.trim();
+  const caption=$('g-photo-caption').value.trim();
+  const urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'));
+  if(!urls.length){toast('Aucune URL valide','error');return;}
+  const album=localAlbums.find(a=>a.id===currentAlbumId);
+  if(!album){toast('Album introuvable','error');return;}
+  const newPhotos=[...(album.photos||[]),...urls.map(url=>({url,caption:caption||''}))];
+  try{
+    await updateDoc(doc(db,'albums',currentAlbumId),{photos:newPhotos});
+    toast(urls.length+' photo'+(urls.length>1?'s':'')+' ajoutée'+(urls.length>1?'s':'')+' ✓');
+    closeAddPhoto();
+  }catch(e){toast(e.message,'error');}
+};
+window.deletePhoto=async function(albumId,idx){
+  const album=localAlbums.find(a=>a.id===albumId);if(!album)return;
+  const photos=[...(album.photos||[])];photos.splice(idx,1);
+  try{
+    await updateDoc(doc(db,'albums',albumId),{photos});
+    toast('Photo supprimée');
+  }catch(e){toast(e.message,'error');}
+};
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
 renderSite();startCountdowns();
 if(initFirebase(FIREBASE_CONFIG)){
   startListeners();
+  startAlbumListener();
   ls.set('fb_cfg',FIREBASE_CONFIG);
 }
 </script>
