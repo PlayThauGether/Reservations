@@ -800,6 +800,24 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
 .photo-item.is-video .photo-bg{filter:brightness(.75);}
 .lb-video-wrap{width:min(90vw,860px);aspect-ratio:16/9;position:relative;}
 .lb-video-wrap iframe{width:100%;height:100%;border:none;border-radius:8px;}
+
+/* ══ MOT DE PASSE GALERIE ═════════════════════════════════ */
+#gallery-pwd-modal{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(22,10,3,.7);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+}
+#gallery-pwd-modal.open{display:flex;}
+.pwd-box{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:16px;padding:32px 28px;width:min(340px,90vw);
+  box-shadow:0 24px 80px rgba(44,26,8,.25);
+  display:flex;flex-direction:column;gap:14px;
+  animation:fadeIn .2s ease;
+}
+.pwd-box h3{font-family:var(--font-d);font-size:22px;color:var(--accent);margin:0;text-align:center;}
+.pwd-box p{font-size:13px;color:var(--muted);text-align:center;margin:0;}
+.pwd-error{font-size:12px;color:#c0392b;text-align:center;display:none;}
 </style>
 </head>
 <body>
@@ -1128,6 +1146,11 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <div class="form-group"><label class="form-label">URL du logo</label><input type="url" class="form-input" id="s-logo" placeholder="logo.png"/></div>
           <div class="form-group"><label class="form-label">Email de contact</label><input type="email" class="form-input" id="s-email" placeholder="contact@monasso.fr"/></div>
           <div class="form-group"><label class="form-label">Cloudinary Cloud Name <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(pour la galerie)</span></label><input type="text" class="form-input" id="s-cloudinary" placeholder="mon-cloud-name"/><div class="form-hint">Trouve-le sur cloudinary.com → Dashboard (ex: <code>dxyz1234</code>)</div></div>
+          <div class="form-group">
+            <label class="form-label">Mot de passe Galerie Photo <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(laisser vide = accès libre)</span></label>
+            <input type="password" class="form-input" id="s-gallery-pwd" placeholder="Mon mot de passe…"/>
+            <div class="form-hint">Les visiteurs devront entrer ce mot de passe pour voir la galerie</div>
+          </div>
           <button class="btn btn-accent btn-full" onclick="saveSettings()">Enregistrer</button>
         </div>
         <!-- Stats -->
@@ -2100,11 +2123,13 @@ function loadSettingsForm(){
   $('s-logo').value=localSettings.logo||'';
   $('s-email').value=localSettings.email||'';
   $('s-cloudinary').value=ls.get('cloudinary_cloud','');
+  $('s-gallery-pwd').value=ls.get('gallery_pwd','');
 }
 window.saveSettings=async function(){
   const s={name:$('s-name').value.trim(),name2:$('s-name2').value.trim(),
     tagline:$('s-tagline').value.trim(),logo:$('s-logo').value.trim(),email:$('s-email').value.trim()};
   const cld=$('s-cloudinary').value.trim();if(cld)ls.set('cloudinary_cloud',cld);
+  ls.set('gallery_pwd',$('s-gallery-pwd').value);
   localSettings={...localSettings,...s};
   ls.set('cache_settings',localSettings);
   try{
@@ -2617,12 +2642,44 @@ window.switchMainTab=function(tab){
     renderGalleryAdmin();
   }
 };
+
+/* ══ MOT DE PASSE GALERIE ═════════════════════════════════ */
 window.showGalleryPage=function(){
+  const pwd=ls.get('gallery_pwd','');
+  if(pwd&&!sessionStorage.getItem('gallery_unlocked')){
+    // Afficher la modal mot de passe
+    $('gallery-pwd-modal').classList.add('open');
+    setTimeout(()=>$('gallery-pwd-input')&&$('gallery-pwd-input').focus(),100);
+    return;
+  }
+  _openGalleryPage();
+};
+window.checkGalleryPwd=function(){
+  const pwd=ls.get('gallery_pwd','');
+  const input=$('gallery-pwd-input').value;
+  if(input===pwd){
+    sessionStorage.setItem('gallery_unlocked','1');
+    $('gallery-pwd-modal').classList.remove('open');
+    $('gallery-pwd-input').value='';
+    $('gallery-pwd-error').style.display='none';
+    _openGalleryPage();
+  }else{
+    $('gallery-pwd-error').style.display='block';
+    $('gallery-pwd-input').select();
+  }
+};
+window.closeGalleryPwd=function(){
+  $('gallery-pwd-modal').classList.remove('open');
+  $('gallery-pwd-input').value='';
+  $('gallery-pwd-error').style.display='none';
+};
+function _openGalleryPage(){
   $('view-events').style.display='none';
   $('view-gallery').style.display='block';
   history.pushState({gallery:true},'','#galerie');
   window.scrollTo(0,0);
-};
+}
+
 window.hideGalleryPage=function(fromPop){
   $('view-gallery').style.display='none';
   $('view-events').style.display='block';
@@ -2650,6 +2707,18 @@ if(initFirebase(FIREBASE_CONFIG)){
 }
 </script>
 
+</div>
+
+<!-- MOT DE PASSE GALERIE -->
+<div id="gallery-pwd-modal">
+  <div class="pwd-box">
+    <h3>🔒 Galerie Photo</h3>
+    <p>Cette galerie est protégée.<br>Entre le mot de passe pour y accéder.</p>
+    <input type="password" class="form-input" id="gallery-pwd-input" placeholder="Mot de passe…" onkeydown="if(event.key==='Enter')checkGalleryPwd()"/>
+    <div class="pwd-error" id="gallery-pwd-error">Mot de passe incorrect</div>
+    <button class="btn btn-accent btn-full" onclick="checkGalleryPwd()">Accéder</button>
+    <button class="btn btn-ghost btn-full" onclick="closeGalleryPwd()" style="margin-top:-6px">Annuler</button>
+  </div>
 </div>
 </body>
 </html>
