@@ -511,10 +511,10 @@ textarea.form-input{resize:vertical;min-height:68px;}
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Nos Réseaux
       </a>
-      <button onclick="showDonPage()" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--teal);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--teal);transition:background .2s,border-color .2s;cursor:pointer;">
+      <a href="https://www.helloasso.com/associations/play-thau-gether/formulaires/1" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--teal);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--teal);transition:background .2s,border-color .2s;" onmouseover="this.style.background='rgba(47,110,98,.08)'" onmouseout="this.style.background='transparent'">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         Faire un don
-      </button>
+      </a>
     </div>
     <div class="ornament"><div class="ornament-icon">✦</div></div>
   </div>
@@ -527,17 +527,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
   </div>
 </main>
 
-<!-- Vue Don -->
-<div id="view-don" style="display:none;min-height:60vh;padding:40px 0 80px;">
-  <div class="wrap" style="max-width:600px">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
-      <button onclick="hideDonPage()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted2);font-size:13px;cursor:pointer;flex-shrink:0;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--surface2)'">← Retour</button>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,42px);color:var(--mid);letter-spacing:.04em;margin:0">Faire un don</h2>
-    </div>
-    <p style="font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:28px;">Votre soutien nous permet d'organiser des soirées de qualité, d'accueillir de nouveaux joueurs et de faire vivre la communauté Play Thau'Gether sur le Bassin de Thau. Merci !</p>
-    <iframe id="haWidgetLight" allowtransparency="true" allow="payment" scrolling="auto" src="https://www.helloasso.com/associations/play-thau-gether/formulaires/1/widget?view=form" style="width:clamp(300px,100%,26rem);margin:0 auto;border:none;display:block;" onload="window.addEventListener('message',function(e){var h=e.data.height;var el=document.getElementById('haWidgetLight');if(h>parseFloat(el.height||0)){el.height=h+'px';}})"></iframe>
-  </div>
-</div>
 
 <footer>
   <div class="wrap">
@@ -1205,7 +1194,6 @@ let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
 window.addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdmin();});
 if(location.hash==='#admin')setTimeout(openAdmin,300);
-if(location.hash==='#don')setTimeout(showDonPage,400);
 if(location.hash.startsWith('#e-')){const _sid=location.hash.slice(3);const _tryOpen=()=>{if(localEvents.length)openEventModal(_sid);else setTimeout(_tryOpen,300);};setTimeout(_tryOpen,400);}
 
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
@@ -1570,23 +1558,9 @@ window.pickName=function(i){const n=getTplNames()[i];if(!n)return;$('f-name').va
 window.pickText=function(i){const t=getTplTexts()[i];if(!t)return;if(t.short)$('f-desc').value=t.short;if(t.long)$('f-desc-long').value=t.long;document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));};
 
 
-/* ══ PAGE DON ══════════════════════════════════════════════ */
-window.showDonPage=function(){
-  document.getElementById('view-don').style.display='block';
-  document.getElementById('view-events').style.display='none';
-  history.pushState({don:true},'','#don');
-  window.scrollTo(0,0);
-};
-window.hideDonPage=function(fromPop){
-  document.getElementById('view-don').style.display='none';
-  document.getElementById('view-events').style.display='block';
-  if(!fromPop&&location.hash==='#don')history.back();
-  window.scrollTo(0,0);
-};
 /* ══ POPSTATE — modal + swipe retour ══════════════════════ */
 window.addEventListener('popstate',function(e){
   if($('event-modal').classList.contains('open')&&!e.state?.modal){closeEventModal(true);return;}
-  if(document.getElementById('view-don').style.display==='block'&&!e.state?.don){hideDonPage(true);return;}
 });
 window.addEventListener('scroll',function(){var a=document.getElementById('scroll-arrow');if(a)a.style.display='none';},{once:true,passive:true});
 /* ══ INIT ════════════════════════════════════════════════ */
