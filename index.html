@@ -519,7 +519,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
     <div class="ornament"><div class="ornament-icon">✦</div></div>
   </div>
 </header>
-<main>
+<main id="view-events">
   <div class="wrap">
     <div class="events-grid" id="events-grid">
       <div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Chargement…</p></div>
@@ -1561,13 +1561,13 @@ window.pickText=function(i){const t=getTplTexts()[i];if(!t)return;if(t.short)$('
 /* ══ PAGE DON ══════════════════════════════════════════════ */
 window.showDonPage=function(){
   document.getElementById('view-don').style.display='block';
-  document.querySelector('main').style.display='none';
+  document.getElementById('view-events').style.display='none';
   history.pushState({don:true},'','#don');
   window.scrollTo(0,0);
 };
 window.hideDonPage=function(fromPop){
   document.getElementById('view-don').style.display='none';
-  document.querySelector('main').style.display='block';
+  document.getElementById('view-events').style.display='block';
   if(!fromPop&&location.hash==='#don')history.back();
   window.scrollTo(0,0);
 };
