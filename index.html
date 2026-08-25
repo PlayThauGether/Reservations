@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title id="page-title">Play Thau'Gether — Événements</title>
 
-<!-- ═══ FAVICON ═══════════════════════════════════════════ -->
 <link rel="icon" type="image/png" sizes="195x195"  href="favicon.png"/>
 <link rel="apple-touch-icon"      sizes="195x195"  href="favicon.png"/>
 <link rel="icon" type="image/png" sizes="512x512"  href="favicon-512.png"/>
 
-<!-- ═══ PWA — Installation sur Android & iPhone ══════════ -->
 <link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#613402"/>
+<meta name="theme-color" content="#5C3A21"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -22,7 +20,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
 
-<!-- ═══ OPEN GRAPH — Partage réseaux sociaux ══════════════ -->
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://playthaugether.github.io/Reservations/"/>
 <meta property="og:title" content="Play Thau'Gether — Événements"/>
@@ -38,12 +35,12 @@
 
 <style>
 :root{
-  --bg:#efe2d3;--bg2:#e8d5c2;--surface:#fff9f3;--surface2:#f5ebe0;
-  --border:rgba(97,52,2,.1);--border2:rgba(97,52,2,.2);
-  --accent:#613402;--accent-l:#8a4d0f;--mid:#cdb396;
-  --text:#2c1a08;--muted:#9a7b5e;--muted2:#7a5c3e;
+  --bg:#EFE2D3;--bg2:#e3d3be;--surface:#fffaf5;--surface2:#f5ebe0;
+  --border:rgba(92,58,33,.12);--border2:rgba(92,58,33,.22);
+  --accent:#5C3A21;--accent-l:#7a4e2d;--mid:#C0522A;--teal:#2F6E62;
+  --text:#2c1608;--muted:#8a6a50;--muted2:#6b4f38;
   --r:14px;--font-d:'Playfair Display',serif;--font-b:'DM Sans',sans-serif;
-  --card-w:290px;--shadow:0 4px 24px rgba(97,52,2,.1);--shadow-lg:0 16px 60px rgba(97,52,2,.18);
+  --card-w:290px;--shadow:0 4px 24px rgba(92,58,33,.1);--shadow-lg:0 16px 60px rgba(92,58,33,.18);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
@@ -54,9 +51,9 @@ input,textarea,select{font-family:var(--font-b);}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.6;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");}
 .deco{position:fixed;border-radius:50%;pointer-events:none;z-index:0;}
-.deco-1{width:700px;height:700px;border:1px solid rgba(97,52,2,.06);top:-200px;right:-250px;}
-.deco-2{width:500px;height:500px;border:1px solid rgba(97,52,2,.05);bottom:-150px;left:-200px;}
-.deco-3{width:300px;height:300px;background:rgba(205,179,150,.15);filter:blur(80px);top:100px;left:-100px;}
+.deco-1{width:700px;height:700px;border:1px solid rgba(92,58,33,.06);top:-200px;right:-250px;}
+.deco-2{width:500px;height:500px;border:1px solid rgba(92,58,33,.05);bottom:-150px;left:-200px;}
+.deco-3{width:300px;height:300px;background:rgba(47,110,98,.08);filter:blur(80px);top:100px;left:-100px;}
 .wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 28px;}
 /* HEADER */
 header{position:relative;z-index:1;padding:56px 0 0;text-align:center;transition:opacity .3s;}
@@ -69,23 +66,23 @@ header{position:relative;z-index:1;padding:56px 0 0;text-align:center;transition
 }
 #page-loader.hide{opacity:0;pointer-events:none;}
 .loader-logo{width:90px;height:90px;border-radius:50%;object-fit:contain;}
-.loader-spinner{width:28px;height:28px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
-.logo-row{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:2px;}
+.loader-spinner{width:28px;height:28px;border:2.5px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:6px;}
 .site-logo{width:140px;height:140px;border-radius:0;object-fit:contain;border:none;padding:0;background:transparent;}
 .site-logo-ph{width:72px;height:72px;border-radius:12px;background:var(--surface);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;}
 .site-logo-ph svg{width:40px;height:40px;}
-.asso-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5.5vw,68px);font-weight:400;color:var(--accent);line-height:1;letter-spacing:.04em;display:flex;flex-direction:column;justify-content:center;}
+.asso-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5.5vw,68px);font-weight:400;color:var(--mid);line-height:1;letter-spacing:.04em;display:flex;flex-direction:column;justify-content:center;}
 .asso-name em{font-style:normal;color:var(--muted2);font-weight:400;}
 .tagline{font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
 .ornament{display:flex;align-items:center;gap:18px;margin:36px auto;max-width:440px;}
-.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--mid),transparent);}
-.ornament-icon{color:var(--mid);font-size:18px;flex-shrink:0;display:flex;align-items:center;gap:10px;}
-.ornament-icon::before,.ornament-icon::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--mid);}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);}
+.ornament-icon{color:var(--teal);font-size:18px;flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.ornament-icon::before,.ornament-icon::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--teal);}
 /* GRID */
 .events-grid{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;padding-bottom:96px;}
 /* CARD */
 .event-card{width:var(--card-w);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;color:inherit;position:relative;transition:transform .32s cubic-bezier(.23,1,.32,1),box-shadow .32s,border-color .3s;animation:fadeUp .55s both;box-shadow:var(--shadow);}
-.event-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--border2);}
+.event-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--teal);}
 .card-img-wrap{position:relative;width:100%;aspect-ratio:1080/1350;overflow:hidden;background:var(--surface2);flex-shrink:0;}
 .card-img-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s cubic-bezier(.23,1,.32,1);}
 .event-card:hover .card-img-bg{transform:scale(1.04);}
@@ -93,33 +90,33 @@ header{position:relative;z-index:1;padding:56px 0 0;text-align:center;transition
 /* Blocage téléchargement */
 .card-img-wrap, .card-img-bg, .emodal-poster{-webkit-user-select:none;user-select:none;pointer-events:auto;}
 .card-img-bg::after{content:'';position:absolute;inset:0;}
-.price-badge{position:absolute;top:12px;right:12px;z-index:2;background:var(--accent);color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:20px;box-shadow:0 3px 12px rgba(97,52,2,.35);}
+.price-badge{position:absolute;top:12px;right:12px;z-index:2;background:var(--accent);color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:20px;box-shadow:0 3px 12px rgba(92,58,33,.35);}
 .price-badge.free{background:var(--surface);color:var(--accent);border:1.5px solid var(--accent);}
 .card-overlay-name{position:absolute;bottom:14px;left:14px;right:14px;z-index:2;font-family:var(--font-d);font-size:20px;font-weight:700;line-height:1.15;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6);}
 .card-body{padding:16px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1;}
 .meta-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);}
-.meta-item svg{flex-shrink:0;opacity:.5;}
+.meta-item svg{flex-shrink:0;opacity:.65;stroke:var(--teal);}
 .meta-item strong{color:var(--text);font-weight:500;}
 .card-desc{font-size:12.5px;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .card-cta{margin-top:auto;padding-top:14px;}
-.cta-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:10px 16px;border-radius:8px;font-size:13.5px;font-weight:500;background:var(--accent);color:#fff;border:none;transition:background .22s,transform .15s;cursor:pointer;}
-.cta-btn:hover{background:var(--accent-l);}
+.cta-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:10px 16px;border-radius:8px;font-size:13.5px;font-weight:500;background:var(--mid);color:#fff;border:none;transition:background .22s,transform .15s;cursor:pointer;}
+.cta-btn:hover{background:#255a4e;}
 .cta-btn:active{transform:scale(.98);}
 .cta-arrow{transition:transform .22s;}
 .cta-btn:hover .cta-arrow{transform:translateX(3px);}
 .sold-out-overlay{position:absolute;inset:0;z-index:5;background:rgba(239,226,211,.65);backdrop-filter:blur(1px);display:flex;align-items:center;justify-content:center;}
-.sold-out-stamp{font-family:var(--font-d);font-size:28px;font-weight:700;color:var(--accent);border:2.5px solid var(--accent);padding:8px 22px;border-radius:6px;transform:rotate(-10deg);box-shadow:0 4px 20px rgba(97,52,2,.2);background:rgba(239,226,211,.8);}
+.sold-out-stamp{font-family:var(--font-d);font-size:28px;font-weight:700;color:var(--accent);border:2.5px solid var(--accent);padding:8px 22px;border-radius:6px;transform:rotate(-10deg);box-shadow:0 4px 20px rgba(92,58,33,.2);background:rgba(239,226,211,.8);}
 /* FOOTER */
-footer{position:relative;z-index:1;text-align:center;padding:30px 24px 38px;border-top:1px solid var(--border2);color:var(--muted);font-size:13px;background:var(--bg2);}
-footer a{color:var(--accent);}
+footer{position:relative;z-index:1;text-align:center;padding:30px 24px 38px;border-top:2px solid var(--teal);color:var(--muted);font-size:13px;background:var(--bg2);}
+footer a{color:var(--teal);}
 .footer-socials{display:flex;align-items:center;justify-content:center;gap:14px;margin:16px 0 6px;}
 .footer-socials a{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--border2);color:var(--accent);transition:background .2s,transform .2s;}
-.footer-socials a:hover{background:var(--accent);color:#fff;transform:scale(1.1);}
+.footer-socials a:hover{background:var(--teal);color:#fff;transform:scale(1.1);}
 .footer-socials svg{width:18px;height:18px;fill:currentColor;}
-#admin-trigger{display:inline-block;padding:4px 8px;border-radius:4px;cursor:pointer;user-select:none;color:var(--mid);transition:background .2s;}
+#admin-trigger{display:inline-block;padding:4px 8px;border-radius:4px;cursor:pointer;user-select:none;color:var(--teal);transition:background .2s;}
 #admin-trigger:hover{background:var(--border);}
 /* TOAST */
-#toast{position:fixed;bottom:26px;right:26px;z-index:999;background:var(--accent);color:#fff;border-radius:10px;padding:11px 20px;font-size:14px;font-weight:500;box-shadow:0 8px 28px rgba(97,52,2,.3);transform:translateY(20px);opacity:0;transition:all .3s cubic-bezier(.23,1,.32,1);pointer-events:none;max-width:300px;}
+#toast{position:fixed;bottom:26px;right:26px;z-index:999;background:var(--teal);color:#fff;border-radius:10px;padding:11px 20px;font-size:14px;font-weight:500;box-shadow:0 8px 28px rgba(92,58,33,.3);transform:translateY(20px);opacity:0;transition:all .3s cubic-bezier(.23,1,.32,1);pointer-events:none;max-width:300px;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.error{background:#c0392b;}
 /* ADMIN OVERLAY */
@@ -146,23 +143,12 @@ footer a{color:var(--accent);}
 .backend-banner.err{border-color:rgba(192,57,43,.3);color:#c0392b;background:rgba(192,57,43,.06);}
 .backend-banner.warn{border-color:rgba(243,156,18,.3);color:#b7770d;background:rgba(243,156,18,.06);}
 .sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
-.sdot.g{background:#4aae4a;}.sdot.o{background:#f39c12;}.sdot.r{background:#c0392b;}
+.sdot.g{background:var(--teal);}.sdot.o{background:#f39c12;}.sdot.r{background:#c0392b;}
 /* Sec title */
 .sec-title{font-family:var(--font-d);font-size:17px;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
 .sec-title::after{content:'';flex:1;height:1px;background:var(--border2);}
 /* Admin list */
 .admin-event-list{display:flex;flex-direction:column;gap:10px;}
-/* ══ DRAG & DROP ══════════════════════════════════════════ */
-.drag-handle{
-  display:flex;align-items:center;justify-content:center;
-  width:24px;flex-shrink:0;cursor:grab;color:var(--mid);
-  padding:4px 2px;border-radius:4px;transition:color .15s;
-}
-.drag-handle:active{cursor:grabbing;}
-.drag-handle:hover{color:var(--accent);}
-.admin-event-item.dragging{opacity:.4;border:1.5px dashed var(--accent);}
-.admin-event-item.drag-over{border-color:var(--accent);background:rgba(97,52,2,.05);}
-
 .admin-event-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;transition:border-color .2s;}
 .admin-event-item:hover{border-color:var(--border2);}
 .admin-thumb{width:42px;height:52px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--surface2);}
@@ -193,7 +179,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
 /* Tabs */
 .admin-tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--surface2);border-radius:9px;padding:4px;}
 .admin-tab{flex:1;padding:7px;text-align:center;font-size:13px;font-weight:500;border-radius:6px;border:none;background:transparent;color:var(--muted2);cursor:pointer;transition:background .2s,color .2s;}
-.admin-tab.active{background:var(--surface);color:var(--accent);box-shadow:0 1px 6px rgba(97,52,2,.1);}
+.admin-tab.active{background:var(--surface);color:var(--accent);box-shadow:0 1px 6px rgba(92,58,33,.1);}
 .admin-tab-panel{display:none;}
 .admin-tab-panel.active{display:block;}
 /* Image preview */
@@ -224,7 +210,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
 .stats-legend{display:flex;gap:14px;font-size:11px;color:var(--muted2);}
 .stats-legend span{display:flex;align-items:center;gap:5px;}
 .stats-legend-dot{width:8px;height:8px;border-radius:50%;}
-.spinner{width:18px;height:18px;border:2px solid rgba(97,52,2,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+.spinner{width:18px;height:18px;border:2px solid rgba(92,58,33,.2);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg);}}
 /* Empty */
 .empty-state{text-align:center;padding:70px 20px;color:var(--muted);font-size:15px;width:100%;}
@@ -299,7 +285,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
 .emodal-content{
   padding:34px 30px 28px;display:flex;flex-direction:column;
   gap:13px;overflow-y:auto;
-  max-height:90vh;
 }
 .emodal-close{
   position:absolute;top:12px;right:12px;z-index:10;
@@ -316,30 +301,31 @@ textarea.form-input{resize:vertical;min-height:68px;}
   font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted2);
 }
-.emodal-status .dot{width:7px;height:7px;border-radius:50%;background:#4aae4a;box-shadow:0 0 0 3px rgba(74,174,74,.2);}
+.emodal-status .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(47,110,98,.2);}
 .emodal-status .dot.sold{background:#c0392b;box-shadow:0 0 0 3px rgba(192,57,43,.2);}
 .emodal-status .dot.soon{background:#f39c12;box-shadow:0 0 0 3px rgba(243,156,18,.2);}
-.emodal-title{font-family:var(--font-d);font-size:clamp(20px,2.8vw,32px);font-weight:700;color:var(--accent);line-height:1.15;}
+.emodal-title{font-family:var(--font-d);font-size:clamp(20px,2.8vw,32px);font-weight:700;color:var(--mid);line-height:1.15;}
 .emodal-divider{height:1px;background:var(--border2);margin:0;}
 .emodal-meta{display:flex;flex-direction:column;gap:9px;}
 .emodal-meta-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted2);}
-.emodal-meta-item svg{flex-shrink:0;margin-top:2px;opacity:.55;}
+.emodal-meta-item svg{flex-shrink:0;margin-top:2px;opacity:.7;stroke:var(--teal);}
 .emodal-meta-item strong{color:var(--text);font-weight:500;}
-.emodal-meta-item a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+.emodal-meta-item a{color:var(--teal);text-decoration:underline;text-underline-offset:3px;}
 .emodal-desc{font-size:14px;color:var(--text);line-height:1.8;white-space:pre-wrap;}
 .emodal-map{flex-shrink:0;}
 .maps-link-btn{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--muted2);font-size:13px;font-weight:500;transition:background .2s,border-color .2s;}
-.maps-link-btn:hover{background:var(--surface);border-color:var(--accent);}
+.maps-link-btn:hover{background:var(--surface);border-color:var(--teal);color:var(--teal);}
 .maps-link-btn span{flex:1;}
-
+.share-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:14px 16px;border-radius:12px;font-size:15px;font-weight:600;background:var(--surface2);color:var(--muted2);border:1.5px solid var(--border2);cursor:pointer;transition:background .2s,border-color .2s,color .2s;white-space:nowrap;flex-shrink:0;}
+.share-btn:hover{background:rgba(47,110,98,.08);border-color:var(--teal);color:var(--teal);}
 .emodal-cta{margin-top:auto;padding-top:4px;display:flex;gap:10px;}
-.emodal-reserve{
+.emodal-reserve{background:var(--mid);
   flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
   padding:14px 20px;border-radius:12px;
   font-family:var(--font-b);font-size:15px;font-weight:600;
   background:var(--accent);color:#fff;text-decoration:none;
   transition:background .22s,transform .15s;
-  box-shadow:0 6px 20px rgba(97,52,2,.3);
+  box-shadow:0 6px 20px rgba(92,58,33,.3);
 }
 .emodal-reserve:hover{background:var(--accent-l);transform:translateY(-1px);}
 .emodal-reserve:active{transform:scale(.98);}
@@ -348,155 +334,14 @@ textarea.form-input{resize:vertical;min-height:68px;}
   font-size:14px;font-weight:600;background:var(--surface2);color:var(--muted);
   border:1px solid var(--border2);cursor:default;
 }
-
-/* ══ BOUTON PARTAGE ═══════════════════════════════════════ */
-.share-btn{
-  display:flex;align-items:center;justify-content:center;gap:7px;
-  padding:14px 16px;border-radius:12px;
-  font-size:15px;font-weight:600;
-  background:var(--surface2);color:var(--muted2);
-  border:1.5px solid var(--border2);cursor:pointer;
-  transition:background .2s,border-color .2s,color .2s;
-  white-space:nowrap;flex-shrink:0;
-}
-.share-btn:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
-.share-btn svg{flex-shrink:0;}
 /* ══ CARTE "BIENTÔT" ══════════════════════════════════════ */
 
-
-
-
-/* ══ DÉROULANTS FORMULAIRE ════════════════════════════════ */
-// Ferme tous les menus si clic extérieur
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.input-with-dd')){
-    document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-  }
-});
-window.toggleDd=function(id){
-  const menu=document.getElementById(id);if(!menu)return;
-  const wasOpen=menu.classList.contains('open');
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-  if(!wasOpen){
-    fillDdMenu(id);
-    menu.classList.add('open');
-  }
-};
-function fillDdMenu(id){
-  const menu=document.getElementById(id);if(!menu)return;
-  if(id==='dd-venues'){
-    const arr=getTplVenues();
-    menu.innerHTML=arr.length
-      ?arr.map((v,i)=>'<div class="dd-opt" onclick="pickVenue('+i+')"><span>📍 '+v.name+'</span><span class="dd-opt-sub">'+v.maps+'</span></div>').join('')
-      +'<div class="dd-empty">+ Enregistre des lieux dans l\'onglet Modèles</div>'
-      :'<div class="dd-empty">Aucun lieu — va dans l\'onglet Modèles</div>';
-  }else if(id==='dd-names'){
-    const arr=getTplNames();
-    menu.innerHTML=arr.length
-      ?arr.map((n,i)=>'<div class="dd-opt" onclick="pickName('+i+')"><span>🏷 '+n+'</span></div>').join('')
-      +'<div class="dd-empty">+ Enregistre des noms dans l\'onglet Modèles</div>'
-      :'<div class="dd-empty">Aucun nom — va dans l\'onglet Modèles</div>';
-  }else if(id==='dd-texts'){
-    const arr=getTplTexts();
-    menu.innerHTML=arr.length
-      ?arr.map((t,i)=>'<div class="dd-opt" onclick="pickText('+i+')"><span>📝 '+t.name+'</span><span class="dd-opt-sub">'+(t.short||'').slice(0,50)+'</span></div>').join('')
-      +'<div class="dd-empty">+ Enregistre des textes dans l\'onglet Modèles</div>'
-      :'<div class="dd-empty">Aucun texte — va dans l\'onglet Modèles</div>';
-  }
-}
-window.pickVenue=function(i){
-  const v=getTplVenues()[i];if(!v)return;
-  $('f-place').value=v.name;
-  if(v.maps){$('f-maps-url').value=v.maps;onMapsUrlInput(v.maps);}
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-};
-window.pickName=function(i){
-  const n=getTplNames()[i];if(!n)return;
-  $('f-name').value=n;
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-};
-window.pickText=function(i){
-  const t=getTplTexts()[i];if(!t)return;
-  if(t.short)$('f-desc').value=t.short;
-  if(t.long)$('f-desc-long').value=t.long;
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-};
-/* Noms d'événements */
-function getTplNames(){try{return JSON.parse(localStorage.getItem('tpl_names'))||[];}catch{return[];}}
-function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr));}
-
-/* ══ CHAMPS AVEC DÉROULANT ════════════════════════════════ */
-.input-with-dd{position:relative;display:flex;gap:0;}
-.input-with-dd .form-input{flex:1;border-radius:8px 0 0 8px;z-index:1;}
-.dd-toggle{
-  display:flex;align-items:center;justify-content:center;
-  width:34px;flex-shrink:0;
-  background:var(--surface2);border:1.5px solid var(--border2);
-  border-left:none;border-radius:0 8px 8px 0;
-  cursor:pointer;color:var(--muted);font-size:13px;
-  transition:background .15s,color .15s;
-}
-.dd-toggle:hover{background:var(--surface);color:var(--accent);}
-.dd-menu{
-  position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:999;
-  background:var(--surface);border:1.5px solid var(--border2);border-radius:10px;
-  box-shadow:0 8px 28px rgba(44,26,8,.18);
-  display:none;flex-direction:column;overflow:hidden;max-height:220px;overflow-y:auto;
-}
-.dd-menu.open{display:flex;}
-.dd-opt{
-  padding:10px 14px;font-size:13px;color:var(--text);cursor:pointer;
-  border-bottom:1px solid var(--border);transition:background .12s;
-  display:flex;flex-direction:column;gap:2px;
-}
-.dd-opt:last-child{border-bottom:none;}
-.dd-opt:hover{background:var(--surface2);}
-.dd-opt-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.dd-empty{padding:10px 14px;font-size:12px;color:var(--muted);font-style:italic;}
-/* ══ TEMPLATES ════════════════════════════════════════════ */
-.tpl-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
-.tpl-item{display:flex;align-items:center;gap:10px;padding:9px 12px;
-  background:var(--surface);border:1px solid var(--border);border-radius:8px;}
-.tpl-item-name{flex:1;font-size:13px;font-weight:500;color:var(--text);}
-.tpl-item-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
-.tpl-use-btn{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--surface2);
-  border:1px solid var(--border2);color:var(--muted2);cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.tpl-use-btn:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
-.tpl-del-btn{font-size:11px;padding:4px 8px;border-radius:6px;background:transparent;
-  border:none;color:var(--muted);cursor:pointer;flex-shrink:0;}
-.tpl-del-btn:hover{color:#c0392b;}
-.tpl-section-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;
-  letter-spacing:.08em;margin:16px 0 8px;}
-/* Boutons de remplissage rapide dans le formulaire */
-.tpl-quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
-.tpl-chip{font-size:11px;padding:3px 10px;border-radius:12px;
-  background:var(--surface2);border:1px solid var(--border);
-  color:var(--muted2);cursor:pointer;transition:background .15s,border-color .15s;}
-.tpl-chip:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
-/* ══ AUTO-SUPPRESSION ═════════════════════════════════════ */
-.delete-badge{font-size:10px;color:#c0392b;background:rgba(192,57,43,.1);
-  border-radius:4px;padding:1px 5px;margin-left:4px;}
 /* ══ COUNTDOWN ════════════════════════════════════════════ */
-.countdown-wrap{
-  display:flex;gap:8px;align-items:center;justify-content:center;
-  margin-top:4px;
-}
-.cd-block{
-  display:flex;flex-direction:column;align-items:center;
-  background:rgba(22,10,3,.55);border-radius:8px;
-  padding:6px 10px;min-width:44px;
-  backdrop-filter:blur(4px);
-}
-.cd-num{
-  font-family:'Bebas Neue',sans-serif;font-size:22px;
-  color:#fff;line-height:1;letter-spacing:.04em;
-}
-.cd-label{
-  font-size:9px;color:rgba(255,255,255,.6);
-  text-transform:uppercase;letter-spacing:.1em;margin-top:2px;
-}
+.countdown-wrap{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:4px;}
+.cd-block{display:flex;flex-direction:column;align-items:center;background:rgba(22,10,3,.55);border-radius:8px;padding:6px 10px;min-width:44px;backdrop-filter:blur(4px);}
+.cd-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;line-height:1;letter-spacing:.04em;}
+.cd-label{font-size:9px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-top:2px;}
 .cd-sep{font-size:20px;color:rgba(255,255,255,.4);font-weight:300;margin-bottom:10px;}
-/* Champ reveal date — visible seulement quand statut = coming_soon */
 #reveal-date-group{display:none;}
 
 .event-card.coming-soon{cursor:default;}
@@ -510,7 +355,7 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
   background:var(--accent);color:#fff;
   font-family:var(--font-d);font-size:17px;font-weight:700;
   letter-spacing:.06em;padding:8px 22px;border-radius:30px;
-  box-shadow:0 6px 24px rgba(97,52,2,.45);
+  box-shadow:0 6px 24px rgba(92,58,33,.45);
   text-transform:uppercase;
 }
 .coming-soon-sub{
@@ -537,11 +382,6 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
     max-height:none;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
-  }
-  /* Sur mobile, le scroll est géré par emodal-box — pas par emodal-content */
-  .emodal-content{
-    overflow-y:visible;
-    max-height:none;
   }
   .emodal-poster{
     width:100%;
@@ -574,7 +414,7 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
     width:36px;height:36px;
   }
   .emodal-content{padding:20px 18px 60px;}
-
+  .emodal-map{height:180px;}
 }
 @media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
   .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
@@ -588,7 +428,7 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
   border-radius:20px;padding:7px 16px 7px 14px;
   font-size:12px;font-weight:500;letter-spacing:.05em;
   gap:6px;align-items:center;
-  box-shadow:0 4px 16px rgba(97,52,2,.35);
+  box-shadow:0 4px 16px rgba(92,58,33,.35);
   animation:bounceY 1.4s ease-in-out infinite;
   pointer-events:none;
   white-space:nowrap;
@@ -599,11 +439,11 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
 .cal-trigger{
   display:inline-flex;align-items:center;gap:6px;
   padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;
-  border:1.5px solid var(--border2);background:var(--surface2);color:var(--muted2);
+  border:1.5px solid var(--teal);background:rgba(47,110,98,.06);color:var(--teal);
   cursor:pointer;transition:background .2s,border-color .2s,color .2s;
   white-space:nowrap;position:relative;
 }
-.cal-trigger:hover{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+.cal-trigger:hover{background:var(--surface);border-color:var(--teal);color:var(--teal);}
 .cal-trigger svg{flex-shrink:0;}
 .cal-dropdown{
   position:absolute;top:calc(100% + 6px);right:0;left:auto;z-index:20;
@@ -619,205 +459,32 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
   cursor:pointer;transition:background .15s;text-decoration:none;border:none;background:none;
   font-family:var(--font-b);text-align:left;width:100%;
 }
-.cal-option:hover{background:var(--surface2);color:var(--accent);}
+.cal-option:hover{background:var(--surface2);color:var(--teal);}
 .cal-option svg{opacity:.6;flex-shrink:0;}
 
-/* ══ GALERIE PHOTO ════════════════════════════════════════ */
-.gallery-section{position:relative;z-index:1;padding:60px 0 80px;}
-.gallery-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);
-  color:var(--accent);text-align:center;margin-bottom:4px;letter-spacing:.04em;}
-.gallery-sub{text-align:center;font-size:12px;color:var(--muted);
-  letter-spacing:.1em;text-transform:uppercase;margin-bottom:36px;}
-/* Albums */
-.album-list{display:flex;flex-direction:column;gap:48px;}
-.album-title{font-family:var(--font-d);font-size:20px;font-weight:700;
-  color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-.album-title::after{content:'';flex:1;height:1px;background:var(--border2);}
-.album-count{font-size:12px;color:var(--muted);font-family:var(--font-b);font-weight:400;}
-/* Grille photos */
-.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
-@media(max-width:520px){.photo-grid{grid-template-columns:repeat(2,1fr);gap:6px;}}
-.photo-item{
-  position:relative;overflow:hidden;border-radius:10px;
-  aspect-ratio:4/3;cursor:pointer;
-  background:var(--surface2);
-  -webkit-user-select:none;user-select:none;
-}
-.photo-item:hover .photo-bg{transform:scale(1.05);}
-.photo-bg{
-  position:absolute;
-  top:0;left:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-  transition:transform .4s cubic-bezier(.23,1,.32,1);
-  -webkit-user-select:none;user-select:none;
-  pointer-events:none;
-}
-/* Watermark */
-.photo-item::before{
-  content:'© Play Thau\'Gether';
-  position:absolute;bottom:6px;right:8px;z-index:3;
-  font-size:9px;color:rgba(255,255,255,.55);
-  text-shadow:0 1px 3px rgba(0,0,0,.5);
-  font-weight:500;letter-spacing:.04em;
-  pointer-events:none;
-}
-/* Lightbox */
-#photo-lb{
-  display:none;position:fixed;inset:0;z-index:300;
-  background:rgba(10,5,0,.96);
-  align-items:center;justify-content:center;
-}
-#photo-lb.open{display:flex;}
-.lb-img-wrap{
-  position:relative;max-width:90vw;max-height:88vh;
-  display:flex;align-items:center;justify-content:center;
-}
-#photo-lb-img{
-  max-width:90vw;max-height:82vh;object-fit:contain;
-  border-radius:8px;display:block;
-  -webkit-user-select:none;user-select:none;pointer-events:none;
-}
-.lb-watermark{
-  position:absolute;bottom:10px;right:12px;
-  font-size:11px;color:rgba(255,255,255,.4);
-  font-weight:500;letter-spacing:.05em;pointer-events:none;
-}
-.lb-close{
-  position:fixed;top:16px;right:18px;z-index:10;
-  width:38px;height:38px;border-radius:50%;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:18px;color:#fff;transition:background .2s;
-}
-.lb-close:hover{background:rgba(255,255,255,.25);}
-.lb-nav{
-  position:fixed;top:50%;transform:translateY(-50%);
-  width:46px;height:46px;border-radius:50%;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:#fff;font-size:22px;transition:background .2s;z-index:10;
-}
-.lb-nav:hover{background:rgba(255,255,255,.22);}
-#lb-prev{left:14px;}#lb-next{right:14px;}
-@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  color:rgba(255,255,255,.5);font-size:12px;text-align:center;
-  max-width:80vw;pointer-events:none;
-}
-/* Admin galerie */
-.album-admin-item{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;margin-bottom:12px;overflow:hidden;
-}
-.album-admin-header{
-  display:flex;align-items:center;gap:10px;padding:11px 14px;
-  cursor:pointer;
-}
-.album-admin-name{flex:1;font-size:14px;font-weight:600;color:var(--text);}
-.album-admin-count{font-size:12px;color:var(--muted);}
-.album-admin-body{padding:10px 14px 14px;border-top:1px solid var(--border);display:none;}
-.album-admin-body.open{display:block;}
-.album-photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-bottom:10px;}
-.album-photo-thumb{
-  position:relative;aspect-ratio:4/3;border-radius:6px;
-  overflow:hidden;background:var(--surface2);
-}
-.album-photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
-.album-photo-del{
-  position:absolute;top:3px;right:3px;width:20px;height:20px;
-  border-radius:50%;background:rgba(192,57,43,.85);border:none;
-  color:#fff;font-size:10px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-.album-photo-cover-btn{
-  position:absolute;bottom:3px;left:3px;right:3px;
-  background:rgba(22,10,3,.7);border:none;border-radius:4px;
-  color:rgba(255,255,255,.8);font-size:9px;cursor:pointer;
-  padding:2px 4px;text-align:center;
-  transition:background .15s;
-}
-.album-photo-cover-btn:hover{background:var(--accent);}
-.album-photo-cover-badge{
-  position:absolute;top:3px;left:3px;
-  background:var(--accent);border-radius:4px;
-  color:#fff;font-size:9px;padding:2px 5px;
-  font-weight:600;pointer-events:none;
-}
+/* ══ TEMPLATES & DÉROULANTS ═══════════════════════════════ */
+.input-with-dd{position:relative;display:flex;gap:0;}
+.input-with-dd .form-input{flex:1;border-radius:8px 0 0 8px;z-index:1;}
+.dd-toggle{display:flex;align-items:center;justify-content:center;width:34px;flex-shrink:0;background:var(--surface2);border:1.5px solid var(--border2);border-left:none;border-radius:0 8px 8px 0;cursor:pointer;color:var(--muted);font-size:13px;transition:background .15s,color .15s;}
+.dd-toggle:hover{background:var(--surface);color:var(--accent);}
+.dd-menu{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:999;background:var(--surface);border:1.5px solid var(--border2);border-radius:10px;box-shadow:0 8px 28px rgba(44,26,8,.18);display:none;flex-direction:column;overflow:hidden;max-height:220px;overflow-y:auto;}
+.dd-menu.open{display:flex;}
+.dd-opt{padding:10px 14px;font-size:13px;color:var(--text);cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;display:flex;flex-direction:column;gap:2px;}
+.dd-opt:last-child{border-bottom:none;}
+.dd-opt:hover{background:var(--surface2);}
+.dd-opt-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dd-empty{padding:10px 14px;font-size:12px;color:var(--muted);font-style:italic;}
+.tpl-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.tpl-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+.tpl-item-name{flex:1;font-size:13px;font-weight:500;color:var(--text);}
+.tpl-item-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.tpl-del-btn{font-size:11px;padding:4px 8px;border-radius:6px;background:transparent;border:none;color:var(--muted);cursor:pointer;}
+.tpl-del-btn:hover{color:#c0392b;}
+.tpl-section-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px;}
 
-/* ══ VUE DOSSIERS ═════════════════════════════════════════ */
-.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
-@media(max-width:520px){.folder-grid{grid-template-columns:repeat(2,1fr);gap:10px;}}
-.folder-card{
-  position:relative;overflow:hidden;border-radius:14px;
-  aspect-ratio:1080/1350;cursor:pointer;
-  background:var(--surface2);border:1px solid var(--border);
-  box-shadow:var(--shadow);
-  transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s;
-  -webkit-user-select:none;user-select:none;
-}
-.folder-card:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(44,26,8,.18);}
-.folder-cover{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;display:block;
-  transition:transform .4s cubic-bezier(.23,1,.32,1);
-}
-.folder-card:hover .folder-cover{transform:scale(1.07);}
-.folder-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 30%,rgba(22,10,3,.75) 100%);
-}
-.folder-info{
-  position:absolute;bottom:0;left:0;right:0;padding:14px 16px;z-index:2;
-}
-.folder-name{
-  font-family:var(--font-d);font-size:16px;font-weight:700;
-  color:#fff;line-height:1.2;text-shadow:0 1px 6px rgba(0,0,0,.5);
-  margin-bottom:3px;
-}
-.folder-count{font-size:11px;color:rgba(255,255,255,.65);letter-spacing:.06em;}
-/* Vue album (retour) */
-.album-back-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:7px 16px;border-radius:20px;
-  background:var(--surface2);border:1px solid var(--border2);
-  color:var(--muted2);font-size:13px;cursor:pointer;
-  margin-bottom:24px;transition:background .15s;
-}
-.album-back-btn:hover{background:var(--surface);}
-.album-view-title{
-  font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3.5vw,38px);
-  color:var(--accent);letter-spacing:.04em;margin-bottom:6px;
-}
-.album-view-count{font-size:12px;color:var(--muted);margin-bottom:24px;}
-
-/* ══ VIDÉOS GALERIE ═══════════════════════════════════════ */
-.photo-item.is-video::after{content:'▶';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  font-size:28px;color:rgba(255,255,255,.9);
-  text-shadow:0 2px 12px rgba(0,0,0,.6);pointer-events:none;z-index:2;}
-.photo-item.is-video .photo-bg{filter:brightness(.75);}
-.lb-video-wrap{width:min(90vw,860px);aspect-ratio:16/9;position:relative;}
-.lb-video-wrap iframe{width:100%;height:100%;border:none;border-radius:8px;}
-
-/* ══ MOT DE PASSE GALERIE ═════════════════════════════════ */
-#gallery-pwd-modal{
-  display:none;position:fixed;inset:0;z-index:200;
-  background:rgba(22,10,3,.7);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;
-}
-#gallery-pwd-modal.open{display:flex;}
-.pwd-box{
-  background:var(--surface);border:1px solid var(--border2);
-  border-radius:16px;padding:32px 28px;width:min(340px,90vw);
-  box-shadow:0 24px 80px rgba(44,26,8,.25);
-  display:flex;flex-direction:column;gap:14px;
-  animation:fadeIn .2s ease;
-}
-.pwd-box h3{font-family:var(--font-d);font-size:22px;color:var(--accent);margin:0;text-align:center;}
-.pwd-box p{font-size:13px;color:var(--muted);text-align:center;margin:0;}
-.pwd-error{font-size:12px;color:#c0392b;text-align:center;display:none;}
+#scroll-arrow{display:none;position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:50;background:var(--teal);color:#fff;border-radius:30px;padding:7px 22px;font-size:12px;font-weight:500;letter-spacing:.05em;gap:6px;align-items:center;box-shadow:0 4px 16px rgba(92,58,33,.3);animation:bounceY 1.4s ease-in-out infinite;pointer-events:none;white-space:nowrap;}
+@keyframes bounceY{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(5px);}}
+@media(max-width:520px){#scroll-arrow{display:flex;}}
 </style>
 </head>
 <body>
@@ -840,55 +507,25 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
     </div>
     <p class="tagline" id="site-tagline"></p>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px">
-      <a href="https://campsite.bio/playthaugether" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--border2);transition:background .2s,border-color .2s;" onmouseover="this.style.background='var(--surface)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--border2)'">
+      <a href="https://campsite.bio/playthaugether" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--teal);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--teal);transition:background .2s,border-color .2s;" onmouseover="this.style.background='rgba(47,110,98,.08)';this.style.borderColor='var(--teal)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--teal)'">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Nos Réseaux
       </a>
-      <button id="btn-gallery-page" onclick="showGalleryPage()" style="display:none;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--accent);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--border2);cursor:pointer;transition:background .2s,border-color .2s;" onmouseover="this.style.background='var(--surface)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--border2)'">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        Galerie Photo
+      <button onclick="showDonPage()" style="display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:20px;background:transparent;color:var(--teal);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--teal);transition:background .2s,border-color .2s;cursor:pointer;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Faire un don
       </button>
     </div>
     <div class="ornament"><div class="ornament-icon">✦</div></div>
   </div>
 </header>
-<!-- Vue Événements -->
-<main id="view-events">
+<main>
   <div class="wrap">
     <div class="events-grid" id="events-grid">
       <div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Chargement…</p></div>
     </div>
   </div>
 </main>
-
-<!-- Vue Galerie Photo -->
-<main id="view-gallery" style="display:none">
-  <div class="wrap">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;padding-top:16px">
-      <button onclick="hideGalleryPage()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted2);font-size:13px;cursor:pointer;transition:background .15s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--surface2)'">
-        ← Retour
-      </button>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,42px);color:var(--accent);letter-spacing:.04em;margin:0">Galerie Photo</h2>
-    </div>
-    <div class="album-list" id="album-list-public"></div>
-    <div id="gallery-empty" style="display:none;text-align:center;padding:60px 0;color:var(--muted)">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity=".3" style="margin-bottom:16px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <p>Aucune photo pour le moment</p>
-    </div>
-  </div>
-</main>
-
-<!-- Lightbox -->
-<div id="photo-lb" onclick="if(event.target===this||event.target.id==='photo-lb')closeLb()">
-  <button class="lb-close" onclick="closeLb()">✕</button>
-  <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
-  <div class="lb-img-wrap">
-    <img id="photo-lb-img" src="" alt="" oncontextmenu="return false" ondragstart="return false"/>
-    <div class="lb-watermark">© Play Thau'Gether</div>
-  </div>
-  <button class="lb-nav" id="lb-next" onclick="lbNav(1)">›</button>
-  <div class="lb-caption" id="lb-caption"></div>
-</div>
 
 <footer>
   <div class="wrap">
@@ -960,78 +597,9 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <div class="sdot o"></div>
           <span>Firebase non configuré — <button class="btn btn-sm btn-ghost" style="margin-left:4px" onclick="openFirebaseModal()">Configurer</button></span>
         </div>
-        <!-- Toggle Événements / Galerie -->
-        <div style="display:flex;gap:8px;margin-bottom:20px">
-          <button id="main-tab-events" class="btn btn-accent" style="flex:1" onclick="switchMainTab('events')">🎭 Événements</button>
-          <button id="main-tab-gallery" class="btn btn-ghost" style="flex:1" onclick="switchMainTab('gallery')">🖼 Galerie Photo</button>
-        </div>
-        <!-- Vue Événements -->
-        <div id="main-view-events">
-          <div class="sec-title">Événements</div>
-          <div id="admin-event-list" class="admin-event-list"></div>
-          <button class="btn btn-accent" style="margin-top:16px" onclick="openEventForm(null)">+ Ajouter un événement</button>
-        </div>
-        <!-- Vue Galerie -->
-        <div id="main-view-gallery" style="display:none">
-          <div class="sec-title">Galerie Photo</div>
-          <div class="form-hint" style="margin-bottom:16px">Héberge tes photos sur <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">Cloudinary</a> (gratuit) puis colle les URLs ici.</div>
-          <div class="form-group">
-            <label class="form-label">Nom de l'album</label>
-            <input type="text" class="form-input" id="g-album-name" placeholder="Soirée Loups-Garous — Mars 2026"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Image de couverture <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(URL Imgur — format 1080×1350)</span></label>
-            <input type="url" class="form-input" id="g-album-cover" placeholder="https://i.imgur.com/…"/>
-            <div class="form-hint">Colle l'URL directe de ton affiche depuis Imgur (lien se terminant par .jpg ou .png)</div>
-          </div>
-          <button class="btn btn-accent" style="width:100%;margin-bottom:16px" onclick="createAlbum()">+ Créer l'album</button>
-          <div id="album-list-admin"></div>
-          <div id="g-add-photo-form" style="display:none;margin-top:16px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
-            <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
-            <!-- Toggle mode -->
-            <div style="display:flex;gap:6px;margin-bottom:12px">
-              <button id="g-mode-tag-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('tag')">🏷 Tag</button>
-              <button id="g-mode-url-btn" class="btn btn-accent btn-sm" style="flex:1" onclick="setPhotoMode('url')">🖼 Photos</button>
-              <button id="g-mode-video-btn" class="btn btn-ghost btn-sm" style="flex:1" onclick="setPhotoMode('video')">▶ Vidéo</button>
-            </div>
-            <!-- Mode Tag -->
-            <div id="g-mode-tag" style="display:none">
-              <div class="form-group">
-                <label class="form-label">Nom du tag Cloudinary</label>
-                <input type="text" class="form-input" id="g-tag-name" placeholder="soiree-mars-2026"/>
-                <div class="form-hint" style="color:#c0392b">⚠️ Peut ne pas fonctionner selon les paramètres Cloudinary. Utilise "URLs" si ça échoue.</div>
-              </div>
-            </div>
-            <!-- Mode URL -->
-            <div id="g-mode-url">
-              <div class="form-group">
-                <label class="form-label">URLs Cloudinary (une par ligne)</label>
-                <textarea class="form-input" id="g-photo-urls" rows="5" placeholder="https://res.cloudinary.com/…&#10;https://res.cloudinary.com/…&#10;&#10;💡 Dans Cloudinary : clique sur une photo → panneau droit → copie l'URL"></textarea>
-                <div class="form-hint">💡 <strong>Astuce rapide</strong> : dans Cloudinary, clique sur chaque photo → panneau droit → icône 🔗 pour copier l'URL. Colle toutes tes URLs ici d'un coup.</div>
-              </div>
-            </div>
-            <!-- Mode Vidéo -->
-            <div id="g-mode-video" style="display:none">
-              <div class="form-group">
-                <label class="form-label">Lien YouTube</label>
-                <input type="url" class="form-input" id="g-video-url" placeholder="https://www.youtube.com/watch?v=… ou youtu.be/…"/>
-                <div class="form-hint">Fonctionne avec les liens YouTube normaux, non répertoriés, et youtu.be</div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Titre de la vidéo</label>
-                <input type="text" class="form-input" id="g-video-title" placeholder="Ambiance soirée Loups-Garous…"/>
-              </div>
-            </div>
-            <div class="form-group" id="g-caption-group">
-              <label class="form-label">Légende (optionnel)</label>
-              <input type="text" class="form-input" id="g-photo-caption" placeholder="Ambiance de la soirée…"/>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-accent" style="flex:1" id="g-add-btn" onclick="addPhotos()">Ajouter</button>
-              <button class="btn btn-ghost" onclick="closeAddPhoto()">Annuler</button>
-            </div>
-          </div>
-        </div>
+        <div class="sec-title">Événements</div>
+        <div id="admin-event-list" class="admin-event-list"></div>
+        <button class="btn btn-accent" style="margin-top:16px" onclick="openEventForm(null)">+ Ajouter un événement</button>
       </div>
       <!-- Side -->
       <div class="admin-side">
@@ -1055,29 +623,22 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           </div>
           <div class="form-group">
             <label class="form-label">Nom de l'événement *</label>
-            <div class="input-with-dd">
-              <input type="text" class="form-input" id="f-name" placeholder="Concert de printemps"/>
-              <button type="button" class="dd-toggle" onclick="toggleDd('dd-names')" title="Noms enregistrés">▾</button>
-              <div class="dd-menu" id="dd-names"></div>
-            </div>
+            <div class="input-with-dd"><input type="text" class="form-input" id="f-name" placeholder="Concert de printemps"/><button type="button" class="dd-toggle" onclick="toggleDd('dd-names')">▾</button><div class="dd-menu" id="dd-names"></div></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label class="form-label">Date *</label><input type="date" class="form-input" id="f-date"/></div>
             <div class="form-group"><label class="form-label">Heure</label><input type="time" class="form-input" id="f-time"/></div>
           </div>
           <div class="form-group">
-            <label class="form-label">Lieu</label>
-            <div class="input-with-dd">
-              <input type="text" class="form-input" id="f-place" placeholder="La Hune, Sète…" oninput="this.dataset.manual='1'"/>
-              <button type="button" class="dd-toggle" onclick="toggleDd('dd-venues')" title="Lieux enregistrés">▾</button>
-              <div class="dd-menu" id="dd-venues"></div>
-            </div>
-          </div>
-          <div class="form-group">
             <label class="form-label">Lien Google Maps</label>
-            <input type="url" class="form-input" id="f-maps-url" placeholder="https://maps.app.goo.gl/…" oninput="onMapsUrlInput(this.value)"/>
+            <input type="url" class="form-input" id="f-maps-url" placeholder="https://maps.app.goo.gl/… ou maps.google.com/…" oninput="onMapsUrlInput(this.value)"/>
             <div class="form-hint" id="f-maps-hint"></div>
             <div class="form-hint">💡 Copie le lien depuis Google Maps → "Partager" → "Copier le lien"</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lieu</label>
+            <div class="input-with-dd"><input type="text" class="form-input" id="f-place" placeholder="La Hune, Sète…"/><button type="button" class="dd-toggle" onclick="toggleDd('dd-venues')">▾</button><div class="dd-menu" id="dd-venues"></div></div>
+            <div class="form-hint">Auto-rempli depuis le lien Maps, modifiable</div>
           </div>
           <div class="form-row">
             <div class="form-group"><label class="form-label">Prix</label><input type="text" class="form-input" id="f-price" placeholder="12 €"/></div>
@@ -1095,11 +656,7 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           </div>
           <div class="form-group">
             <label class="form-label">Description courte (vignette)</label>
-            <div class="input-with-dd">
-              <textarea class="form-input" id="f-desc" rows="2" placeholder="2 lignes max, affichées sur la carte…" style="border-radius:8px 0 0 8px;resize:vertical"></textarea>
-              <button type="button" class="dd-toggle" onclick="toggleDd('dd-texts')" title="Textes enregistrés" style="height:auto;align-self:stretch;border-radius:0 8px 8px 0;">▾</button>
-              <div class="dd-menu" id="dd-texts"></div>
-            </div>
+            <div class="input-with-dd"><textarea class="form-input" id="f-desc" rows="2" placeholder="2 lignes max…" style="border-radius:8px 0 0 8px;resize:vertical"></textarea><button type="button" class="dd-toggle" onclick="toggleDd('dd-texts')" style="height:auto;align-self:stretch;border-radius:0 8px 8px 0">▾</button><div class="dd-menu" id="dd-texts"></div></div>
           </div>
           <div class="form-group">
             <label class="form-label">Description complète (page événement)</label>
@@ -1114,18 +671,18 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
               <option value="hidden">Masqué</option>
             </select>
           </div>
+          <div class="form-group">
+            <label class="form-label">Suppression automatique <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(optionnel)</span></label>
+            <input type="date" class="form-input" id="f-delete-at"/>
+            <div class="form-hint">L'événement sera supprimé automatiquement à cette date</div>
+          </div>
           <div class="form-group" id="reveal-date-group">
-            <label class="form-label">Date & heure de dévoilement automatique</label>
+            <label class="form-label">Date &amp; heure de dévoilement automatique</label>
             <div class="form-row">
               <div class="form-group" style="margin-bottom:0"><input type="date" class="form-input" id="f-reveal-date"/></div>
               <div class="form-group" style="margin-bottom:0"><input type="time" class="form-input" id="f-reveal-time" placeholder="20:00"/></div>
             </div>
             <div class="form-hint">À cette date/heure, l'événement passera automatiquement en "En vente"</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Suppression automatique <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(optionnel)</span></label>
-            <input type="date" class="form-input" id="f-delete-at"/>
-            <div class="form-hint">L'événement sera supprimé automatiquement à cette date</div>
           </div>
           <input type="hidden" id="f-id"/>
           <div style="display:flex;gap:10px;margin-top:4px">
@@ -1145,12 +702,6 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
           <div class="form-group"><label class="form-label">Slogan / tagline</label><input type="text" class="form-input" id="s-tagline" placeholder="Nos prochains événements"/></div>
           <div class="form-group"><label class="form-label">URL du logo</label><input type="url" class="form-input" id="s-logo" placeholder="logo.png"/></div>
           <div class="form-group"><label class="form-label">Email de contact</label><input type="email" class="form-input" id="s-email" placeholder="contact@monasso.fr"/></div>
-          <div class="form-group"><label class="form-label">Cloudinary Cloud Name <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(pour la galerie)</span></label><input type="text" class="form-input" id="s-cloudinary" placeholder="mon-cloud-name"/><div class="form-hint">Trouve-le sur cloudinary.com → Dashboard (ex: <code>dxyz1234</code>)</div></div>
-          <div class="form-group">
-            <label class="form-label">Mot de passe Galerie Photo <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(laisser vide = accès libre)</span></label>
-            <input type="password" class="form-input" id="s-gallery-pwd" placeholder="Mon mot de passe…"/>
-            <div class="form-hint">Les visiteurs devront entrer ce mot de passe pour voir la galerie</div>
-          </div>
           <button class="btn btn-accent btn-full" onclick="saveSettings()">Enregistrer</button>
         </div>
         <!-- Stats -->
@@ -1179,14 +730,12 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
         <!-- Modèles -->
         <div class="admin-tab-panel" id="tab-templates">
           <div class="sec-title">Modèles réutilisables</div>
-          <!-- Noms d'événements -->
           <div class="tpl-section-title">🏷 Noms d'événements</div>
           <div id="tpl-names-list" class="tpl-list"></div>
           <div class="form-group" style="display:flex;gap:8px">
             <input type="text" class="form-input" id="tpl-n-name" placeholder="Soirée Loups-Garous | La Hune" style="flex:1"/>
             <button class="btn btn-accent" onclick="saveTplName()" style="white-space:nowrap">+ Ajouter</button>
           </div>
-          <!-- Lieux -->
           <div class="tpl-section-title">📍 Lieux enregistrés</div>
           <div id="tpl-venues-list" class="tpl-list"></div>
           <div class="form-group">
@@ -1198,7 +747,6 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
             <input type="url" class="form-input" id="tpl-v-maps" placeholder="https://maps.app.goo.gl/…"/>
           </div>
           <button class="btn btn-accent" style="width:100%;margin-bottom:20px" onclick="saveTplVenue()">+ Enregistrer ce lieu</button>
-          <!-- Textes -->
           <div class="tpl-section-title">📝 Textes pré-enregistrés</div>
           <div id="tpl-texts-list" class="tpl-list"></div>
           <div class="form-group">
@@ -1206,40 +754,14 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
             <input type="text" class="form-input" id="tpl-t-name" placeholder="Description Loups-Garous"/>
           </div>
           <div class="form-group">
-            <label class="form-label">Texte (description courte)</label>
+            <label class="form-label">Description courte</label>
             <textarea class="form-input" id="tpl-t-short" rows="2" placeholder="Résumé affiché sur la carte…"></textarea>
           </div>
           <div class="form-group">
-            <label class="form-label">Texte long (détail modal)</label>
+            <label class="form-label">Description longue</label>
             <textarea class="form-input" id="tpl-t-long" rows="4" placeholder="Description complète…"></textarea>
           </div>
           <button class="btn btn-accent" style="width:100%" onclick="saveTplText()">+ Enregistrer ce texte</button>
-
-          <div class="form-hint" style="margin-bottom:16px">Héberge tes photos sur <a href="https://cloudinary.com" target="_blank" style="color:var(--accent)">Cloudinary</a> (gratuit) puis colle les URLs ici.</div>
-          <!-- Créer un album -->
-          <div class="form-group" style="display:flex;gap:8px">
-            <input type="text" class="form-input" id="g-album-name" placeholder="Soirée Loups-Garous — Mars 2026" style="flex:1"/>
-            <button class="btn btn-accent" onclick="createAlbum()" style="white-space:nowrap">+ Album</button>
-          </div>
-          <!-- Liste des albums -->
-          <div id="album-list-admin"></div>
-          <!-- Ajouter photo -->
-          <div id="g-add-photo-form" style="display:none;margin-top:16px;padding:14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">
-            <div class="form-label" id="g-add-photo-title" style="margin-bottom:10px"></div>
-            <div class="form-group">
-              <label class="form-label">URL Cloudinary</label>
-              <textarea class="form-input" id="g-photo-urls" rows="3" placeholder="https://res.cloudinary.com/…&#10;Une URL par ligne (ou colle plusieurs d'un coup)"></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Légende (optionnel, appliquée à toutes)</label>
-              <input type="text" class="form-input" id="g-photo-caption" placeholder="Ambiance de la soirée…"/>
-            </div>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-accent" style="flex:1" onclick="addPhotos()">Ajouter</button>
-              <button class="btn btn-ghost" onclick="closeAddPhoto()">Annuler</button>
-            </div>
-          </div>
-        </div>
         </div>
       </div>
     </div>
@@ -1288,7 +810,9 @@ function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr))
       <div class="emodal-meta" id="emodal-meta"></div>
       <div class="emodal-divider"></div>
       <p class="emodal-desc" id="emodal-desc"></p>
-      <div class="emodal-map" id="emodal-map" style="display:none"></div>
+      <div class="emodal-map" id="emodal-map" style="display:none">
+        <iframe id="emodal-map-iframe" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
       <div class="emodal-cta" id="emodal-cta"></div>
     </div>
   </div>
@@ -1359,24 +883,6 @@ function parseMapsName(url){
   return '';
 }
 /* Construit une URL d'embed Maps depuis un lien ou un nom */
-function buildMapsEmbed(mapsUrl, placeName){
-  // Lien raccourci (maps.app.goo.gl) → ne contient pas de coords, on utilise le nom
-  const isShort = mapsUrl && (mapsUrl.includes('maps.app.goo.gl') || mapsUrl.includes('goo.gl'));
-  if(!isShort && mapsUrl){
-    // Priorité 1 : coordonnées GPS dans l'URL longue
-    const coords=mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-    if(coords) return 'https://maps.google.com/maps?q='+coords[1]+','+coords[2]+'&output=embed&z=16';
-    // Priorité 2 : nom dans l'URL longue
-    const m=mapsUrl.match(/\/maps\/place\/([^/@?&]+)/);
-    if(m){
-      const q=decodeURIComponent(m[1].replace(/\+/g,' '));
-      return 'https://maps.google.com/maps?q='+encodeURIComponent(q)+'&output=embed';
-    }
-  }
-  // Priorité 3 : nom du lieu saisi manuellement (marche toujours, même avec lien court)
-  if(placeName) return 'https://maps.google.com/maps?q='+encodeURIComponent(placeName)+'&output=embed';
-  return '';
-}
 window.onMapsUrlInput=function(url){
   const hint=$('f-maps-hint');
   if(!url){hint.textContent='';hint.style.color='';return;}
@@ -1426,7 +932,7 @@ function initFirebase(cfg){
     db=getFirestore(fbApp);
     fbAuth=getAuth(fbApp);
     return true;
-  }catch(e){console.error('Firebase init error',e);return false;}
+  }catch(e){return false;}
 }
 
 function getFbCfg(){return ls.get('fb_cfg',null);}
@@ -1446,19 +952,11 @@ function startListeners(){
     snap.forEach(d=>localEvents.push({id:d.id,...d.data()}));
     localEvents.sort((a,b)=>a.order-b.order||(a.date||'').localeCompare(b.date||''));
     ls.set('cache_events',localEvents);
-    // Auto-suppression des événements expirés
-    const today=new Date().toISOString().slice(0,10);
-    localEvents.filter(e=>e.deleteAt&&e.deleteAt<today).forEach(e=>{
-      deleteDoc(doc(db,'events',e.id)).catch(()=>{});
-    });
-    renderSite();startCountdowns();
+    renderSite();startCountdowns();checkAutoDelete();
     if(isLogged)renderAdminList();
     // Cache le loader dès la première réponse Firebase
     if(window._hl)window._hl();
-  },err=>{
-    console.warn('Firestore events error',err);
-    if(window._hl)window._hl();
-  });
+  },err=>{if(window._hl)window._hl();});
 
   /* Écoute temps réel des paramètres */
   if(unsubSettings)unsubSettings();
@@ -1469,7 +967,7 @@ function startListeners(){
       renderSite();
       if(isLogged)loadSettingsForm();
     }
-  },err=>console.warn('Firestore settings error',err));
+  });
 }
 
 function updateBackendStatus(type,msg,dotClass){
@@ -1490,7 +988,7 @@ function renderSite(){
   const lc=$('logo-container');
   lc.innerHTML=s.logo
     ?'<img class="site-logo" src="'+s.logo+'" alt="Logo"/>'
-    :'<div class="site-logo-ph"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="8" stroke="#613402" stroke-width="1.5"/><circle cx="20" cy="18" r="6" stroke="#613402" stroke-width="1.5"/><path d="M8 34c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="#613402" stroke-width="1.5" stroke-linecap="round"/></svg></div>';
+    :'<div class="site-logo-ph"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="8" stroke="#5C3A21" stroke-width="1.5"/><circle cx="20" cy="18" r="6" stroke="#5C3A21" stroke-width="1.5"/><path d="M8 34c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="#5C3A21" stroke-width="1.5" stroke-linecap="round"/></svg></div>';
   const ev=localEvents.filter(e=>e.status!=='hidden');
   const grid=$('events-grid');
   if(!ev.length){
@@ -1545,9 +1043,8 @@ window.trackClick=function(n){
 /* ══ STATS FIRESTORE ══════════════════════════════════════ */
 async function incrementStat(eventId, field){
   if(!db||!eventId)return;
-  try{
-    await setDoc(doc(db,'stats',eventId),{[field]:increment(1)},{merge:true});
-  }catch(e){/* silencieux */}
+  try{await setDoc(doc(db,'stats',eventId),{[field]:increment(1)},{merge:true});}
+  catch(e){}
 }
 window.incrementStat=incrementStat;
 
@@ -1624,7 +1121,7 @@ window.openEventModal=function(id){
   const mapsLink=e.mapsUrl||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||''));
   $('emodal-meta').innerHTML=
     (e.date?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+formatDateLong(e.date,e.time)+'</strong>'+'<div class="cal-trigger" onclick="toggleCalDropdown(event)" style="margin-left:auto"><svg width="12" height="12" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"/><line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"/><line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"/></svg> + Agenda<div class="cal-dropdown" id="cal-dd"><a class=\"cal-option\" id=\"cal-google-link\" href=\"#\" target=\"_blank\" rel=\"noopener\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"/><line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"/><line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"/></svg>Google Agenda</a><button class=\"cal-option\" id=\"cal-ical-btn\" onclick=\"\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>iCal / Apple</button></div></div></div>':'')
-    +(e.place?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span><a href="'+mapsLink+'" target="_blank" rel="noopener noreferrer">'+e.place+'</a><span style="color:var(--mid);font-size:12px"> — ouvrir Maps ↗</span></span></div>':'')
+    +(e.place?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span><a href="'+mapsLink+'" target="_blank" rel="noopener noreferrer">'+e.place+'</a><span style="color:var(--teal);font-size:12px"> — ouvrir Maps ↗</span></span></div>':'')
     +(e.price?'<div class="emodal-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.88 13.76V17h-1.75v-1.17c-1.07-.23-2.27-.78-2.27-2.42h1.6c0 .87.58 1.29 1.42 1.29.87 0 1.33-.42 1.33-1.05 0-.61-.35-.93-1.47-1.24-1.57-.44-2.7-1.04-2.7-2.55 0-1.32.99-2.15 2.09-2.4V6h1.75v1.49c1.08.27 1.92.96 1.92 2.2h-1.6c0-.8-.47-1.18-1.32-1.18-.82 0-1.26.42-1.26 1 0 .58.39.87 1.57 1.21 1.57.44 2.6 1.09 2.6 2.6 0 1.4-1.06 2.24-2.41 2.44z"/></svg><strong>'+e.price+'</strong></div>':'');
 
   // Description
@@ -1633,6 +1130,7 @@ window.openEventModal=function(id){
   desc.textContent=txt;desc.style.display=txt?'block':'none';
 
   // Carte Maps — utilise les coordonnées du lien si possible, sinon adresse complète
+  // Bouton Google Maps
   const mapWrap=$('emodal-map');
   const mapsLink2=e.mapsUrl||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||''));
   if(e.place||e.mapsUrl){
@@ -1647,11 +1145,10 @@ window.openEventModal=function(id){
   }
 
   // CTA
-  const shareBtn='<button class="share-btn" onclick="shareEvent(\''+e.id+'\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>';
+  const shareBtn='<button class="share-btn" onclick="shareEvent(\''+e.id+'\')">⧆</button>';
   $('emodal-cta').innerHTML=sold
     ?'<div class="emodal-sold" style="flex:1">⛔ Cet événement est complet</div>'+shareBtn
     :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>'+shareBtn;
-
 
   // Boutons Agenda
   // Met à jour les liens agenda dans le dropdown
@@ -1684,195 +1181,20 @@ window.toggleCalDropdown=function(ev){
 document.addEventListener('click',()=>{
   const dd=$('cal-dd');if(dd)dd.classList.remove('open');
 });
-window.closeEventModal=function(fromPopstate){
+window.closeEventModal=function(){
   $('event-modal').classList.remove('open');
   document.body.style.overflow='';
-  $('emodal-map').innerHTML='';
-  if(!fromPopstate&&location.hash.startsWith('#e-'))history.back();
+  $('emodal-map-iframe').src=''; // arrête le chargement Maps
 };
-// Swipe retour : ferme uniquement quand on passe au-delà de notre propre entrée
-window.addEventListener('popstate',function(ev){
-  if($('event-modal').classList.contains('open')&&!ev.state?.modal){
-    closeEventModal(true);
-  }
-});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEventModal();});
-
-
-/* ══ PARTAGE ÉVÉNEMENT ════════════════════════════════════ */
-window.shareEvent=async function(id){
-  const e=localEvents.find(ev=>ev.id===id);if(!e)return;
-  const url=location.origin+location.pathname+'#e-'+id;
-  if(navigator.share){
-    try{await navigator.share({title:e.name,text:'Découvre cet événement : '+e.name,url});return;}catch(err){}
-  }
-  // Fallback : copier dans le presse-papiers
-  try{
-    await navigator.clipboard.writeText(url);
-    toast('Lien copié ✓');
-  }catch{
-    prompt('Copie ce lien :',url);
-  }
-};
-
-
-
-/* ══ DÉROULANTS FORMULAIRE ════════════════════════════════ */
-// Ferme tous les menus si clic extérieur
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.input-with-dd')){
-    document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-  }
-});
-window.toggleDd=function(id){
-  const menu=document.getElementById(id);if(!menu)return;
-  const wasOpen=menu.classList.contains('open');
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-  if(!wasOpen){
-    fillDdMenu(id);
-    menu.classList.add('open');
-  }
-};
-function fillDdMenu(id){
-  const menu=document.getElementById(id);if(!menu)return;
-  if(id==='dd-venues'){
-    const arr=getTplVenues();
-    menu.innerHTML=arr.length
-      ?arr.map((v,i)=>'<div class="dd-opt" onclick="pickVenue('+i+')"><span>📍 '+v.name+'</span><span class="dd-opt-sub">'+v.maps+'</span></div>').join('')
-      +'<div class="dd-empty">+ Enregistre des lieux dans l\'onglet Modèles</div>'
-      :'<div class="dd-empty">Aucun lieu — va dans l\'onglet Modèles</div>';
-  }else if(id==='dd-names'){
-    const arr=getTplNames();
-    menu.innerHTML=arr.length
-      ?arr.map((n,i)=>'<div class="dd-opt" onclick="pickName('+i+')"><span>🏷 '+n+'</span></div>').join('')
-      +'<div class="dd-empty">+ Enregistre des noms dans l\'onglet Modèles</div>'
-      :'<div class="dd-empty">Aucun nom — va dans l\'onglet Modèles</div>';
-  }else if(id==='dd-texts'){
-    const arr=getTplTexts();
-    menu.innerHTML=arr.length
-      ?arr.map((t,i)=>'<div class="dd-opt" onclick="pickText('+i+')"><span>📝 '+t.name+'</span><span class="dd-opt-sub">'+(t.short||'').slice(0,50)+'</span></div>').join('')
-      +'<div class="dd-empty">+ Enregistre des textes dans l\'onglet Modèles</div>'
-      :'<div class="dd-empty">Aucun texte — va dans l\'onglet Modèles</div>';
-  }
-}
-window.pickVenue=function(i){
-  const v=getTplVenues()[i];if(!v)return;
-  $('f-place').value=v.name;
-  if(v.maps){$('f-maps-url').value=v.maps;onMapsUrlInput(v.maps);}
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-};
-window.pickName=function(i){
-  const n=getTplNames()[i];if(!n)return;
-  $('f-name').value=n;
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-};
-window.pickText=function(i){
-  const t=getTplTexts()[i];if(!t)return;
-  if(t.short)$('f-desc').value=t.short;
-  if(t.long)$('f-desc-long').value=t.long;
-  document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
-};
-/* Noms d'événements */
-function getTplNames(){try{return JSON.parse(localStorage.getItem('tpl_names'))||[];}catch{return[];}}
-function saveTplNames(arr){localStorage.setItem('tpl_names',JSON.stringify(arr));}
-/* ══ TEMPLATES ════════════════════════════════════════════ */
-function getTplVenues(){try{return JSON.parse(localStorage.getItem('tpl_venues'))||[];}catch{return[];}}
-function getTplTexts(){try{return JSON.parse(localStorage.getItem('tpl_texts'))||[];}catch{return[];}}
-function saveTplVenues(arr){localStorage.setItem('tpl_venues',JSON.stringify(arr));}
-function saveTplTexts(arr){localStorage.setItem('tpl_texts',JSON.stringify(arr));}
-
-window.saveTplName=function(){
-  const n=$('tpl-n-name').value.trim();
-  if(!n){toast('Nom requis','error');return;}
-  const arr=getTplNames();
-  if(arr.includes(n)){toast('Déjà enregistré','error');return;}
-  arr.push(n);saveTplNames(arr);
-  $('tpl-n-name').value='';
-  renderTemplates();toast('Nom enregistré ✓');
-};
-window.delTplName=function(i){
-  const arr=getTplNames();arr.splice(i,1);saveTplNames(arr);renderTemplates();
-};
-window.renderTemplates=function(){
-  const venues=getTplVenues();
-  const texts=getTplTexts();
-  const names=getTplNames();
-  const vl=$('tpl-venues-list');
-  const tl=$('tpl-texts-list');
-  const nl=$('tpl-names-list');
-  if(nl)nl.innerHTML=names.length?names.map((n,i)=>'<div class="tpl-item"><div class="tpl-item-name" style="flex:1">🏷 '+n+'</div><button class="tpl-del-btn" onclick="delTplName('+i+')">✕</button></div>').join(''):'<p style="font-size:12px;color:var(--muted)">Aucun nom enregistré</p>';
-  if(vl)vl.innerHTML=venues.length?venues.map((v,i)=>
-    '<div class="tpl-item">'
-    +'<div style="flex:1"><div class="tpl-item-name">'+v.name+'</div>'
-    +'<div class="tpl-item-sub">'+v.maps+'</div></div>'
-    +'<button class="tpl-use-btn" onclick="applyVenue('+i+')">Utiliser</button>'
-    +'<button class="tpl-del-btn" onclick="delTplVenue('+i+')">✕</button>'
-    +'</div>'
-  ).join(''):'<p style="font-size:12px;color:var(--muted)">Aucun lieu enregistré</p>';
-  if(tl)tl.innerHTML=texts.length?texts.map((t,i)=>
-    '<div class="tpl-item">'
-    +'<div style="flex:1"><div class="tpl-item-name">'+t.name+'</div>'
-    +'<div class="tpl-item-sub">'+(t.short||t.long||'').slice(0,60)+'…</div></div>'
-    +'<button class="tpl-use-btn" onclick="applyText('+i+')">Utiliser</button>'
-    +'<button class="tpl-del-btn" onclick="delTplText('+i+')">✕</button>'
-    +'</div>'
-  ).join(''):'<p style="font-size:12px;color:var(--muted)">Aucun texte enregistré</p>';
-};
-
-window.saveTplVenue=function(){
-  const name=$('tpl-v-name').value.trim();
-  const maps=$('tpl-v-maps').value.trim();
-  if(!name){toast('Nom requis','error');return;}
-  const arr=getTplVenues();arr.push({name,maps});saveTplVenues(arr);
-  $('tpl-v-name').value='';$('tpl-v-maps').value='';
-  renderTemplates();renderVenueChips();toast('Lieu enregistré ✓');
-};
-window.saveTplText=function(){
-  const name=$('tpl-t-name').value.trim();
-  const short=$('tpl-t-short').value.trim();
-  const long=$('tpl-t-long').value.trim();
-  if(!name){toast('Nom requis','error');return;}
-  const arr=getTplTexts();arr.push({name,short,long});saveTplTexts(arr);
-  $('tpl-t-name').value='';$('tpl-t-short').value='';$('tpl-t-long').value='';
-  renderTemplates();renderTextChips();toast('Texte enregistré ✓');
-};
-window.delTplVenue=function(i){
-  const arr=getTplVenues();arr.splice(i,1);saveTplVenues(arr);
-  renderTemplates();renderVenueChips();
-};
-window.delTplText=function(i){
-  const arr=getTplTexts();arr.splice(i,1);saveTplTexts(arr);
-  renderTemplates();renderTextChips();
-};
-window.applyVenue=function(i){
-  const v=getTplVenues()[i];if(!v)return;
-  switchTab('form',0);
-  $('f-place').value=v.name;
-  $('f-maps-url').value=v.maps;
-  if(v.maps)onMapsUrlInput(v.maps);
-  toast('Lieu appliqué ✓');
-};
-window.applyText=function(i){
-  const t=getTplTexts()[i];if(!t)return;
-  switchTab('form',0);
-  if(t.short)$('f-desc').value=t.short;
-  if(t.long)$('f-desc-long').value=t.long;
-  toast('Texte appliqué ✓');
-};
-
 
 /* ══ ADMIN TRIGGER ═══════════════════════════════════════ */
 let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
 window.addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdmin();});
 if(location.hash==='#admin')setTimeout(openAdmin,300);
-// Ouvrir directement un événement si lien partagé
-if(location.hash.startsWith('#e-')){
-  const sharedId=location.hash.slice(3);
-  // Attendre que les events soient chargés
-  const tryOpen=()=>{if(localEvents.length){openEventModal(sharedId);}else{setTimeout(tryOpen,300);}};
-  setTimeout(tryOpen,400);
-}
+if(location.hash==='#don')setTimeout(showDonPage,400);
+if(location.hash.startsWith('#e-')){const _sid=location.hash.slice(3);const _tryOpen=()=>{if(localEvents.length)openEventModal(_sid);else setTimeout(_tryOpen,300);};setTimeout(_tryOpen,400);}
 
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
 window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
@@ -1954,70 +1276,23 @@ function renderAdminList(){
   const list=$('admin-event-list');
   if(!localEvents.length){list.innerHTML='<p style="color:var(--muted);font-size:13px">Aucun événement. Crée-en un !</p>';return;}
   list.innerHTML=localEvents.map(ev=>
-    '<div class="admin-event-item" draggable="true" data-id="'+ev.id+'">'
-    +'<div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">'+'<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:12px;line-height:1" data-action="move-up" title="Monter">↑</button>'+'<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:12px;line-height:1" data-action="move-down" title="Descendre">↓</button>'+'</div>'
+    '<div class="admin-event-item">'
     +(ev.img?'<img class="admin-thumb" src="'+ev.img+'" alt=""/>'
       :'<div class="admin-thumb" style="display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="21 15 16 10 5 21"/></svg></div>')
     +'<div class="admin-event-info">'
     +'<div class="admin-event-name">'+(ev.status==='coming_soon'?'⏳ [Bientôt] '+ev.name:ev.name)+'</div>'
     +'<div class="admin-event-meta">'+(ev.date?formatDate(ev.date,ev.time):'—')
-    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+(ev.deleteAt?'<span class="delete-badge">🗑 '+new Date(ev.deleteAt+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+'</span>':'')+'</div></div>'
+    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+'</div></div>'
     +'<div class="admin-event-actions">'
+    +'<div style="display:flex;flex-direction:column;gap:2px"><button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:11px" onclick="moveEvent(\''+ev.id+'\',event,-1)">↑</button><button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:11px" onclick="moveEvent(\''+ev.id+'\',event,1)">↓</button></div>'
     +'<button class="btn btn-icon btn-sm" title="Modifier" onclick="openEventForm(\''+ev.id+'\')">✏️</button>'
     +'<button class="btn btn-icon btn-sm" title="Dupliquer" onclick="duplicateEvent(\''+ev.id+'\')">📋</button>'
     +'<button class="btn btn-warn btn-sm" onclick="toggleSoldOut(\''+ev.id+'\')">'+(ev.status==='soldout'?'↩':'⛔')+'</button>'
     +'<button class="btn btn-danger btn-sm" onclick="deleteEvent(\''+ev.id+'\')">🗑</button>'
     +'</div></div>'
   ).join('');
-  initDragDrop();
 }
 
-
-/* ══ DRAG & DROP ADMIN ════════════════════════════════════ */
-function initDragDrop(){
-  const list=$('admin-event-list');
-  if(!list)return;
-  let dragSrc=null;
-  list.querySelectorAll('.admin-event-item').forEach(item=>{
-    item.addEventListener('dragstart',e=>{
-      dragSrc=item;
-      item.classList.add('dragging');
-      e.dataTransfer.effectAllowed='move';
-    });
-    item.addEventListener('dragend',()=>{
-      item.classList.remove('dragging');
-      list.querySelectorAll('.admin-event-item').forEach(i=>i.classList.remove('drag-over'));
-    });
-    item.addEventListener('dragover',e=>{
-      e.preventDefault();
-      if(item!==dragSrc){
-        list.querySelectorAll('.admin-event-item').forEach(i=>i.classList.remove('drag-over'));
-        item.classList.add('drag-over');
-      }
-    });
-    item.addEventListener('drop',async e=>{
-      e.preventDefault();
-      if(!dragSrc||dragSrc===item)return;
-      // Récupère l'ordre actuel des IDs dans le DOM
-      const items=[...list.querySelectorAll('.admin-event-item')];
-      const srcIdx=items.indexOf(dragSrc);
-      const tgtIdx=items.indexOf(item);
-      // Réorganise localEvents
-      const moved=localEvents.splice(srcIdx,1)[0];
-      localEvents.splice(tgtIdx,0,moved);
-      // Réassigne les ordres
-      localEvents.forEach((ev,i)=>ev.order=i*1000);
-      // Sauvegarde dans Firestore
-      if(db){
-        try{
-          await Promise.all(localEvents.map(ev=>updateDoc(doc(db,'events',ev.id),{order:ev.order})));
-          toast('Ordre sauvegardé ✓');
-        }catch(err){toast('Erreur sauvegarde','error');}
-      }
-      renderAdminList();
-    });
-  });
-}
 /* ══ EVENT FORM ══════════════════════════════════════════ */
 window.openEventForm=function(id){
   switchTab('form',0);editingId=id;
@@ -2031,13 +1306,9 @@ window.openEventForm=function(id){
   $('f-link').value=ev?.link||'';$('f-desc').value=ev?.desc||'';
   $('f-desc-long').value=ev?.descLong||'';
   $('f-status').value=ev?.status||'active';
-  onStatusChange(ev?.status||'active');
   $('f-delete-at').value=ev?.deleteAt||'';
-  if(ev?.revealAt){
-    const d=new Date(ev.revealAt);
-    $('f-reveal-date').value=d.toLocaleDateString('en-CA');
-    $('f-reveal-time').value=d.toTimeString().slice(0,5);
-  }else{$('f-reveal-date').value='';$('f-reveal-time').value='';}
+  onStatusChange(ev?.status||'active');
+  if(ev?.revealAt){const d=new Date(ev.revealAt);$('f-reveal-date').value=d.toLocaleDateString('en-CA');$('f-reveal-time').value=d.toTimeString().slice(0,5);}else{$('f-reveal-date').value='';$('f-reveal-time').value='';}
   previewImg(ev?.img||'');$('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
 };
 window.resetForm=function(){
@@ -2067,7 +1338,7 @@ window.saveEvent=async function(){
     descLong:$('f-desc-long').value.trim(),
     status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now(),
     revealAt:($('f-status').value==='coming_soon'&&$('f-reveal-date').value)?new Date($('f-reveal-date').value+'T'+($('f-reveal-time').value||'00:00')+':00').getTime():null,
-    deleteAt:$('f-delete-at').value?$('f-delete-at').value:null};
+    deleteAt:$('f-delete-at').value||null};
   try{
     if(!db)throw new Error('Firebase non connecté. Configure-le d\'abord.');
     if(editingId){await updateDoc(doc(db,'events',editingId),data);toast('Mis à jour ✓');}
@@ -2122,14 +1393,10 @@ function loadSettingsForm(){
   $('s-tagline').value=localSettings.tagline||'';
   $('s-logo').value=localSettings.logo||'';
   $('s-email').value=localSettings.email||'';
-  $('s-cloudinary').value=ls.get('cloudinary_cloud','');
-  $('s-gallery-pwd').value=ls.get('gallery_pwd','');
 }
 window.saveSettings=async function(){
   const s={name:$('s-name').value.trim(),name2:$('s-name2').value.trim(),
     tagline:$('s-tagline').value.trim(),logo:$('s-logo').value.trim(),email:$('s-email').value.trim()};
-  const cld=$('s-cloudinary').value.trim();if(cld)ls.set('cloudinary_cloud',cld);
-  ls.set('gallery_pwd',$('s-gallery-pwd').value);
   localSettings={...localSettings,...s};
   ls.set('cache_settings',localSettings);
   try{
@@ -2145,7 +1412,6 @@ window.switchTab=function(name,idx){
   document.querySelectorAll('.admin-tab-panel').forEach(p=>p.classList.remove('active'));
   $('tab-'+name).classList.add('active');
 };
-
 
 window.downloadIcal=function(id){
   const e=localEvents.find(ev=>ev.id===id);if(!e||!e.date)return;
@@ -2179,12 +1445,11 @@ window.addEventListener('scroll',function(){
   if(a)a.style.display='none';
 },{once:true,passive:true});
 
-
 /* ══ COUNTDOWN & AUTO-REVEAL ══════════════════════════════ */
 window.onStatusChange=function(v){
-  $('reveal-date-group').style.display=v==='coming_soon'?'block':'none';
+  const g=$('reveal-date-group');
+  if(g)g.style.display=v==='coming_soon'?'block':'none';
 };
-
 let cdInterval=null;
 function startCountdowns(){
   if(cdInterval)clearInterval(cdInterval);
@@ -2194,11 +1459,7 @@ function startCountdowns(){
       const diff=e.revealAt-now;
       const el=document.getElementById('cd-'+e.id);
       if(!el)return;
-      if(diff<=0){
-        // Révélation automatique !
-        if(db)updateDoc(doc(db,'events',e.id),{status:'active',revealAt:null}).catch(()=>{});
-        return;
-      }
+      if(diff<=0){if(db)updateDoc(doc(db,'events',e.id),{status:'active',revealAt:null}).catch(()=>{});return;}
       const days=Math.floor(diff/86400000);
       const hours=Math.floor((diff%86400000)/3600000);
       const mins=Math.floor((diff%3600000)/60000);
@@ -2210,515 +1471,121 @@ function startCountdowns(){
       if(blocks[3])blocks[3].textContent=String(secs).padStart(2,'0');
     });
   }
-  tick();
-  cdInterval=setInterval(tick,1000);
+  tick();cdInterval=setInterval(tick,1000);
 }
 
-/* ══ GALERIE PHOTO ════════════════════════════════════════ */
-let localAlbums=[];let unsubAlbums=null;
-let lbPhotos=[];let lbIdx=0;
-let currentAlbumId=null;
+/* ══ PARTAGE ÉVÉNEMENT ════════════════════════════════════ */
+window.shareEvent=async function(id){
+  const e=localEvents.find(ev=>ev.id===id);if(!e)return;
+  const url=location.origin+location.pathname+'#e-'+id;
+  if(navigator.share){try{await navigator.share({title:e.name,url});return;}catch(err){}}
+  try{await navigator.clipboard.writeText(url);toast('Lien copié ✓');}
+  catch{prompt('Copie ce lien :',url);}
+};
 
-function startAlbumListener(){
-  if(!db||unsubAlbums)return;
-  unsubAlbums=onSnapshot(collection(db,'albums'),snap=>{
-    if(_savingOrder)return; // Ignorer les snapshots intermédiaires pendant la sauvegarde
-    localAlbums=[];
-    snap.forEach(d=>localAlbums.push({id:d.id,...d.data()}));
-    localAlbums.sort((a,b)=>(a.order||a.createdAt||0)-(b.order||b.createdAt||0));
-    renderGalleryPublic();
-    if(isLogged&&!_savingOrder)renderGalleryAdmin();
+/* ══ AUTO-SUPPRESSION ════════════════════════════════════= */
+function checkAutoDelete(){
+  const today=new Date().toISOString().slice(0,10);
+  localEvents.filter(e=>e.deleteAt&&e.deleteAt<today).forEach(e=>{
+    if(db)deleteDoc(doc(db,'events',e.id)).catch(()=>{});
   });
 }
 
-/* ── PUBLIC ───────────────────────────────────────────── */
-
-function fixUrl(url, size='thumb'){
-  if(!url)return url;
-  if(url.includes('res.cloudinary.com')&&url.includes('/upload/')){
-    // Conversion HEIC → JPG via transformation
-    const isHeic=/\.(heic|heif)(\?|$)/i.test(url);
-    let transform='';
-    if(size==='thumb') transform='w_600,h_450,c_fill,q_auto,f_auto';
-    else if(size==='full') transform='w_1200,q_auto,f_auto';
-    else transform='f_auto';
-    if(isHeic){
-      url=url.replace('/upload/','/upload/'+transform+'/');
-      url=url.replace(/\.(heic|heif)(\?.*)?$/i,'.jpg');
-    } else {
-      url=url.replace('/upload/','/upload/'+transform+'/');
-    }
-  }
-  return url;
-}
-
-let currentAlbumView=null;
-
-function renderGalleryPublic(){
-  const hasPhotos=localAlbums.some(a=>a.photos&&a.photos.length>0);
-  const btn=$('btn-gallery-page');
-  if(btn)btn.style.display=hasPhotos?'inline-flex':'none';
-  // Si on était sur un album, rafraîchir la vue album
-  if(currentAlbumView)renderAlbumView(currentAlbumView);
-  else renderFolderView();
-}
-
-function renderFolderView(){
-  currentAlbumView=null;
-  const albumsWithPhotos=localAlbums.filter(a=>a.photos&&a.photos.length>0);
-  const empty=$('gallery-empty');
-  if(empty)empty.style.display=albumsWithPhotos.length?'none':'block';
-  $('album-list-public').innerHTML='<div class="folder-grid">'
-    +albumsWithPhotos.map(a=>{
-      const photos=a.photos||[];
-      const cover=a.coverUrl||fixUrl((typeof a.cover==='number'?photos[a.cover]:photos[0])?.url||'','thumb');
-      return '<div class="folder-card" data-folder="'+a.id+'">'
-        +(cover?'<img class="folder-cover" src="'+cover+'" alt="" draggable="false" oncontextmenu="return false"/>':'')
-        +'<div class="folder-overlay"></div>'
-        +'<div class="folder-info">'
-        +'<div class="folder-name">'+a.name+'</div>'
-        +'<div class="folder-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</div>'
-        +'</div></div>';
-    }).join('')
-    +'</div>';
-}
-
-function renderAlbumView(albumId){
-  const a=localAlbums.find(x=>x.id===albumId);if(!a)return renderFolderView();
-  currentAlbumView=albumId;
-  const photos=a.photos||[];
-  $('album-list-public').innerHTML=
-    '<button class="album-back-btn" id="gallery-back-btn">← Tous les albums</button>'
-    +'<div class="album-view-title">'+a.name+'</div>'
-    +'<div class="album-view-count">'+photos.length+' photo'+(photos.length>1?'s':'')+'</div>'
-    +'<div class="photo-grid">'
-    +photos.map((p,i)=>{
-      if(p.type==='video'){
-        const thumb='https://img.youtube.com/vi/'+p.ytId+'/hqdefault.jpg';
-        return '<div class="photo-item is-video" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
-          +'<img class="photo-bg" src="'+thumb+'" alt="" draggable="false" oncontextmenu="return false"/>'
-          +(p.caption?'<div class="gallery-caption">'+p.caption+'</div>':'')
-          +'</div>';
-      }
-      return '<div class="photo-item" data-album="'+a.id+'" data-idx="'+i+'" oncontextmenu="return false">'
-        +'<img class="photo-bg" src="'+fixUrl(p.url)+'" alt="" draggable="false" oncontextmenu="return false"/>'
-        +'</div>';
-    }).join('')
-    +'</div>';
-}
-
-window.openAlbum=function(id){
-  history.pushState({album:id},'','#galerie-'+id);
-  renderAlbumView(id);
-  window.scrollTo(0,0);
-};
-
-/* ── LIGHTBOX ─────────────────────────────────────────── */
-window.openLb=function(albumId,idx){
-  const album=localAlbums.find(a=>a.id===albumId);
-  if(!album)return;
-  lbPhotos=album.photos||[];lbIdx=idx;
-  updateLb();
-  $('photo-lb').classList.add('open');
-  document.body.style.overflow='hidden';
-  history.pushState({lb:true},'','');
-};
-window.stopLbVideo=function(){
-  const vw=document.getElementById('lb-video-el');
-  if(vw){vw.innerHTML='';vw.style.display='none';}
-  const sp=$('lb-spinner');if(sp)sp.style.display='none';
-  $('photo-lb-img').style.display='block';
-  $('photo-lb-img').style.filter='none';
-};
-window.closeLb=function(fromPop){
-  stopLbVideo();
-  $('photo-lb').classList.remove('open');
-  document.body.style.overflow='';
-  if(!fromPop&&history.state?.lb)history.back();
-};
-window.lbNav=function(dir){
-  stopLbVideo();
-  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;updateLb();
-};
-function updateLb(){
-  const p=lbPhotos[lbIdx];
-  const wrap=document.querySelector('.lb-img-wrap');
-  if(p.type==='video'){
-    $('photo-lb-img').style.display='none';
-    let vw=document.getElementById('lb-video-el');
-    if(!vw){vw=document.createElement('div');vw.id='lb-video-el';vw.className='lb-video-wrap';wrap.insertBefore(vw,wrap.firstChild);}
-    vw.style.display='block';
-    vw.innerHTML='<iframe src="https://www.youtube.com/embed/'+p.ytId+'?autoplay=1&rel=0" allowfullscreen allow="autoplay"></iframe>';
-  }else{
-    const vw=document.getElementById('lb-video-el');
-    if(vw){vw.style.display='none';vw.innerHTML='';}
-    const img=$('photo-lb-img');
-    img.style.display='block';
-    // 1. Afficher immédiatement la miniature (déjà en cache)
-    const thumbUrl=fixUrl(p.url,'thumb');
-    const fullUrl=fixUrl(p.url,'full');
-    img.src=thumbUrl;
-    img.style.filter='blur(4px)';
-    img.style.transition='filter .3s';
-    // Spinner
-    let sp=$('lb-spinner');
-    if(!sp){sp=document.createElement('div');sp.id='lb-spinner';sp.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:rgba(255,255,255,.8);border-radius:50%;animation:spin .7s linear infinite;z-index:10;pointer-events:none';document.getElementById('photo-lb').appendChild(sp);}
-    sp.style.display='block';
-    // 2. Charger la pleine résolution en arrière-plan
-    const hi=new Image();
-    hi.onload=()=>{
-      if(img.src===thumbUrl||img.src===hi.src){
-        img.src=hi.src;
-        img.style.filter='none';
-        if(sp)sp.style.display='none';
-      }
-    };
-    hi.src=fullUrl;
-  }
-  $('lb-caption').textContent=p.caption||'';
-  // Précharger les images adjacentes
-  [lbIdx+1, lbIdx-1].forEach(i=>{
-    const ni=lbPhotos[(i+lbPhotos.length)%lbPhotos.length];
-    if(ni&&ni.type!=='video'){new Image().src=fixUrl(ni.url,'full');}
-  });
-}
-window.addEventListener('popstate',function(e){
-  if($('photo-lb').classList.contains('open')&&!e.state?.lb)closeLb(true);
-});
-document.getElementById('album-list-public').addEventListener('click',e=>{
-  const folder=e.target.closest('.folder-card');
-  if(folder){openAlbum(folder.dataset.folder);return;}
-  if(e.target.id==='gallery-back-btn'||e.target.closest('#gallery-back-btn')){
-    currentAlbumView=null;
-    history.back();
-    renderFolderView();
-    return;
-  }
-  const item=e.target.closest('.photo-item');
-  if(item)openLb(item.dataset.album,parseInt(item.dataset.idx));
-});
-document.addEventListener('keydown',e=>{
-  if(!$('photo-lb').classList.contains('open'))return;
-  if(e.key==='ArrowLeft')lbNav(-1);
-  if(e.key==='ArrowRight')lbNav(1);
-  if(e.key==='Escape')closeLb();
-});
-
-/* ── ADMIN ────────────────────────────────────────────── */
-window.renderGalleryAdmin=function(){
-  const el=$('album-list-admin');if(!el)return;
-  if(!localAlbums.length){
-    el.innerHTML='<p style="font-size:13px;color:var(--muted)">Aucun album. Crée-en un !</p>';return;
-  }
-  el.innerHTML=localAlbums.map(a=>{
-    const photos=a.photos||[];
-    const coverIdx=typeof a.cover==='number'?a.cover:0;
-    return '<div class="album-admin-item" data-id="'+a.id+'">'
-      +'<div class="album-admin-header">'
-      +'<div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">'+'<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:12px;line-height:1" data-action="move-up" title="Monter">↑</button>'+'<button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:12px;line-height:1" data-action="move-down" title="Descendre">↓</button>'+'</div>'
-      +'<span class="album-admin-name" id="aname-'+a.id+'">📁 '+a.name+'</span>'
-      +'<span class="album-admin-count">'+photos.length+' média'+(photos.length>1?'s':'')+'</span>'
-      +'<button class="btn btn-ghost btn-sm" style="padding:4px 8px;font-size:11px" data-action="rename">✏️</button>'
-      +'<button class="btn btn-accent btn-sm" style="padding:4px 10px;font-size:11px" data-action="add-photos" data-name="'+a.name.replace(/"/g,'&quot;')+'">+ Photos</button>'
-      +'<button class="btn btn-ghost btn-sm" style="padding:4px 8px;font-size:11px" data-action="edit-cover" data-cover="'+(a.coverUrl||'')+'" data-name="'+a.name+'">🖼 Couv.</button>'
-      +'<button class="btn btn-danger btn-sm" data-action="del-album" style="padding:4px 8px">🗑</button>'
-      +'</div>'
-      +'<div class="album-admin-body" id="ab-'+a.id+'">'
-      +(photos.length
-        ?'<div class="album-photo-grid">'+photos.map((p,i)=>{
-            const isVideo=p.type==='video';
-            const isCover=coverIdx===i;
-            const thumb=isVideo
-              ?'https://img.youtube.com/vi/'+p.ytId+'/default.jpg'
-              :fixUrl(p.url);
-            return '<div class="album-photo-thumb" style="'+(isCover?'outline:2px solid var(--accent);':'')+'">'
-              +'<img src="'+thumb+'" alt="" oncontextmenu="return false" ondragstart="return false" style="'+(isVideo?'opacity:.8':'')+'"/>'
-              +(isVideo?'<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;pointer-events:none">▶</div>':'')
-              +(isCover?'<div class="album-photo-cover-badge">★</div>':'')
-              +'<button class="album-photo-del" data-action="del-photo" data-idx="'+i+'">✕</button>'
-              +(!isCover&&!isVideo?'<button class="album-photo-cover-btn" data-action="set-cover" data-idx="'+i+'">★ Couv.</button>':'')
-              +'</div>';
-          }).join('')+'</div>'
-        :'<p style="font-size:12px;color:var(--muted)">Pas encore de médias.</p>'
-      )
-      +'</div>'
-      +'</div>';
-  }).join('');
-  el.onclick=function(e){
-    const item=e.target.closest('.album-admin-item');if(!item)return;
-    const id=item.dataset.id;
-    if(e.target.dataset.action==='move-up'){
-      e.stopPropagation();moveAlbum(id,-1);
-    } else if(e.target.dataset.action==='move-down'){
-      e.stopPropagation();moveAlbum(id,1);
-    } else if(e.target.dataset.action==='rename'){
-      e.stopPropagation();renameAlbum(id);
-    } else if(e.target.dataset.action==='edit-cover'){
-      e.stopPropagation();
-      const newUrl=prompt('URL de la couverture (Imgur) :', e.target.dataset.cover||'');
-      if(newUrl!==null)setCoverUrl(id,newUrl.trim());
-    } else if(e.target.dataset.action==='add-photos'){
-      e.stopPropagation();openAddPhoto(id,e.target.dataset.name);
-    } else if(e.target.dataset.action==='del-album'){
-      e.stopPropagation();deleteAlbum(id);
-    } else if(e.target.dataset.action==='set-cover'){
-      e.stopPropagation();setCover(id,parseInt(e.target.dataset.idx));
-    } else if(e.target.dataset.action==='del-photo'){
-      e.stopPropagation();deletePhoto(id,parseInt(e.target.dataset.idx));
-    } else if(e.target.closest('.album-admin-header')&&!e.target.closest('button')&&!e.target.closest('.drag-handle')){
-      toggleAlbumAdmin(id);
-    }
-  };
-};
-
-let _savingOrder=false;
-window.moveAlbum=function(id,dir){
-  const idx=localAlbums.findIndex(a=>a.id===id);
+/* ══ ORDRE ÉVÉNEMENTS ════════════════════════════════════= */
+let _savingEvOrder=false;
+window.moveEvent=function(id,ev,dir){
+  ev.stopPropagation();
+  const idx=localEvents.findIndex(e=>e.id===id);
   const newIdx=idx+dir;
-  if(newIdx<0||newIdx>=localAlbums.length)return;
-  // Swap immédiat dans le tableau local
-  const tmp=localAlbums[idx];
-  localAlbums[idx]=localAlbums[newIdx];
-  localAlbums[newIdx]=tmp;
-  localAlbums.forEach((a,i)=>a.order=i*1000);
-  // Afficher tout de suite sans attendre Firestore
-  renderGalleryAdmin();
-  // Sauvegarder en arrière-plan (les onSnapshot intermédiaires sont ignorés)
-  _savingOrder=true;
-  Promise.all(localAlbums.map(a=>updateDoc(doc(db,'albums',a.id),{order:a.order})))
-    .then(()=>{toast('Ordre mis à jour ✓');})
-    .catch(()=>{toast('Erreur sauvegarde','error');})
-    .finally(()=>{
-      _savingOrder=false;
-      renderGalleryPublic();
-      if(isLogged)renderGalleryAdmin();
-    });
+  if(newIdx<0||newIdx>=localEvents.length)return;
+  const tmp=localEvents[idx];localEvents[idx]=localEvents[newIdx];localEvents[newIdx]=tmp;
+  localEvents.forEach((e,i)=>e.order=i*1000);
+  _savingEvOrder=true;
+  renderAdminList();
+  Promise.all(localEvents.map(e=>updateDoc(doc(db,'events',e.id),{order:e.order})))
+    .then(()=>toast('Ordre mis à jour ✓'))
+    .catch(()=>toast('Erreur','error'))
+    .finally(()=>{_savingEvOrder=false;});
 };
-window.renameAlbum=async function(id){
-  const a=localAlbums.find(x=>x.id===id);if(!a)return;
-  const newName=prompt('Nouveau nom de l\'album :',a.name);
-  if(!newName||newName===a.name)return;
+
+/* ══ TEMPLATES ════════════════════════════════════════════ */
+/* ══ TEMPLATES — stockés dans Firestore ════════════════════ */
+let localTpl={names:[],venues:[],texts:[]};
+
+async function loadTpl(){
+  if(!db)return;
   try{
-    await updateDoc(doc(db,'albums',id),{name:newName.trim()});
-    toast('Album renommé ✓');
-  }catch(e){toast(e.message,'error');}
-};
-
-
-
-window.toggleAlbumAdmin=function(id){
-  const b=document.getElementById('ab-'+id);
-  if(b)b.classList.toggle('open');
-};
-window.createAlbum=async function(){
-  const name=$('g-album-name').value.trim();
-  if(!name){toast("Nom d'album requis",'error');return;}
-  if(!db){toast('Firebase non connecté','error');return;}
-  try{
-    const coverUrl=$('g-album-cover').value.trim();
-    await addDoc(collection(db,'albums'),{name,photos:[],coverUrl,createdAt:Date.now()});
-    $('g-album-cover').value='';
-    $('g-album-name').value='';
-    toast('Album créé ✓');
-  }catch(e){toast(e.message,'error');}
-};
-window.deleteAlbum=async function(id){
-  if(!confirm('Supprimer cet album et toutes ses photos ?'))return;
-  try{await deleteDoc(doc(db,'albums',id));toast('Album supprimé');}
-  catch(e){toast(e.message,'error');}
-};
-window.openAddPhoto=function(albumId,albumName){
-  currentAlbumId=albumId;
-  $('g-add-photo-title').textContent='Ajouter des photos → '+albumName;
-  $('g-photo-urls').value='';$('g-photo-caption').value='';
-  $('g-add-photo-form').style.display='block';
-  $('g-add-photo-form').scrollIntoView({behavior:'smooth',block:'nearest'});
-};
-window.closeAddPhoto=function(){
-  $('g-add-photo-form').style.display='none';currentAlbumId=null;
-};
-window.setPhotoMode=function(mode){
-  $('g-mode-tag').style.display=mode==='tag'?'block':'none';
-  $('g-mode-url').style.display=mode==='url'?'block':'none';
-  if($('g-mode-video'))$('g-mode-video').style.display=mode==='video'?'block':'none';
-  if($('g-caption-group'))$('g-caption-group').style.display=mode==='video'?'none':'block';
-  ['tag','url','video'].forEach(m=>{
-    const b=$('g-mode-'+m+'-btn');
-    if(b){b.className='btn btn-sm '+(mode===m?'btn-accent':'btn-ghost');b.style.flex='1';}
-  });
-};
-window.addPhotos=async function(){
-  if(!currentAlbumId){toast('Sélectionne un album','error');return;}
-  const caption=$('g-photo-caption').value.trim();
-  const album=localAlbums.find(a=>a.id===currentAlbumId);
-  if(!album){toast('Album introuvable','error');return;}
-  const btn=$('g-add-btn');
-  const isVideoMode=$('g-mode-video')&&$('g-mode-video').style.display!=='none';
-  const isTagMode=!isVideoMode&&$('g-mode-tag').style.display!=='none';
-  let urls=[];
-  if(isTagMode){
-    const tag=$('g-tag-name').value.trim();
-    if(!tag){toast('Nom de tag requis','error');return;}
-    const cloud=ls.get('cloudinary_cloud','');
-    if(!cloud){toast('Entre ton Cloud Name dans Paramètres d\'abord','error');return;}
-    btn.textContent='Chargement…';btn.disabled=true;
-    try{
-      const res=await fetch('https://res.cloudinary.com/'+cloud+'/image/list/'+encodeURIComponent(tag)+'.json');
-      if(res.status===404)throw new Error('Tag "'+tag+'" introuvable. Vérifie le nom exact dans Cloudinary.');
-      if(res.status===401||res.status===403)throw new Error('Accès refusé — va dans Cloudinary → Settings → Security → décoche "Resource list"');
-      if(!res.ok)throw new Error('Erreur Cloudinary ('+res.status+') — vérifie ton Cloud Name dans Paramètres');
-      const data=await res.json();
-      urls=(data.resources||[]).map(r=>{
-        const url=r.secure_url||('https://res.cloudinary.com/'+cloud+'/image/upload/'+r.public_id+'.'+r.format);
-        return url.replace(/\.heic(\?.*)?$/i,'.jpg').replace(/\.heif(\?.*)?$/i,'.jpg');
-      });
-      if(!urls.length){toast('Aucune photo trouvée pour ce tag','error');btn.textContent='Ajouter';btn.disabled=false;return;}
-    }catch(e){toast(e.message,'error');btn.textContent='Ajouter';btn.disabled=false;return;}
-  }else if(isVideoMode){
-    const raw=$('g-video-url').value.trim();
-    const title=$('g-video-title').value.trim();
-    if(!raw){toast('URL YouTube requise','error');return;}
-    const ytId=extractYouTubeId(raw);
-    if(!ytId){toast('URL YouTube invalide','error');return;}
-    const newPhotos=[...(album.photos||[]),{type:'video',ytId,caption:title||''}];
-    try{
-      await updateDoc(doc(db,'albums',currentAlbumId),{photos:newPhotos});
-      toast('Vidéo ajoutée ✓');closeAddPhoto();
-    }catch(e){toast(e.message,'error');}
-    if(btn){btn.textContent='Ajouter';btn.disabled=false;}
-    return;
-  }else{
-    const raw=$('g-photo-urls').value.trim();
-    urls=raw.split(/[\r\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'))
-      .map(u=>u.replace(/\.heic(\?.*)?$/i,'.jpg').replace(/\.heif(\?.*)?$/i,'.jpg'));
-    if(!urls.length){toast('Aucune URL valide','error');return;}
-  }
-  const newPhotos=[...(album.photos||[]),...urls.map(url=>({url,caption:caption||''}))];
-  try{
-    await updateDoc(doc(db,'albums',currentAlbumId),{photos:newPhotos});
-    toast(urls.length+' photo'+(urls.length>1?'s':'')+' ajoutée'+(urls.length>1?'s':'')+' ✓');
-    closeAddPhoto();
-  }catch(e){toast(e.message,'error');}
-  if(btn){btn.textContent='Ajouter';btn.disabled=false;}
-};
-
-function extractYouTubeId(url){
-  const m=url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/);
-  return m?m[1]:null;
+    const snap=await getDoc(doc(db,'config','templates'));
+    if(snap.exists())localTpl={names:[],venues:[],texts:[],...snap.data()};
+  }catch(e){}
 }
-window.setCoverUrl=async function(albumId,url){
-  try{
-    await updateDoc(doc(db,'albums',albumId),{coverUrl:url});
-    toast('Couverture mise à jour ✓');
-  }catch(e){toast(e.message,'error');}
-};
-window.setCover=async function(albumId,idx){
-  try{
-    await updateDoc(doc(db,'albums',albumId),{cover:idx});
-    toast('Photo de couverture mise à jour ✓');
-  }catch(e){toast(e.message,'error');}
-};
-window.deletePhoto=async function(albumId,idx){
-  const album=localAlbums.find(a=>a.id===albumId);if(!album)return;
-  const photos=[...(album.photos||[])];photos.splice(idx,1);
-  try{
-    await updateDoc(doc(db,'albums',albumId),{photos});
-    toast('Photo supprimée');
-  }catch(e){toast(e.message,'error');}
-};
-
-/* ══ NAVIGATION GALERIE ═══════════════════════════════════ */
-window.switchMainTab=function(tab){
-  const evView=$('main-view-events');
-  const galView=$('main-view-gallery');
-  const evBtn=$('main-tab-events');
-  const galBtn=$('main-tab-gallery');
-  if(tab==='events'){
-    evView.style.display='block';galView.style.display='none';
-    evBtn.className='btn btn-accent';galBtn.className='btn btn-ghost';
-  }else{
-    evView.style.display='none';galView.style.display='block';
-    evBtn.className='btn btn-ghost';galBtn.className='btn btn-accent';
-    renderGalleryAdmin();
-  }
-};
-
-/* ══ MOT DE PASSE GALERIE ═════════════════════════════════ */
-window.showGalleryPage=function(){
-  const pwd=ls.get('gallery_pwd','');
-  if(pwd&&!sessionStorage.getItem('gallery_unlocked')){
-    // Afficher la modal mot de passe
-    $('gallery-pwd-modal').classList.add('open');
-    setTimeout(()=>$('gallery-pwd-input')&&$('gallery-pwd-input').focus(),100);
-    return;
-  }
-  _openGalleryPage();
-};
-window.checkGalleryPwd=function(){
-  const pwd=ls.get('gallery_pwd','');
-  const input=$('gallery-pwd-input').value;
-  if(input===pwd){
-    sessionStorage.setItem('gallery_unlocked','1');
-    $('gallery-pwd-modal').classList.remove('open');
-    $('gallery-pwd-input').value='';
-    $('gallery-pwd-error').style.display='none';
-    _openGalleryPage();
-  }else{
-    $('gallery-pwd-error').style.display='block';
-    $('gallery-pwd-input').select();
-  }
-};
-window.closeGalleryPwd=function(){
-  $('gallery-pwd-modal').classList.remove('open');
-  $('gallery-pwd-input').value='';
-  $('gallery-pwd-error').style.display='none';
-};
-function _openGalleryPage(){
-  $('view-events').style.display='none';
-  $('view-gallery').style.display='block';
-  history.pushState({gallery:true},'','#galerie');
-  window.scrollTo(0,0);
+async function saveTpl(){
+  if(!db)return;
+  try{await setDoc(doc(db,'config','templates'),localTpl);}catch(e){}
 }
 
-window.hideGalleryPage=function(fromPop){
-  $('view-gallery').style.display='none';
-  $('view-events').style.display='block';
-  if(!fromPop)history.back();
+function getTplNames(){return localTpl.names||[];}
+function getTplVenues(){return localTpl.venues||[];}
+function getTplTexts(){return localTpl.texts||[];}
+
+window.renderTemplates=async function(){
+  await loadTpl();
+  const nl=$('tpl-names-list');const vl=$('tpl-venues-list');const tl=$('tpl-texts-list');
+  const names=getTplNames();const venues=getTplVenues();const texts=getTplTexts();
+  if(nl)nl.innerHTML=names.length?names.map((n,i)=>'<div class="tpl-item"><div class="tpl-item-name" style="flex:1">🏷 '+n+'</div><button class="tpl-del-btn" onclick="delTplName('+i+')">✕</button></div>').join(''):'<p style="font-size:12px;color:var(--muted)">Aucun nom.</p>';
+  if(vl)vl.innerHTML=venues.length?venues.map((v,i)=>'<div class="tpl-item"><div style="flex:1"><div class="tpl-item-name">📍 '+v.name+'</div><div class="tpl-item-sub">'+v.maps+'</div></div><button class="tpl-del-btn" onclick="delTplVenue('+i+')">✕</button></div>').join(''):'<p style="font-size:12px;color:var(--muted)">Aucun lieu.</p>';
+  if(tl)tl.innerHTML=texts.length?texts.map((t,i)=>'<div class="tpl-item"><div style="flex:1"><div class="tpl-item-name">📝 '+t.name+'</div><div class="tpl-item-sub">'+(t.short||'').slice(0,50)+'</div></div><button class="tpl-del-btn" onclick="delTplText('+i+')">✕</button></div>').join(''):'<p style="font-size:12px;color:var(--muted)">Aucun texte.</p>';
+};
+window.saveTplName=async function(){const n=$('tpl-n-name').value.trim();if(!n)return;localTpl.names.push(n);await saveTpl();$('tpl-n-name').value='';renderTemplates();toast('Nom enregistré ✓');};
+window.saveTplVenue=async function(){const n=$('tpl-v-name').value.trim();const m=$('tpl-v-maps').value.trim();if(!n)return;localTpl.venues.push({name:n,maps:m});await saveTpl();$('tpl-v-name').value='';$('tpl-v-maps').value='';renderTemplates();toast('Lieu enregistré ✓');};
+window.saveTplText=async function(){const n=$('tpl-t-name').value.trim();const s=$('tpl-t-short').value.trim();const l=$('tpl-t-long').value.trim();if(!n)return;localTpl.texts.push({name:n,short:s,long:l});await saveTpl();$('tpl-t-name').value='';$('tpl-t-short').value='';$('tpl-t-long').value='';renderTemplates();toast('Texte enregistré ✓');};
+window.delTplName=async function(i){localTpl.names.splice(i,1);await saveTpl();renderTemplates();};
+window.delTplVenue=async function(i){localTpl.venues.splice(i,1);await saveTpl();renderTemplates();};
+window.delTplText=async function(i){localTpl.texts.splice(i,1);await saveTpl();renderTemplates();};
+
+/* Déroulants formulaire */
+document.addEventListener('click',e=>{if(!e.target.closest('.input-with-dd'))document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));});
+window.toggleDd=function(id){const menu=document.getElementById(id);if(!menu)return;const wasOpen=menu.classList.contains('open');document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));if(!wasOpen){fillDdMenu(id);menu.classList.add('open');}};
+async function fillDdMenu(id){
+  await loadTpl();
+  const menu=document.getElementById(id);if(!menu)return;
+  if(id==='dd-venues'){const arr=getTplVenues();menu.innerHTML=arr.length?arr.map((v,i)=>'<div class="dd-opt" onclick="pickVenue('+i+')"><span>📍 '+v.name+'</span><span class="dd-opt-sub">'+v.maps+'</span></div>').join('')+'<div class="dd-empty">+ Ajoute des lieux dans Modèles</div>':'<div class="dd-empty">Aucun lieu — va dans Modèles</div>';}
+  else if(id==='dd-names'){const arr=getTplNames();menu.innerHTML=arr.length?arr.map((n,i)=>'<div class="dd-opt" onclick="pickName('+i+')"><span>🏷 '+n+'</span></div>').join('')+'<div class="dd-empty">+ Ajoute des noms dans Modèles</div>':'<div class="dd-empty">Aucun nom — va dans Modèles</div>';}
+  else if(id==='dd-texts'){const arr=getTplTexts();menu.innerHTML=arr.length?arr.map((t,i)=>'<div class="dd-opt" onclick="pickText('+i+')"><span>📝 '+t.name+'</span><span class="dd-opt-sub">'+(t.short||'').slice(0,50)+'</span></div>').join('')+'<div class="dd-empty">+ Ajoute des textes dans Modèles</div>':'<div class="dd-empty">Aucun texte — va dans Modèles</div>';}
+}
+window.pickVenue=function(i){const v=getTplVenues()[i];if(!v)return;$('f-place').value=v.name;if(v.maps){$('f-maps-url').value=v.maps;onMapsUrlInput(v.maps);}document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));};
+window.pickName=function(i){const n=getTplNames()[i];if(!n)return;$('f-name').value=n;document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));};
+window.pickText=function(i){const t=getTplTexts()[i];if(!t)return;if(t.short)$('f-desc').value=t.short;if(t.long)$('f-desc-long').value=t.long;document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));};
+
+
+/* ══ PAGE DON ══════════════════════════════════════════════ */
+window.showDonPage=function(){
+  document.getElementById('view-don').style.display='block';
+  document.querySelector('main').style.display='none';
+  history.pushState({don:true},'','#don');
   window.scrollTo(0,0);
 };
-// Popstate pour la page galerie publique
+window.hideDonPage=function(fromPop){
+  document.getElementById('view-don').style.display='none';
+  document.querySelector('main').style.display='block';
+  if(!fromPop&&location.hash==='#don')history.back();
+  window.scrollTo(0,0);
+};
+/* ══ POPSTATE — modal + swipe retour ══════════════════════ */
 window.addEventListener('popstate',function(e){
-  if($('photo-lb').classList.contains('open')&&!e.state?.lb){closeLb(true);return;}
-  if($('view-gallery').style.display==='block'){
-    if(e.state?.album){renderAlbumView(e.state.album);}
-    else if(currentAlbumView){currentAlbumView=null;renderFolderView();}
-    else if(!e.state?.gallery){hideGalleryPage(true);}
-  }
+  if($('event-modal').classList.contains('open')&&!e.state?.modal){closeEventModal(true);return;}
+  if(document.getElementById('view-don').style.display==='block'&&!e.state?.don){hideDonPage(true);return;}
 });
-// Hash direct
-if(location.hash==='#galerie')setTimeout(()=>showGalleryPage(),400);
+window.addEventListener('scroll',function(){var a=document.getElementById('scroll-arrow');if(a)a.style.display='none';},{once:true,passive:true});
 /* ══ INIT ════════════════════════════════════════════════ */
 $('footer-year').textContent=new Date().getFullYear();
 renderSite();startCountdowns();
 if(initFirebase(FIREBASE_CONFIG)){
   startListeners();
-  startAlbumListener();
   ls.set('fb_cfg',FIREBASE_CONFIG);
 }
 </script>
 
-</div>
-
-<!-- MOT DE PASSE GALERIE -->
-<div id="gallery-pwd-modal">
-  <div class="pwd-box">
-    <h3>🔒 Galerie Photo</h3>
-    <p>Cette galerie est protégée.<br>Entre le mot de passe pour y accéder.</p>
-    <input type="password" class="form-input" id="gallery-pwd-input" placeholder="Mot de passe…" onkeydown="if(event.key==='Enter')checkGalleryPwd()"/>
-    <div class="pwd-error" id="gallery-pwd-error">Mot de passe incorrect</div>
-    <button class="btn btn-accent btn-full" onclick="checkGalleryPwd()">Accéder</button>
-    <button class="btn btn-ghost btn-full" onclick="closeGalleryPwd()" style="margin-top:-6px">Annuler</button>
-  </div>
 </div>
 </body>
 </html>
