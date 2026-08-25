@@ -527,6 +527,18 @@ textarea.form-input{resize:vertical;min-height:68px;}
   </div>
 </main>
 
+<!-- Vue Don -->
+<div id="view-don" style="display:none;min-height:60vh;padding:40px 0 80px;">
+  <div class="wrap" style="max-width:600px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;">
+      <button onclick="hideDonPage()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted2);font-size:13px;cursor:pointer;flex-shrink:0;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='var(--surface2)'">← Retour</button>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,42px);color:var(--mid);letter-spacing:.04em;margin:0">Faire un don</h2>
+    </div>
+    <p style="font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:28px;">Votre soutien nous permet d'organiser des soirées de qualité, d'accueillir de nouveaux joueurs et de faire vivre la communauté Play Thau'Gether sur le Bassin de Thau. Merci !</p>
+    <iframe id="haWidgetLight" allowtransparency="true" allow="payment" scrolling="auto" src="https://www.helloasso.com/associations/play-thau-gether/formulaires/1/widget?view=form" style="width:clamp(300px,100%,26rem);margin:0 auto;border:none;display:block;" onload="window.addEventListener('message',function(e){var h=e.data.height;var el=document.getElementById('haWidgetLight');if(h>parseFloat(el.height||0)){el.height=h+'px';}})"></iframe>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
     <p>© <span id="footer-year"></span> <strong id="footer-name"></strong></p>
