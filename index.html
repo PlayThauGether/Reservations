@@ -863,7 +863,7 @@ function formatDate(d,t){
   if(!d)return '';
   const dt=new Date(d+'T12:00:00');
   const D=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
-  const M=['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+  const M=['jan','fév','mar','avr','mai','jun','jul','août','sep','oct','nov','déc'];
   return D[dt.getDay()]+' '+dt.getDate()+' '+M[dt.getMonth()]+' '+dt.getFullYear()+(t?' · '+t:'');
 }
 function formatDateLong(d,t){
