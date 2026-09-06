@@ -950,15 +950,20 @@ async function connectFirebase(){
 
 function startListeners(){
   if(!db)return;
+  let _lastEventsJson='';
   /* Écoute temps réel des événements */
   if(unsubEvents)unsubEvents();
   unsubEvents=onSnapshot(collection(db,'events'),snap=>{
-    localEvents=[];
-    snap.forEach(d=>localEvents.push({id:d.id,...d.data()}));
-    localEvents.sort((a,b)=>a.order-b.order||(a.date||'').localeCompare(b.date||''));
+    const newEvents=[];
+    snap.forEach(d=>newEvents.push({id:d.id,...d.data()}));
+    newEvents.sort((a,b)=>(a.order??Infinity)-(b.order??Infinity)||(a.date||'').localeCompare(b.date||''));
+    const newJson=JSON.stringify(newEvents);
+    if(newJson===_lastEventsJson){if(window._hl)window._hl();return;}
+    _lastEventsJson=newJson;
+    localEvents=newEvents;
     ls.set('cache_events',localEvents);
-    renderSite();startCountdowns();checkAutoDelete();
-    if(isLogged)renderAdminList();
+    renderSite();startCountdowns();
+    if(isLogged){checkAutoDelete();renderAdminList();}
     // Cache le loader dès la première réponse Firebase
     if(window._hl)window._hl();
   },err=>{if(window._hl)window._hl();});
@@ -1198,7 +1203,7 @@ let tc=0,tt;
 $('admin-trigger').addEventListener('click',()=>{clearTimeout(tt);if(++tc>=5){openAdmin();tc=0;return;}tt=setTimeout(()=>tc=0,2000);});
 window.addEventListener('hashchange',()=>{if(location.hash==='#admin')openAdmin();});
 if(location.hash==='#admin')setTimeout(openAdmin,300);
-if(location.hash.startsWith('#e-')){const _sid=location.hash.slice(3);const _tryOpen=()=>{if(localEvents.length)openEventModal(_sid);else setTimeout(_tryOpen,300);};setTimeout(_tryOpen,400);}
+if(location.hash.startsWith('#e-')){const _sid=location.hash.slice(3);let _tries=0;const _tryOpen=()=>{if(localEvents.length)openEventModal(_sid);else if(_tries++<20)setTimeout(_tryOpen,300);};setTimeout(_tryOpen,400);}
 
 function openAdmin(){$('admin-overlay').classList.add('open');history.replaceState(null,'',location.pathname);isLogged?showDashboard():showLogin();}
 window.closeAdmin=function(){$('admin-overlay').classList.remove('open');};
@@ -1455,6 +1460,7 @@ window.onStatusChange=function(v){
   if(g)g.style.display=v==='coming_soon'?'block':'none';
 };
 let cdInterval=null;
+let _revealing=new Set();
 function startCountdowns(){
   if(cdInterval)clearInterval(cdInterval);
   function tick(){
@@ -1462,8 +1468,15 @@ function startCountdowns(){
     localEvents.filter(e=>e.status==='coming_soon'&&e.revealAt).forEach(e=>{
       const diff=e.revealAt-now;
       const el=document.getElementById('cd-'+e.id);
+      if(diff<=0){
+        if(db&&!_revealing.has(e.id)){
+          _revealing.add(e.id);
+          updateDoc(doc(db,'events',e.id),{status:'active',revealAt:null})
+            .catch(()=>{_revealing.delete(e.id);});
+        }
+        return;
+      }
       if(!el)return;
-      if(diff<=0){if(db)updateDoc(doc(db,'events',e.id),{status:'active',revealAt:null}).catch(()=>{});return;}
       const days=Math.floor(diff/86400000);
       const hours=Math.floor((diff%86400000)/3600000);
       const mins=Math.floor((diff%3600000)/60000);
@@ -1488,10 +1501,14 @@ window.shareEvent=async function(id){
 };
 
 /* ══ AUTO-SUPPRESSION ════════════════════════════════════= */
+let _deleting=new Set();
 function checkAutoDelete(){
   const today=new Date().toISOString().slice(0,10);
   localEvents.filter(e=>e.deleteAt&&e.deleteAt<today).forEach(e=>{
-    if(db)deleteDoc(doc(db,'events',e.id)).catch(()=>{});
+    if(db&&!_deleting.has(e.id)){
+      _deleting.add(e.id);
+      deleteDoc(doc(db,'events',e.id)).catch(()=>{_deleting.delete(e.id);});
+    }
   });
 }
 
