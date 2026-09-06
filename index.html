@@ -319,15 +319,15 @@ textarea.form-input{resize:vertical;min-height:68px;}
 .share-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:14px 16px;border-radius:12px;font-size:15px;font-weight:600;background:var(--surface2);color:var(--muted2);border:1.5px solid var(--border2);cursor:pointer;transition:background .2s,border-color .2s,color .2s;white-space:nowrap;flex-shrink:0;}
 .share-btn:hover{background:rgba(47,110,98,.08);border-color:var(--teal);color:var(--teal);}
 .emodal-cta{margin-top:auto;padding-top:4px;display:flex;gap:10px;}
-.emodal-reserve{background:var(--mid);
+.emodal-reserve{
   flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
   padding:14px 20px;border-radius:12px;
   font-family:var(--font-b);font-size:15px;font-weight:600;
-  background:var(--accent);color:#fff;text-decoration:none;
+  background:var(--mid);color:#fff;text-decoration:none;
   transition:background .22s,transform .15s;
   box-shadow:0 6px 20px rgba(92,58,33,.3);
 }
-.emodal-reserve:hover{background:var(--accent-l);transform:translateY(-1px);}
+.emodal-reserve:hover{background:#a8451f;transform:translateY(-1px);}
 .emodal-reserve:active{transform:scale(.98);}
 .emodal-sold,.emodal-soon-cta{
   flex:1;padding:14px 20px;border-radius:12px;text-align:center;
@@ -419,22 +419,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
 @media(max-width:520px){:root{--card-w:calc(100vw - 48px);}
   .form-row{grid-template-columns:1fr;}.admin-side{border-left:none;border-top:1px solid var(--border2);}}
 
-/* ══ SCROLL ARROW MOBILE ══════════════════════════════════ */
-#scroll-arrow{
-  display:none;
-  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
-  z-index:50;
-  background:var(--accent);color:#fff;
-  border-radius:20px;padding:7px 16px 7px 14px;
-  font-size:12px;font-weight:500;letter-spacing:.05em;
-  gap:6px;align-items:center;
-  box-shadow:0 4px 16px rgba(92,58,33,.35);
-  animation:bounceY 1.4s ease-in-out infinite;
-  pointer-events:none;
-  white-space:nowrap;
-}
-@keyframes bounceY{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(5px);}}
-@media(max-width:520px){#scroll-arrow{display:flex;}}
 /* ══ BOUTONS CALENDRIER ═══════════════════════════════════ */
 .cal-trigger{
   display:inline-flex;align-items:center;gap:6px;
@@ -725,11 +709,6 @@ textarea.form-input{resize:vertical;min-height:68px;}
           <div id="stats-list" class="stats-list">
             <p style="color:var(--muted);font-size:13px">Clique sur "Stats" pour charger…</p>
           </div>
-
-          <div class="form-group">
-            <label class="form-label">Légende (optionnel)</label>
-          </div>
-        </div>
         </div>
 
         <!-- Modèles -->
@@ -815,9 +794,7 @@ textarea.form-input{resize:vertical;min-height:68px;}
       <div class="emodal-meta" id="emodal-meta"></div>
       <div class="emodal-divider"></div>
       <p class="emodal-desc" id="emodal-desc"></p>
-      <div class="emodal-map" id="emodal-map" style="display:none">
-        <iframe id="emodal-map-iframe" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
+      <div class="emodal-map" id="emodal-map" style="display:none"></div>
       <div class="emodal-cta" id="emodal-cta"></div>
     </div>
   </div>
@@ -1191,10 +1168,10 @@ window.toggleCalDropdown=function(ev){
 document.addEventListener('click',()=>{
   const dd=$('cal-dd');if(dd)dd.classList.remove('open');
 });
-window.closeEventModal=function(){
+window.closeEventModal=function(fromPop){
   $('event-modal').classList.remove('open');
   document.body.style.overflow='';
-  $('emodal-map-iframe').src=''; // arrête le chargement Maps
+  if(!fromPop&&location.hash.startsWith('#e-'))history.back();
 };
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEventModal();});
 
@@ -1370,6 +1347,9 @@ window.duplicateEvent=function(id){
   $('f-link').value=ev.link||'';$('f-desc').value=ev.desc||'';
   $('f-desc-long').value=ev.descLong||'';
   $('f-status').value=ev.status||'active';
+  onStatusChange(ev.status||'active');
+  $('f-delete-at').value='';
+  $('f-reveal-date').value='';$('f-reveal-time').value='';
   previewImg(ev.img||'');$('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
   toast('Formulaire pré-rempli — modifie puis enregistre ✓');
 };
@@ -1593,6 +1573,5 @@ if(initFirebase(FIREBASE_CONFIG)){
 }
 </script>
 
-</div>
 </body>
 </html>
