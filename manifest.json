@@ -4,14 +4,14 @@
   "description": "Nos prochains événements — Réserve ta place",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#efe2d3",
-  "theme_color": "#613402",
+  "background_color": "#F3F0ED",
+  "theme_color": "#F3F0ED",
   "orientation": "portrait",
   "lang": "fr",
   "icons": [
     {
       "src": "favicon.png",
-      "sizes": "192x192",
+      "sizes": "195x195",
       "type": "image/png"
     },
     {
