@@ -69,9 +69,21 @@ input,textarea,select{font-family:var(--font-sans);letter-spacing:inherit;}
 /* Les trois lumières de la saison : fixes, derrière tout (fonctionne aussi sur iPhone) */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(circle at 0% 0%,var(--light-terra),transparent 58%),
-    radial-gradient(circle at 100% 45%,var(--light-teal),transparent 58%),
-    radial-gradient(circle at 20% 115%,var(--light-dore),transparent 58%);}
+    radial-gradient(circle at 0% 0%,rgba(192,82,42,.5),transparent 56%),
+    radial-gradient(circle at 100% 8%,rgba(201,165,126,.55),transparent 50%),
+    radial-gradient(circle at 100% 62%,rgba(47,110,98,.4),transparent 56%),
+    radial-gradient(circle at 15% 100%,rgba(201,165,126,.65),transparent 56%);}
+/* Aurore : les lumières dérivent très lentement (un cycle toutes les 25 à 40 secondes) */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.aurora i{position:absolute;width:80vmax;height:80vmax;border-radius:50%;will-change:transform;}
+.aurora i:nth-child(1){left:-30vmax;top:-40vmax;background:radial-gradient(circle,rgba(192,82,42,.42),transparent 62%);animation:au1 28s ease-in-out infinite alternate;}
+.aurora i:nth-child(2){right:-35vmax;top:-30vmax;background:radial-gradient(circle,rgba(201,165,126,.55),transparent 62%);animation:au2 34s ease-in-out infinite alternate;}
+.aurora i:nth-child(3){right:-40vmax;bottom:-50vmax;background:radial-gradient(circle,rgba(47,110,98,.38),transparent 62%);animation:au3 31s ease-in-out infinite alternate;}
+.aurora i:nth-child(4){left:-25vmax;bottom:-55vmax;background:radial-gradient(circle,rgba(201,165,126,.6),transparent 62%);animation:au4 38s ease-in-out infinite alternate;}
+@keyframes au1{to{transform:translate3d(32vmax,24vmax,0) scale(1.12);}}
+@keyframes au2{to{transform:translate3d(-34vmax,30vmax,0) scale(.92);}}
+@keyframes au3{to{transform:translate3d(-36vmax,-24vmax,0) scale(1.15);}}
+@keyframes au4{to{transform:translate3d(34vmax,-28vmax,0) scale(1.05);}}
 .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px;}
 main,footer{position:relative;z-index:1;}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
@@ -91,11 +103,11 @@ main,footer{position:relative;z-index:1;}
 header{position:relative;z-index:2;padding:36px 0 0;}
 .hdr-bar{display:flex;align-items:center;gap:clamp(14px,3vw,28px);animation:rise .8s var(--ease) backwards;}
 #logo-container{display:flex;align-items:center;flex-shrink:0;}
-.site-logo{height:clamp(76px,14vw,132px);width:auto;max-width:clamp(76px,14vw,132px);object-fit:contain;display:block;border:none;background:transparent;filter:drop-shadow(0 10px 20px rgba(40,24,14,.18));}
-.site-logo-ph{width:clamp(76px,14vw,132px);height:clamp(76px,14vw,132px);display:flex;align-items:center;justify-content:center;border-radius:50%;
+.site-logo{height:clamp(62px,10vw,104px);width:auto;max-width:clamp(62px,10vw,104px);object-fit:contain;display:block;border:none;background:transparent;filter:drop-shadow(0 10px 20px rgba(40,24,14,.18));}
+.site-logo-ph{width:clamp(62px,10vw,104px);height:clamp(62px,10vw,104px);display:flex;align-items:center;justify-content:center;border-radius:50%;
   background:linear-gradient(160deg,var(--glass-hi),var(--glass-lo));box-shadow:var(--lg-edge),var(--lg-drop);}
 .site-logo-ph svg{width:50%;height:50%;}
-.asso-name{font-family:var(--font-brand);font-size:clamp(46px,10.5vw,98px);font-weight:400;letter-spacing:.03em;line-height:.92;color:var(--terra);display:flex;flex-direction:column;}
+.asso-name{font-family:var(--font-brand);font-size:clamp(36px,7.5vw,68px);font-weight:400;letter-spacing:.03em;line-height:.92;color:var(--terra);display:flex;flex-direction:column;}
 .asso-name em{font-style:normal;color:var(--terra);}
 
 /* ── Titre de page ── */
@@ -129,6 +141,17 @@ header{position:relative;z-index:2;padding:36px 0 0;}
 .meta-item strong{color:var(--ink);font-weight:500;}
 .card-desc{font-size:12.5px;color:var(--ink-2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .card-cta{margin-top:auto;padding-top:12px;}
+@media(min-width:900px){
+  .events-grid.wide{grid-template-columns:1fr;gap:22px;max-width:980px;}
+  .events-grid.wide .event-card{flex-direction:row;align-items:stretch;}
+  .events-grid.wide .card-img-wrap{width:360px;margin:10px;align-self:flex-start;}
+  .events-grid.wide .card-body{padding:30px 36px 30px 18px;gap:12px;justify-content:center;}
+  .events-grid.wide .card-title{font-size:30px;line-height:1.15;margin-bottom:4px;}
+  .events-grid.wide .meta-item{font-size:15px;}
+  .events-grid.wide .card-desc{font-size:15px;-webkit-line-clamp:6;}
+  .events-grid.wide .card-cta{margin-top:12px;align-self:flex-start;}
+  .events-grid.wide .card-cta .cta-btn{width:auto;min-width:200px;padding:0 34px;}
+}
 .cta-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:44px;padding:0 18px;border-radius:var(--radius-pill);font-size:14.5px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.66);border:none;box-shadow:var(--lg-press);transition:transform .2s var(--ease);cursor:pointer;}
 .cta-btn:active{transform:scale(.97);}
 .cta-btn.is-off{color:var(--ink-2);cursor:default;pointer-events:none;background:rgba(255,255,255,.4);box-shadow:var(--lg-edge);}
@@ -366,6 +389,7 @@ textarea.form-input{resize:vertical;min-height:72px;}
 </style>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div id="scroll-arrow">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
   Voir les événements
@@ -493,6 +517,7 @@ textarea.form-input{resize:vertical;min-height:72px;}
           <button class="admin-tab" onclick="switchTab('settings',1)">Paramètres</button>
           <button class="admin-tab" onclick="switchTab('stats',2);loadStats()">Stats</button>
           <button class="admin-tab" onclick="switchTab('templates',3);renderTemplates()">Modèles</button>
+          <button class="admin-tab" onclick="switchTab('inscrits',4);initInscrits()">Inscrits</button>
         </div>
         <!-- Formulaire événement -->
         <div class="admin-tab-panel active" id="tab-form">
@@ -536,6 +561,22 @@ textarea.form-input{resize:vertical;min-height:72px;}
             </div>
           </div>
           <div class="form-group">
+            <label class="form-label">Mode de réservation</label>
+            <select class="form-input" id="f-resa-mode" onchange="onResaModeChange(this.value)">
+              <option value="external">Lien externe (Billetweb, Scopie…)</option>
+              <option value="ptg">Réservation PTG (sur le site)</option>
+            </select>
+          </div>
+          <div id="f-resa-box" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="form-group"><label class="form-label">Places au total</label><input type="number" min="1" class="form-input" id="f-resa-cap" placeholder="30"/></div>
+              <div class="form-group"><label class="form-label">Maximum par réservation</label><input type="number" min="1" max="6" class="form-input" id="f-resa-max" placeholder="6"/></div>
+              <div class="form-group"><label class="form-label">Ouverture</label><input type="date" class="form-input" id="f-resa-open"/></div>
+              <div class="form-group"><label class="form-label">Fermeture</label><input type="date" class="form-input" id="f-resa-close"/></div>
+            </div>
+            <div class="form-hint" style="margin-bottom:14px">Ouverture et fermeture sont facultatives. La fermeture inclut toute la journée choisie.</div>
+          </div>
+          <div class="form-group" id="f-link-group">
             <label class="form-label">Lien de réservation <span id="f-link-required" style="color:var(--muted);font-weight:400;text-transform:none;font-size:11px">(obligatoire sauf "Bientôt")</span></label>
             <input type="url" class="form-input" id="f-link" placeholder="https://billetterie.fr/…"/>
           </div>
@@ -574,6 +615,22 @@ textarea.form-input{resize:vertical;min-height:72px;}
             <button class="btn btn-accent" style="flex:1" onclick="saveEvent()">Enregistrer</button>
             <button class="btn btn-ghost" onclick="resetForm()">Annuler</button>
           </div>
+        </div>
+        <!-- Inscrits -->
+        <div class="admin-tab-panel" id="tab-inscrits">
+          <div class="sec-title">Inscrits</div>
+          <div class="form-group"><select class="form-input" id="ins-event" onchange="loadInscrits()"></select></div>
+          <div id="ins-count" style="font-size:34px;font-weight:300;color:var(--ink);margin:4px 0 12px"></div>
+          <div class="form-group"><input type="search" class="form-input" id="ins-search" placeholder="Rechercher un inscrit" oninput="renderInscrits()"/></div>
+          <div id="ins-list"></div>
+          <div class="sec-title" style="margin-top:20px">Ajouter manuellement</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="form-group"><input class="form-input" id="ins-fn" placeholder="Prénom" autocomplete="off"/></div>
+            <div class="form-group"><input class="form-input" id="ins-ln" placeholder="Nom" autocomplete="off"/></div>
+            <div class="form-group"><input type="email" class="form-input" id="ins-em" placeholder="Adresse mail" autocomplete="off"/></div>
+            <div class="form-group"><input type="number" min="1" class="form-input" id="ins-se" placeholder="Personnes" value="1"/></div>
+          </div>
+          <div style="display:flex;gap:10px"><button class="btn btn-accent" style="flex:1" onclick="addInscrit()">Ajouter</button><button class="btn btn-ghost" onclick="exportInscrits()">Exporter en CSV</button></div>
         </div>
         <!-- Paramètres asso -->
         <div class="admin-tab-panel" id="tab-settings">
@@ -801,6 +858,18 @@ let localSettings=ls.get('cache_settings',{
   tagline:'Nos prochains événements — Réserve ta place',logo:'',email:'contact@votreasso.fr'
 });
 let isLogged=false, editingId=null, saving=false;
+/* Réservation PTG (voir le guide de configuration) */
+const RESA_API="";          // ex : https://ptg-reservations-api.vercel.app
+const TURNSTILE_SITEKEY=""; // clé publique Cloudflare Turnstile
+const resaInfo=e=>{
+  if(!e||e.resaMode!=='ptg')return{ptg:false};
+  const left=Math.max((e.resaCapacity||0)-(e.resaTaken||0),0),now=Date.now();
+  let state='open';
+  if(left<=0)state='full';
+  else if(e.resaOpensAt&&now<e.resaOpensAt)state='notopen';
+  else if(e.resaClosesAt&&now>e.resaClosesAt)state='closed';
+  return{ptg:true,left,state,max:e.resaMax||6};
+};
 
 /* ══ INIT FIREBASE ════════════════════════════════════════ */
 function initFirebase(cfg){
@@ -880,8 +949,10 @@ function renderSite(){
     grid.innerHTML='<div class="empty-state"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><p style="margin-top:14px">Aucun événement à venir.<br>Revenez bientôt.</p></div>';
     return;
   }
+  grid.classList.toggle('wide',ev.length<=2);
   grid.innerHTML=ev.map((e,i)=>{
-    const sold=e.status==='soldout';
+    const ri=resaInfo(e);
+    const sold=e.status==='soldout'||(ri.ptg&&ri.state==='full');
     const soon=e.status==='coming_soon';
     const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(e.place||'');
     const clickable=!soon; // bientôt → pas de modal
@@ -898,12 +969,15 @@ function renderSite(){
       +'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>'+(soon?'Date à venir…':formatDate(e.date,e.time))+'</strong></div>'
       +(e.place&&!soon?'<div class="meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><a href="'+(e.mapsUrl||mapsUrl)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--ink-3)">'+e.place+'</a></div>':'')
       +(e.desc&&!soon?'<p class="card-desc">'+e.desc+'</p>':'')
+      +(ri.ptg&&!soon&&!sold?'<div class="meta-item"><strong>'+(ri.state==='open'?ri.left+(ri.left>1?' places restantes':' place restante'):ri.state==='notopen'?'Réservations bientôt ouvertes':'Réservations fermées')+'</strong></div>':'')
       +'<div class="card-cta">'
       +(soon
         ?'<button class="cta-btn is-off">Bientôt</button>'
         :sold
           ?'<button class="cta-btn is-off" onclick="event.stopPropagation()">Complet</button>'
-          :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\');event.stopPropagation();" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>')
+          :(ri.ptg
+            ?(ri.state==='open'?'<button class="cta-btn" onclick="event.stopPropagation();openEventModal(\''+e.id+'\',true)">Réserver</button>':'<button class="cta-btn is-off" onclick="event.stopPropagation()">'+(ri.state==='notopen'?'Bientôt ouvert':'Fermé')+'</button>')
+            :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\');event.stopPropagation();" class="cta-btn" style="text-decoration:none">Réserver<svg class="cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>'))
       +'</div></div></div>';
   }).join('');
 }
@@ -979,9 +1053,11 @@ window.loadStats=async function(){
 };
 
 /* ══ EVENT MODAL ══════════════════════════════════════════ */
-window.openEventModal=function(id){
+window.openEventModal=function(id,openForm){
   const e=localEvents.find(ev=>ev.id===id);if(!e||e.status==='coming_soon')return;
-  const sold=e.status==='soldout';
+  const ri=resaInfo(e);
+  const sold=e.status==='soldout'||(ri.ptg&&ri.state==='full');
+  const oldResa=$('emodal-resa');if(oldResa)oldResa.remove();$('emodal-cta').style.display='';
 
   // Poster — fond flouté + affiche centrée
   const poster=$('emodal-poster');
@@ -996,7 +1072,7 @@ window.openEventModal=function(id){
 
   // Statut
   $('emodal-dot').className='dot'+(sold?' sold':'');
-  $('emodal-status-label').textContent=sold?'Complet':'Places disponibles';
+  $('emodal-status-label').textContent=sold?'Complet':(ri.ptg?(ri.state==='open'?ri.left+(ri.left>1?' places restantes':' place restante'):ri.state==='notopen'?'Réservations bientôt ouvertes':'Réservations fermées'):'Places disponibles');
 
   // Titre
   $('emodal-title').textContent=e.name;
@@ -1032,6 +1108,10 @@ window.openEventModal=function(id){
   const shareBtn='<button class="share-btn" aria-label="Partager" onclick="shareEvent(\''+e.id+'\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>';
   $('emodal-cta').innerHTML=sold
     ?'<div class="emodal-sold" style="flex:1">Cet événement est complet</div>'+shareBtn
+    :ri.ptg
+      ?(ri.state==='open'
+        ?'<button class="emodal-reserve" id="resa-open-btn" onclick="openResaForm(\''+e.id+'\')">Réserver ma place</button>'+shareBtn
+        :'<div class="emodal-sold" style="flex:1">'+(ri.state==='notopen'?'Réservations bientôt ouvertes':'Réservations fermées')+'</div>'+shareBtn)
     :'<a href="'+e.link+'" target="_blank" rel="noopener noreferrer" class="emodal-reserve" onclick="trackClick(\''+e.name.replace(/'/g,"\\'")+'\');incrementStat(\''+e.id+'\',\'reservations\')">Réserver ma place <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>'+shareBtn;
 
   // Boutons Agenda
@@ -1056,6 +1136,7 @@ window.openEventModal=function(id){
   document.body.style.overflow='hidden';
   incrementStat(e.id,'views');
   history.pushState({modal:e.id},'','#e-'+e.id);
+  if(openForm&&ri.ptg&&ri.state==='open')openResaForm(e.id);
 };
 window.toggleCalDropdown=function(ev){
   ev.stopPropagation();
@@ -1165,9 +1246,10 @@ function renderAdminList(){
     +'<div class="admin-event-info">'
     +'<div class="admin-event-name">'+(ev.status==='coming_soon'?'⏳ [Bientôt] '+ev.name:ev.name)+'</div>'
     +'<div class="admin-event-meta">'+(ev.date?formatDate(ev.date,ev.time):'—')
-    +(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+'</div></div>'
+    +(ev.resaMode==='ptg'?' · '+(ev.resaTaken||0)+'/'+(ev.resaCapacity||0)+' places':'')+(ev.status==='soldout'?' · ⛔ Complet':ev.status==='hidden'?' · 👁 Masqué':ev.status==='coming_soon'?' · ⏳ Bientôt':'')+'</div></div>'
     +'<div class="admin-event-actions">'
     +'<div style="display:flex;flex-direction:column;gap:2px"><button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:11px" onclick="moveEvent(\''+ev.id+'\',event,-1)">↑</button><button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:11px" onclick="moveEvent(\''+ev.id+'\',event,1)">↓</button></div>'
+    +(ev.resaMode==='ptg'?'<button class="btn btn-icon btn-sm" title="Inscrits" onclick="openInscrits(\''+ev.id+'\')">👥</button>':'')
     +'<button class="btn btn-icon btn-sm" title="Modifier" onclick="openEventForm(\''+ev.id+'\')">✏️</button>'
     +'<button class="btn btn-icon btn-sm" title="Dupliquer" onclick="duplicateEvent(\''+ev.id+'\')">📋</button>'
     +'<button class="btn btn-warn btn-sm" onclick="toggleSoldOut(\''+ev.id+'\')">'+(ev.status==='soldout'?'↩':'⛔')+'</button>'
@@ -1191,6 +1273,11 @@ window.openEventForm=function(id){
   $('f-status').value=ev?.status||'active';
   $('f-delete-at').value=ev?.deleteAt||'';
   onStatusChange(ev?.status||'active');
+  $('f-resa-mode').value=ev?.resaMode||'external';
+  $('f-resa-cap').value=ev?.resaCapacity||'';$('f-resa-max').value=ev?.resaMax||'';
+  $('f-resa-open').value=ev?.resaOpensAt?new Date(ev.resaOpensAt).toLocaleDateString('en-CA'):'';
+  $('f-resa-close').value=ev?.resaClosesAt?new Date(ev.resaClosesAt).toLocaleDateString('en-CA'):'';
+  onResaModeChange($('f-resa-mode').value);
   if(ev?.revealAt){const d=new Date(ev.revealAt);$('f-reveal-date').value=d.toLocaleDateString('en-CA');$('f-reveal-time').value=d.toTimeString().slice(0,5);}else{$('f-reveal-date').value='';$('f-reveal-time').value='';}
   previewImg(ev?.img||'');$('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
 };
@@ -1199,6 +1286,7 @@ window.resetForm=function(){
   ['f-img','f-name','f-date','f-time','f-place','f-maps-url','f-price','f-link','f-desc','f-desc-long','f-id'].forEach(id=>$(id).value='');
   $('f-price-type').value='normal';$('f-status').value='active';onStatusChange('active');$('f-reveal-date').value='';$('f-reveal-time').value='';$('f-delete-at').value='';previewImg('');
   $('f-maps-hint').textContent='';
+  $('f-resa-mode').value='external';['f-resa-cap','f-resa-max','f-resa-open','f-resa-close'].forEach(i=>$(i).value='');onResaModeChange('external');
 };
 window.previewImg=function(url){
   const w=$('img-preview');
@@ -1212,7 +1300,11 @@ window.saveEvent=async function(){
   const name=$('f-name').value.trim(),link=$('f-link').value.trim();
   if(!name){toast('Le nom est obligatoire','error');return;}
   const status=$('f-status').value;
-  if(!link&&status!=='coming_soon'){toast('Le lien de réservation est obligatoire','error');return;}
+  const resaMode=$('f-resa-mode').value;
+  if(resaMode==='ptg'){
+    const cap=parseInt($('f-resa-cap').value,10);
+    if(!(cap>=1)){toast('Indique le nombre de places','error');return;}
+  }else if(!link&&status!=='coming_soon'){toast('Le lien de réservation est obligatoire','error');return;}
   saving=true;
   const data={name,date:$('f-date').value,time:$('f-time').value,place:$('f-place').value.trim(),
     mapsUrl:$('f-maps-url').value.trim(),
@@ -1221,7 +1313,12 @@ window.saveEvent=async function(){
     descLong:$('f-desc-long').value.trim(),
     status:$('f-status').value,order:editingId?(localEvents.find(e=>e.id===editingId)?.order??Date.now()):Date.now(),
     revealAt:($('f-status').value==='coming_soon'&&$('f-reveal-date').value)?new Date($('f-reveal-date').value+'T'+($('f-reveal-time').value||'00:00')+':00').getTime():null,
-    deleteAt:$('f-delete-at').value||null};
+    deleteAt:$('f-delete-at').value||null,
+    resaMode,
+    resaCapacity:resaMode==='ptg'?parseInt($('f-resa-cap').value,10):null,
+    resaMax:resaMode==='ptg'?Math.min(Math.max(parseInt($('f-resa-max').value,10)||6,1),6):null,
+    resaOpensAt:(resaMode==='ptg'&&$('f-resa-open').value)?new Date($('f-resa-open').value+'T00:00:00').getTime():null,
+    resaClosesAt:(resaMode==='ptg'&&$('f-resa-close').value)?new Date($('f-resa-close').value+'T23:59:59').getTime():null};
   try{
     if(!db)throw new Error('Firebase non connecté. Configure-le d\'abord.');
     if(editingId){await updateDoc(doc(db,'events',editingId),data);toast('Mis à jour ✓');}
@@ -1247,6 +1344,11 @@ window.duplicateEvent=function(id){
   onStatusChange(ev.status||'active');
   $('f-delete-at').value='';
   $('f-reveal-date').value='';$('f-reveal-time').value='';
+  $('f-resa-mode').value=ev.resaMode||'external';
+  $('f-resa-cap').value=ev.resaCapacity||'';$('f-resa-max').value=ev.resaMax||'';
+  $('f-resa-open').value=ev.resaOpensAt?new Date(ev.resaOpensAt).toLocaleDateString('en-CA'):'';
+  $('f-resa-close').value=ev.resaClosesAt?new Date(ev.resaClosesAt).toLocaleDateString('en-CA'):'';
+  onResaModeChange($('f-resa-mode').value);
   previewImg(ev.img||'');$('tab-form').scrollIntoView({behavior:'smooth',block:'start'});
   toast('Formulaire pré-rempli — modifie puis enregistre ✓');
 };
@@ -1290,6 +1392,151 @@ window.saveSettings=async function(){
     await setDoc(doc(db,'config','settings'),s,{merge:true});
     renderSite();toast('Paramètres enregistrés ✓');
   }catch(e){renderSite();toast(e.message,'error');}
+};
+
+/* ══ RÉSERVATION PTG — côté visiteur ═══════════════════════ */
+const escH=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let resaTsToken='',resaTsId=null;
+function loadTurnstile(){
+  return new Promise(res=>{
+    if(window.turnstile)return res();
+    const s=document.createElement('script');
+    s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async=true;s.onload=()=>res();s.onerror=()=>res();document.head.appendChild(s);
+  });
+}
+window.openResaForm=async function(id){
+  const e=localEvents.find(ev=>ev.id===id),ri=resaInfo(e);if(!e||!ri.ptg)return;
+  const old=$('emodal-resa');if(old)old.remove();
+  const box=document.createElement('div');box.id='emodal-resa';box.style.cssText='margin-top:14px';
+  $('emodal-cta').after(box);$('emodal-cta').style.display='none';
+  if(!RESA_API||!TURNSTILE_SITEKEY){
+    box.innerHTML='<p style="color:var(--ink-2);font-size:14px">Les réservations en ligne seront bientôt disponibles.</p>';return;
+  }
+  const maxN=Math.min(ri.max,ri.left);
+  let opts='';for(let i=1;i<=maxN;i++)opts+='<option value="'+i+'">'+i+(i>1?' personnes':' personne')+'</option>';
+  box.innerHTML=
+   '<form id="resa-form" novalidate autocomplete="on">'
+   +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+   +'<div class="form-group"><label class="form-label" for="r-fn">Prénom</label><input class="form-input" id="r-fn" name="given-name" autocomplete="given-name" maxlength="60" required/></div>'
+   +'<div class="form-group"><label class="form-label" for="r-ln">Nom</label><input class="form-input" id="r-ln" name="family-name" autocomplete="family-name" maxlength="60" required/></div></div>'
+   +'<div class="form-group"><label class="form-label" for="r-em">Adresse mail</label><input type="email" class="form-input" id="r-em" autocomplete="email" maxlength="120" required/></div>'
+   +'<div class="form-group"><label class="form-label" for="r-se">Nombre de personnes</label><select class="form-input" id="r-se">'+opts+'</select>'
+   +'<div class="form-hint">'+ri.max+' personnes au maximum par réservation</div></div>'
+   +'<div style="position:absolute;left:-9999px;height:0;overflow:hidden" aria-hidden="true"><label>Site web<input id="r-hp" tabindex="-1" autocomplete="off"/></label></div>'
+   +'<label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);margin:4px 0 10px;line-height:1.45"><input type="checkbox" id="r-consent" style="margin-top:3px"/><span>J\'accepte que mes données servent à gérer ma réservation. Elles sont supprimées 3 mois après l\'événement.</span></label>'
+   +'<label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);margin:0 0 14px;line-height:1.45"><input type="checkbox" id="r-news" style="margin-top:3px"/><span>Je veux recevoir l\'agenda mensuel (facultatif)</span></label>'
+   +'<div id="r-ts" style="margin-bottom:12px"></div>'
+   +'<div id="r-err" role="alert" style="color:#A6461F;font-size:13px;min-height:18px;margin-bottom:8px"></div>'
+   +'<button type="submit" class="btn btn-accent" id="r-go" style="width:100%;height:50px">Réserver</button>'
+   +'</form>';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  $('r-fn').focus({preventScroll:true});
+  resaTsToken='';
+  await loadTurnstile();
+  if(window.turnstile&&$('r-ts')){
+    resaTsId=turnstile.render('#r-ts',{sitekey:TURNSTILE_SITEKEY,language:'fr',callback:t=>{resaTsToken=t;},'expired-callback':()=>{resaTsToken='';},'error-callback':()=>{resaTsToken='';}});
+  }
+  $('resa-form').onsubmit=ev=>{ev.preventDefault();submitResa(e);};
+};
+const RESA_ERR={
+  name:'Vérifie ton prénom et ton nom.',email:'Cette adresse mail ne semble pas valide.',seats:'Le nombre de personnes n\'est pas valide.',
+  consent:'Coche la case d\'acceptation pour continuer.',captcha:'La vérification anti-robot a échoué. Réessaie.',
+  rate:'Trop de tentatives. Réessaie dans une heure.',duplicate:'Cette adresse mail a déjà une réservation pour cet événement.',
+  full:'Il ne reste plus assez de places.',closed:'Les réservations sont fermées.',notopen:'Les réservations ne sont pas encore ouvertes.',
+  event:'Cet événement n\'accepte pas de réservation en ligne.',server:'Une erreur est survenue. Réessaie dans un instant.'
+};
+async function submitResa(e){
+  const err=$('r-err'),btn=$('r-go');err.textContent='';
+  const fn=$('r-fn').value.trim(),ln=$('r-ln').value.trim(),em=$('r-em').value.trim();
+  if(!fn||!ln){err.textContent=RESA_ERR.name;return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)){err.textContent=RESA_ERR.email;return;}
+  if(!$('r-consent').checked){err.textContent=RESA_ERR.consent;return;}
+  if(!resaTsToken){err.textContent='Attends la fin de la vérification anti-robot.';return;}
+  btn.disabled=true;btn.textContent='Envoi…';
+  try{
+    const r=await fetch(RESA_API+'/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({eventId:e.id,firstName:fn,lastName:ln,email:em,seats:Number($('r-se').value),
+        consent:true,newsletter:$('r-news').checked,website:$('r-hp').value,turnstile:resaTsToken})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||!j.ok){
+      err.textContent=(j.error==='full'&&j.remaining>0)?'Il ne reste que '+j.remaining+(j.remaining>1?' places.':' place.'):(RESA_ERR[j.error]||RESA_ERR.server);
+      btn.disabled=false;btn.textContent='Réserver';
+      if(window.turnstile&&resaTsId!==null){try{turnstile.reset(resaTsId);}catch{}}resaTsToken='';
+      return;
+    }
+    $('emodal-resa').innerHTML=
+      '<div style="padding:6px 0 2px"><div style="font-size:22px;font-weight:600;color:var(--ink);margin-bottom:6px">Réservation confirmée</div>'
+      +'<p style="color:var(--ink-2);font-size:14px;line-height:1.5;margin:0 0 10px">'+escH(fn)+', ta place pour '+escH(e.name)+' est réservée.</p>'
+      +'<p style="color:var(--ink-2);font-size:14px;line-height:1.5;margin:0">'+(j.mail
+        ?'Un mail de confirmation vient de partir à '+escH(em)+'. Pense à regarder tes courriers indésirables. Il contient le lien pour modifier ou annuler.'
+        :'Le mail de confirmation n\'a pas pu être envoyé. Ta réservation est bien enregistrée : note ces informations.')+'</p></div>';
+  }catch{
+    err.textContent=RESA_ERR.server;btn.disabled=false;btn.textContent='Réserver';
+  }
+}
+window.onResaModeChange=function(v){
+  $('f-resa-box').style.display=v==='ptg'?'block':'none';
+  $('f-link-group').style.display=v==='ptg'?'none':'';
+};
+
+/* ══ RÉSERVATION PTG — admin (Inscrits) ═══════════════════ */
+let insItems=[];
+async function adminApi(body){
+  if(!RESA_API)throw new Error('RESA_API non configurée dans le site');
+  const u=fbAuth&&fbAuth.currentUser;if(!u)throw new Error('Non connecté');
+  const t=await u.getIdToken();
+  const r=await fetch(RESA_API+'/api/admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error==='full'?'Plus assez de places':j.error==='duplicate'?'Ce mail est déjà inscrit':j.error||'Erreur');
+  return j;
+}
+window.initInscrits=function(keepId){
+  const evs=localEvents.filter(e=>e.resaMode==='ptg');
+  const sel=$('ins-event'),cur=keepId||sel.value;
+  sel.innerHTML=evs.length?evs.map(e=>'<option value="'+e.id+'">'+escH(e.name)+(e.date?' · '+escH(formatDate(e.date,e.time)):'')+'</option>').join(''):'<option value="">Aucun événement en réservation PTG</option>';
+  if(cur&&evs.some(e=>e.id===cur))sel.value=cur;
+  loadInscrits();
+};
+window.openInscrits=function(id){switchTab('inscrits',4);initInscrits(id);};
+window.loadInscrits=async function(){
+  const id=$('ins-event').value;insItems=[];
+  if(!id){$('ins-list').innerHTML='';$('ins-count').textContent='';return;}
+  $('ins-list').innerHTML='<p style="color:var(--muted);font-size:13px">Chargement…</p>';
+  try{const j=await adminApi({action:'list',eventId:id});insItems=j.items;renderInscrits();}
+  catch(e){$('ins-list').innerHTML='';toast(e.message,'error');}
+};
+window.renderInscrits=function(){
+  const id=$('ins-event').value,ev=localEvents.find(e=>e.id===id)||{};
+  const total=insItems.reduce((n,x)=>n+x.seats,0);
+  $('ins-count').innerHTML=total+' <span style="font-size:16px;color:var(--ink-2)">/ '+(ev.resaCapacity||0)+' places</span>';
+  const q=$('ins-search').value.trim().toLowerCase();
+  const rows=insItems.filter(x=>!q||(x.firstName+' '+x.lastName+' '+x.email).toLowerCase().includes(q));
+  $('ins-list').innerHTML=rows.length?rows.map(x=>
+    '<div class="admin-event-item" style="align-items:center"><div class="admin-event-info"><div class="admin-event-name">'+escH(x.firstName)+' '+escH(x.lastName)+'</div>'
+    +'<div class="admin-event-meta">'+escH(x.email)+' · '+x.seats+(x.seats>1?' pers.':' pers.')+(x.byAdmin?' · ajouté à la main':'')+'</div></div>'
+    +'<button class="btn btn-danger btn-sm" onclick="cancelInscrit(\''+x.id+'\')">Annuler</button></div>').join('')
+    :'<p style="color:var(--muted);font-size:13px">Aucun inscrit.</p>';
+};
+window.cancelInscrit=async function(rid){
+  const x=insItems.find(i=>i.id===rid);if(!x)return;
+  if(!confirm('Annuler la réservation de '+x.firstName+' '+x.lastName+' ('+x.seats+' pers.) ?'))return;
+  try{await adminApi({action:'cancel',id:rid});toast('Réservation annulée');loadInscrits();}catch(e){toast(e.message,'error');}
+};
+window.addInscrit=async function(){
+  const id=$('ins-event').value;if(!id)return;
+  try{
+    await adminApi({action:'add',eventId:id,firstName:$('ins-fn').value,lastName:$('ins-ln').value,email:$('ins-em').value,seats:Number($('ins-se').value)});
+    ['ins-fn','ins-ln','ins-em'].forEach(i=>$(i).value='');$('ins-se').value='1';toast('Inscrit ajouté');loadInscrits();
+  }catch(e){toast(e.message,'error');}
+};
+window.exportInscrits=function(){
+  if(!insItems.length){toast('Rien à exporter','error');return;}
+  const c=v=>{v=String(v??'');if(/^[=+\-@\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';};
+  const csv='﻿'+['Prénom;Nom;Mail;Personnes;Pointé'].concat(insItems.map(x=>[x.firstName,x.lastName,x.email,x.seats,x.checkedIn?'oui':'non'].map(c).join(';'))).join('\r\n');
+  const ev=localEvents.find(e=>e.id===$('ins-event').value)||{};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='inscrits-'+(ev.name||'evenement').replace(/[^\w]+/g,'-').toLowerCase()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
 };
 
 /* ══ TABS ════════════════════════════════════════════════ */
